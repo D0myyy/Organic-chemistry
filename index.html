@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizualizator 3D Chimie Organică</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧪 Vizualizator 3D Chimie Organică</h1>
+            <p class="subtitle">Explorează structuri moleculare în 3D</p>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h2>Selectează un Compus</h2>
+                
+                <div class="search-section">
+                    <h3>Caută după Nume IUPAC</h3>
+                    <input type="text" id="iupacSearch" placeholder="ex: 2,3-dimetilhexan, 2-etan">
+                    <button id="searchBtn" class="search-btn">Generează Structura</button>
+                    <p id="searchError" class="error-message"></p>
+                </div>
+                
+                <div class="category">
+                    <h3>Alcani (Legături Simple)</h3>
+                    <button class="molecule-btn" data-molecule="methane">Metan (CH₄)</button>
+                    <button class="molecule-btn" data-molecule="ethane">Etan (C₂H₆)</button>
+                    <button class="molecule-btn" data-molecule="propane">Propan (C₃H₈)</button>
+                    <button class="molecule-btn" data-molecule="butane">Butan (C₄H₁₀)</button>
+                    <button class="molecule-btn" data-molecule="pentane">Pentan (C₅H₁₂)</button>
+                    <button class="molecule-btn" data-molecule="hexane">Hexan (C₆H₁₄)</button>
+                    <button class="molecule-btn" data-molecule="heptane">Heptan (C₇H₁₆)</button>
+                    <button class="molecule-btn" data-molecule="octane">Octan (C₈H₁₈)</button>
+                </div>
+
+                <div class="category">
+                    <h3>Alchene (Legături Duble)</h3>
+                    <button class="molecule-btn" data-molecule="ethene">Etenă (C₂H₄)</button>
+                    <button class="molecule-btn" data-molecule="propene">Propenă (C₃H₆)</button>
+                    <button class="molecule-btn" data-molecule="butene">1-Butenă (C₄H₈)</button>
+                </div>
+
+                <div class="category">
+                    <h3>Alchine (Legături Triple)</h3>
+                    <button class="molecule-btn" data-molecule="ethyne">Etină (C₂H₂)</button>
+                    <button class="molecule-btn" data-molecule="propyne">Propină (C₃H₄)</button>
+                </div>
+
+                <div class="category">
+                    <h3>Compuși Ciclici</h3>
+                    <button class="molecule-btn" data-molecule="cyclopropane">Ciclopropan (C₃H₆)</button>
+                    <button class="molecule-btn" data-molecule="cyclohexane">Ciclohexan (C₆H₁₂)</button>
+                    <button class="molecule-btn" data-molecule="benzene">Benzen (C₆H₆)</button>
+                </div>
+
+                <div class="category">
+                    <h3>Grupe Funcționale</h3>
+                    <button class="molecule-btn" data-molecule="ethanol">Etanol (C₂H₅OH)</button>
+                    <button class="molecule-btn" data-molecule="acetone">Acetonă (C₃H₆O)</button>
+                    <button class="molecule-btn" data-molecule="aceticacid">Acid Acetic (CH₃COOH)</button>
+                    <button class="molecule-btn" data-molecule="methylamine">Metilamină (CH₃NH₂)</button>
+                </div>
+
+                <div class="controls">
+                    <h3>Opțiuni de Afișare</h3>
+                    <label>
+                        <input type="checkbox" id="showLabels" checked>
+                        Arată Etichetele Atomilor
+                    </label>
+                    <label>
+                        <input type="checkbox" id="rotate" checked>
+                        Rotație Automată
+                    </label>
+                    <div class="style-buttons">
+                        <button id="ballStick" class="style-btn active">Bile și Bețe</button>
+                        <button id="spaceFill" class="style-btn">Umplere Spațială</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="viewer-container">
+                <div id="moleculeViewer"></div>
+                <div class="info-panel">
+                    <h3 id="moleculeName">Selectează o moleculă pentru a începe</h3>
+                    <p id="moleculeFormula"></p>
+                    <p id="moleculeDescription"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
