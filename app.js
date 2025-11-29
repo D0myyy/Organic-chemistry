@@ -1326,11 +1326,13 @@ function loadMolecule(moleculeName) {
     document.getElementById('moleculeFormula').textContent = data.formula;
     document.getElementById('moleculeDescription').textContent = data.description;
     
-    // Update active button
-    document.querySelectorAll('.molecule-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.target.classList.add('active');
+    // Update active button only if called from button click
+    if (window.event && window.event.target) {
+        document.querySelectorAll('.molecule-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        window.event.target.classList.add('active');
+    }
 }
 
 function onWindowResize() {
