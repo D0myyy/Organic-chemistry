@@ -995,21 +995,22 @@ class IUPACParser {
         
         // Add remaining hydrogens to main chain carbons
         for (let i = 0; i < chainLength; i++) {
-            const bondsToCarbon = bonds.filter(b => b[0] === i || b[1] === i).length;
-            let maxBonds = 4;
+            // Count bonds AND account for bond types (double/triple bonds)
+            let totalValence = 0;
+            bonds.forEach(bond => {
+                if (bond[0] === i || bond[1] === i) {
+                    // Count valence based on bond type
+                    if (bond[2] === 'triple') {
+                        totalValence += 3; // Triple bond uses 3 valences
+                    } else if (bond[2] === 'double') {
+                        totalValence += 2; // Double bond uses 2 valences
+                    } else {
+                        totalValence += 1; // Single bond uses 1 valence
+                    }
+                }
+            });
             
-            // Carbons with double bonds have fewer hydrogens
-            if (doubleBonds.some(pos => pos === i + 1 || pos === i)) {
-                // This carbon is part of a double bond
-                maxBonds = 4; // Still 4 total bonds, but one is double
-            }
-            
-            // Carbons with triple bonds have even fewer hydrogens
-            if (tripleBonds.some(pos => pos === i + 1 || pos === i)) {
-                maxBonds = 4; // Still 4 total bonds, but one is triple
-            }
-            
-            const hydrogensNeeded = maxBonds - bondsToCarbon;
+            const hydrogensNeeded = 4 - totalValence;
             if (hydrogensNeeded > 0) {
                 this.addHydrogensTetrahedrally(atoms, bonds, i, hydrogensNeeded, 
                     i > 0 ? i - 1 : (i < chainLength - 1 ? i + 1 : -1));
