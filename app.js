@@ -7,226 +7,6 @@ let currentStyle = 'ballStick';
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 let soundEnabled = true; // Global sound toggle
 
-// Ambient Music System - Relaxing melodic composition
-let musicPlaying = false;
-let musicMasterGain = null;
-let musicIntervalId = null;
-let chordIntervalId = null;
-let allActiveOscillators = []; // Track ALL oscillators for complete cleanup
-
-const ambientMusic = {
-    // Pentatonic scale for pleasant, non-dissonant melodies (C major pentatonic)
-    notes: {
-        C3: 130.81, D3: 146.83, E3: 164.81, G3: 196.00, A3: 220.00,
-        C4: 261.63, D4: 293.66, E4: 329.63, G4: 392.00, A4: 440.00,
-        C5: 523.25, D5: 587.33, E5: 659.25, G5: 783.99, A5: 880.00
-    },
-    
-    // Chord progressions for ambient background
-    chordProgressions: [
-        [130.81, 164.81, 196.00], // C - E - G (C major)
-        [146.83, 185.00, 220.00], // D - F# - A (D major)
-        [164.81, 196.00, 246.94], // E - G - B (E minor)
-        [196.00, 246.94, 293.66], // G - B - D (G major)
-    ],
-    
-    currentChordIndex: 0,
-    currentChordOscillators: [],
-    
-    init: () => {
-        musicMasterGain = audioContext.createGain();
-        musicMasterGain.connect(audioContext.destination);
-        musicMasterGain.gain.value = 0.075; // Reduced again: 15% -> 7.5% (50% of 15%)
-    },
-    
-    playNote: (frequency, duration, delay = 0, volume = 0.02) => { // Reduced: 0.04 -> 0.02
-        const osc = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        osc.connect(gainNode);
-        gainNode.connect(musicMasterGain);
-        
-        osc.frequency.value = frequency;
-        osc.type = 'sine';
-        
-        const startTime = audioContext.currentTime + delay;
-        const endTime = startTime + duration;
-        
-        // ADSR envelope for smooth, natural sound
-        gainNode.gain.setValueAtTime(0, startTime);
-        gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.1); // Attack
-        gainNode.gain.linearRampToValueAtTime(volume * 0.7, startTime + 0.3); // Decay
-        gainNode.gain.setValueAtTime(volume * 0.7, endTime - 0.5); // Sustain
-        gainNode.gain.exponentialRampToValueAtTime(0.001, endTime); // Release
-        
-        osc.start(startTime);
-        osc.stop(endTime);
-        
-        // Track this oscillator
-        allActiveOscillators.push({ osc, gain: gainNode });
-        
-        return { osc, gain: gainNode };
-    },
-    
-    playChord: (chordIndex) => {
-        const chord = ambientMusic.chordProgressions[chordIndex];
-        
-        // Stop previous chord
-        ambientMusic.currentChordOscillators.forEach(({ osc, gain }) => {
-            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
-            osc.stop(audioContext.currentTime + 0.5);
-        });
-        ambientMusic.currentChordOscillators = [];
-        
-        // Play new chord (soft pad sound)
-        chord.forEach((freq, i) => {
-            const osc = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            osc.connect(gainNode);
-            gainNode.connect(musicMasterGain);
-            
-            osc.frequency.value = freq;
-            osc.type = 'triangle'; // Warmer than sine
-            
-            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.01, audioContext.currentTime + 1); // Reduced: 0.02 -> 0.01
-            
-            osc.start();
-            
-            const oscData = { osc, gain: gainNode };
-            ambientMusic.currentChordOscillators.push(oscData);
-            allActiveOscillators.push(oscData); // Track globally
-        });
-    },
-    
-    playMelody: () => {
-        // Beautiful, slow pentatonic melody
-        const melodyPatterns = [
-            // Pattern 1: Rising gentle pattern
-            [
-                { note: 'C4', duration: 2, delay: 0 },
-                { note: 'E4', duration: 2, delay: 2 },
-                { note: 'G4', duration: 3, delay: 4 },
-                { note: 'A4', duration: 2, delay: 7 },
-                { note: 'G4', duration: 3, delay: 9 }
-            ],
-            // Pattern 2: Descending calm pattern
-            [
-                { note: 'A4', duration: 2, delay: 0 },
-                { note: 'G4', duration: 2, delay: 2 },
-                { note: 'E4', duration: 3, delay: 4 },
-                { note: 'D4', duration: 2, delay: 7 },
-                { note: 'C4', duration: 3, delay: 9 }
-            ],
-            // Pattern 3: Floating pattern
-            [
-                { note: 'G4', duration: 2.5, delay: 0 },
-                { note: 'A4', duration: 2, delay: 2.5 },
-                { note: 'C5', duration: 3, delay: 4.5 },
-                { note: 'A4', duration: 2.5, delay: 7.5 },
-                { note: 'E4', duration: 2, delay: 10 }
-            ],
-            // Pattern 4: Peaceful resolution
-            [
-                { note: 'D4', duration: 2, delay: 0 },
-                { note: 'E4', duration: 2, delay: 2 },
-                { note: 'C4', duration: 4, delay: 4 },
-                { note: 'G3', duration: 3, delay: 8 },
-                { note: 'C4', duration: 3, delay: 11 }
-            ]
-        ];
-        
-        let patternIndex = 0;
-        
-        const playPattern = () => {
-            if (!musicPlaying) return;
-            
-            const pattern = melodyPatterns[patternIndex];
-            pattern.forEach(({ note, duration, delay }) => {
-                ambientMusic.playNote(ambientMusic.notes[note], duration, delay, 0.015); // Reduced: 0.03 -> 0.015
-            });
-            
-            patternIndex = (patternIndex + 1) % melodyPatterns.length;
-        };
-        
-        // Play first pattern immediately
-        playPattern();
-        
-        // Continue playing patterns every 14 seconds
-        musicIntervalId = setInterval(playPattern, 14000);
-    },
-    
-    start: () => {
-        if (musicPlaying) return;
-        musicPlaying = true;
-        
-        // Start with first chord
-        ambientMusic.playChord(0);
-        
-        // Change chords every 8 seconds
-        chordIntervalId = setInterval(() => {
-            if (!musicPlaying) return;
-            ambientMusic.currentChordIndex = (ambientMusic.currentChordIndex + 1) % ambientMusic.chordProgressions.length;
-            ambientMusic.playChord(ambientMusic.currentChordIndex);
-        }, 8000);
-        
-        // Start melody
-        ambientMusic.playMelody();
-    },
-    
-    stop: () => {
-        if (!musicPlaying) return;
-        musicPlaying = false;
-        
-        // Stop intervals first
-        if (musicIntervalId) {
-            clearInterval(musicIntervalId);
-            musicIntervalId = null;
-        }
-        
-        if (chordIntervalId) {
-            clearInterval(chordIntervalId);
-            chordIntervalId = null;
-        }
-        
-        // Fade out and stop ALL active oscillators with 2-second fade
-        const fadeTime = 2.0;
-        const currentTime = audioContext.currentTime;
-        
-        allActiveOscillators.forEach(({ osc, gain }) => {
-            try {
-                // Fade out the gain node
-                gain.gain.cancelScheduledValues(currentTime);
-                gain.gain.setValueAtTime(gain.gain.value, currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, currentTime + fadeTime);
-                
-                // Stop the oscillator after fade
-                osc.stop(currentTime + fadeTime);
-            } catch (e) {
-                // Oscillator may already be stopped
-            }
-        });
-
-        // Clear the tracking array
-        allActiveOscillators = [];
-        
-        // Clear current chord oscillators array
-        ambientMusic.currentChordOscillators = [];
-
-        // Reset chord index after fade (but keep user's volume setting)
-        setTimeout(() => {
-            ambientMusic.currentChordIndex = 0;
-        }, fadeTime * 1000 + 100);
-    },
-    
-    setVolume: (volume) => {
-        if (musicMasterGain) {
-            musicMasterGain.gain.value = volume;
-        }
-    }
-};
-
 const sounds = {
     // Hover sound - warm, subtle low tone (ASMR-like)
     hover: () => {
@@ -241,7 +21,7 @@ const sounds = {
         oscillator.frequency.value = 180; // Much lower, warmer
         oscillator.type = 'sine'; // Smooth sine wave
         
-        gainNode.gain.setValueAtTime(0.025, audioContext.currentTime); // 50% quieter (was 0.05)
+        gainNode.gain.setValueAtTime(0.0125, audioContext.currentTime); // 75% quieter (was 0.05)
         gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.15);
         
         oscillator.start(audioContext.currentTime);
@@ -261,7 +41,7 @@ const sounds = {
         oscillator.frequency.value = 150; // Lower, warmer
         oscillator.type = 'triangle'; // Softer than square
         
-        gainNode.gain.setValueAtTime(0.04, audioContext.currentTime); // 50% quieter (was 0.08)
+        gainNode.gain.setValueAtTime(0.02, audioContext.currentTime); // 75% quieter (was 0.08)
         gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
         
         oscillator.start(audioContext.currentTime);
@@ -282,7 +62,7 @@ const sounds = {
         oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.4); // Lower end point
         oscillator.type = 'sine'; // Smoother than sawtooth
         
-        gainNode.gain.setValueAtTime(0.06, audioContext.currentTime); // 50% quieter (was 0.12)
+        gainNode.gain.setValueAtTime(0.03, audioContext.currentTime); // 75% quieter (was 0.12)
         gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.4);
         
         oscillator.start(audioContext.currentTime);
@@ -304,7 +84,7 @@ const sounds = {
             oscillator.type = 'sine'; // Smooth warm tone
             
             const startTime = audioContext.currentTime + (i * 0.08);
-            gainNode.gain.setValueAtTime(0.035, startTime); // 50% quieter (was 0.07)
+            gainNode.gain.setValueAtTime(0.0175, startTime); // 75% quieter (was 0.07)
             gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.5);
             
             oscillator.start(startTime);
@@ -712,6 +492,198 @@ const molecules = {
     }
 };
 
+// Isomers database
+const isomersData = {
+    pentane: {
+        formula: 'C₅H₁₂',
+        isomers: [
+            {
+                name: 'n-Pentan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț liniar de 5 atomi de carbon',
+                data: 'pentane'
+            },
+            {
+                name: 'Izopentan (2-metilbutan)',
+                type: 'Izomerie de catenă',
+                description: 'Lanț ramificat cu un grup metil pe poziția 2',
+                atoms: [
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: -1.27, y: 2.19, z: 0 },
+                    { element: 'C', x: 0, y: -1.52, z: 0 },
+                    { element: 'H', x: -2.14, y: 0.22, z: 0.51 },
+                    { element: 'H', x: -1.27, y: 0.73, z: -1.03 },
+                    { element: 'H', x: 2.14, y: 0.22, z: 0.51 },
+                    { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 1.78, z: 0.51 },
+                    { element: 'H', x: -1.27, y: 2.70, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 2.70, z: -0.51 },
+                    { element: 'H', x: -0.40, y: 2.70, z: -0.51 },
+                    { element: 'H', x: 0, y: -2.03, z: 1.03 },
+                    { element: 'H', x: 0.87, y: -2.03, z: -0.51 },
+                    { element: 'H', x: -0.87, y: -2.03, z: -0.51 }
+                ],
+                bonds: [[0,1], [0,2], [0,4], [1,3], [1,5], [1,6], [2,7], [2,8], [2,9], [3,10], [3,11], [3,12], [4,13], [4,14], [4,15]]
+            },
+            {
+                name: 'Neopentan (2,2-dimetilpropan)',
+                type: 'Izomerie de catenă',
+                description: 'Structură compactă cu carbon central legat la 4 grupuri metil',
+                atoms: [
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 0.9, y: 0.9, z: 0.9 },
+                    { element: 'C', x: -0.9, y: -0.9, z: 0.9 },
+                    { element: 'C', x: -0.9, y: 0.9, z: -0.9 },
+                    { element: 'C', x: 0.9, y: -0.9, z: -0.9 },
+                    { element: 'H', x: 1.3, y: 1.3, z: 1.8 },
+                    { element: 'H', x: 1.8, y: 1.3, z: 0.3 },
+                    { element: 'H', x: 0.3, y: 1.8, z: 0.3 },
+                    { element: 'H', x: -1.3, y: -1.3, z: 1.8 },
+                    { element: 'H', x: -1.8, y: -1.3, z: 0.3 },
+                    { element: 'H', x: -0.3, y: -1.8, z: 0.3 },
+                    { element: 'H', x: -1.3, y: 1.3, z: -1.8 },
+                    { element: 'H', x: -1.8, y: 1.3, z: -0.3 },
+                    { element: 'H', x: -0.3, y: 1.8, z: -0.3 },
+                    { element: 'H', x: 1.3, y: -1.3, z: -1.8 },
+                    { element: 'H', x: 1.8, y: -1.3, z: -0.3 },
+                    { element: 'H', x: 0.3, y: -1.8, z: -0.3 }
+                ],
+                bonds: [[0,1], [0,2], [0,3], [0,4], [1,5], [1,6], [1,7], [2,8], [2,9], [2,10], [3,11], [3,12], [3,13], [4,14], [4,15], [4,16]]
+            }
+        ]
+    },
+    butane: {
+        formula: 'C₄H₁₀',
+        isomers: [
+            {
+                name: 'n-Butan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț liniar de 4 atomi de carbon',
+                data: 'butane'
+            },
+            {
+                name: 'Isobutan (2-metilpropan)',
+                type: 'Izomerie de catenă',
+                description: 'Lanț ramificat cu carbon central',
+                atoms: [
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: -1.52, z: 0 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: -2.03, z: 1.03 },
+                    { element: 'H', x: 0.87, y: -2.03, z: -0.51 },
+                    { element: 'H', x: -0.87, y: -2.03, z: -0.51 }
+                ],
+                bonds: [[0,1], [0,2], [0,3], [1,4], [1,5], [1,6], [2,7], [2,8], [2,9], [3,10], [3,11], [3,12]]
+            }
+        ]
+    },
+    ethanol: {
+        formula: 'C₂H₆O',
+        isomers: [
+            {
+                name: 'Etanol (alcool etilic)',
+                type: 'Izomerie de funcțiune',
+                description: 'Alcool cu grupă -OH',
+                data: 'ethanol'
+            },
+            {
+                name: 'Dimetil eter',
+                type: 'Izomerie de funcțiune',
+                description: 'Eter cu oxigen între doi carboni',
+                atoms: [
+                    { element: 'C', x: -1.14, y: 0, z: 0 },
+                    { element: 'O', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.14, y: 0, z: 0 },
+                    { element: 'H', x: -1.54, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -1.54, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -1.54, y: 0, z: -1.03 },
+                    { element: 'H', x: 1.54, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 1.54, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.54, y: 0, z: -1.03 }
+                ],
+                bonds: [[0,1], [1,2], [0,3], [0,4], [0,5], [2,6], [2,7], [2,8]]
+            }
+        ]
+    },
+    butene: {
+        formula: 'C₄H₈',
+        isomers: [
+            {
+                name: 'But-1-enă',
+                type: 'Izomerie de poziție',
+                description: 'Dubla legătură între C1 și C2',
+                data: 'butene'
+            },
+            {
+                name: 'But-2-enă (cis)',
+                type: 'Izomerie geometrică (cis-trans)',
+                description: 'Dubla legătură între C2 și C3, grupuri CH₃ pe aceeași parte',
+                atoms: [
+                    { element: 'C', x: -1.91, y: 0.5, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0, z: 0 },
+                    { element: 'C', x: 1.91, y: 0.5, z: 0 },
+                    { element: 'H', x: -2.31, y: 0.89, z: 0.89 },
+                    { element: 'H', x: -2.31, y: -0.39, z: 0.51 },
+                    { element: 'H', x: -2.31, y: 1.00, z: -0.89 },
+                    { element: 'H', x: -0.64, y: -1.03, z: 0 },
+                    { element: 'H', x: 0.64, y: -1.03, z: 0 },
+                    { element: 'H', x: 2.31, y: 0.89, z: 0.89 },
+                    { element: 'H', x: 2.31, y: -0.39, z: 0.51 },
+                    { element: 'H', x: 2.31, y: 1.00, z: -0.89 }
+                ],
+                bonds: [[0,1], [1,2,'double'], [2,3], [0,4], [0,5], [0,6], [1,7], [2,8], [3,9], [3,10], [3,11]]
+            },
+            {
+                name: 'But-2-enă (trans)',
+                type: 'Izomerie geometrică (cis-trans)',
+                description: 'Dubla legătură între C2 și C3, grupuri CH₃ pe părți opuse',
+                atoms: [
+                    { element: 'C', x: -1.91, y: 0.5, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0, z: 0 },
+                    { element: 'C', x: 1.91, y: -0.5, z: 0 },
+                    { element: 'H', x: -2.31, y: 0.89, z: 0.89 },
+                    { element: 'H', x: -2.31, y: -0.39, z: 0.51 },
+                    { element: 'H', x: -2.31, y: 1.00, z: -0.89 },
+                    { element: 'H', x: -0.64, y: -1.03, z: 0 },
+                    { element: 'H', x: 0.64, y: 1.03, z: 0 },
+                    { element: 'H', x: 2.31, y: -0.89, z: 0.89 },
+                    { element: 'H', x: 2.31, y: 0.39, z: 0.51 },
+                    { element: 'H', x: 2.31, y: -1.00, z: -0.89 }
+                ],
+                bonds: [[0,1], [1,2,'double'], [2,3], [0,4], [0,5], [0,6], [1,7], [2,8], [3,9], [3,10], [3,11]]
+            }
+        ]
+    },
+    propene: {
+        formula: 'C₃H₆',
+        isomers: [
+            {
+                name: 'Propenă',
+                type: 'Izomerie de funcțiune',
+                description: 'Alchenă cu dubla legătură',
+                data: 'propene'
+            },
+            {
+                name: 'Ciclopropan',
+                type: 'Izomerie de funcțiune',
+                description: 'Compus ciclic cu legături simple',
+                data: 'cyclopropane'
+            }
+        ]
+    }
+};
+
 // Element colors (CPK coloring)
 const elementColors = {
     'C': 0x909090,  // Gray for carbon
@@ -1103,6 +1075,208 @@ class IUPACParser {
 
 const iupacParser = new IUPACParser();
 
+// Store parent compound information
+let parentCompound = null;
+
+// Function to generate isomers for IUPAC compounds
+function generateIUPACIsomers(parsed, currentMoleculeData, currentName) {
+    const isomers = [];
+    const formula = calculateMolecularFormula(currentMoleculeData);
+    
+    // Add current structure as first isomer
+    isomers.push({
+        name: currentName,
+        type: getIsomerType(parsed),
+        description: buildDetailedDescription(parsed),
+        atoms: currentMoleculeData.atoms,
+        bonds: currentMoleculeData.bonds
+    });
+    
+    // Generate positional isomers for alkenes (keeping substituents)
+    if (parsed.doubleBonds.length > 0) {
+        const chainLen = parsed.chainLength;
+        for (let pos = 1; pos <= Math.floor(chainLen / 2); pos++) {
+            if (!parsed.doubleBonds.includes(pos)) {
+                try {
+                    // Create new parsed object with same substituents but different double bond position
+                    const newParsed = { 
+                        ...parsed, 
+                        doubleBonds: [pos],
+                        substituents: [...parsed.substituents] // Keep all substituents
+                    };
+                    const newMolecule = iupacParser.buildMolecule(newParsed);
+                    const newName = generateFullIUPACName(newParsed);
+                    
+                    isomers.push({
+                        name: newName,
+                        type: 'Izomerie de poziție',
+                        description: buildDetailedDescription(newParsed),
+                        atoms: newMolecule.atoms,
+                        bonds: newMolecule.bonds
+                    });
+                } catch (e) {
+                    // Skip invalid isomers
+                    console.log('Skipped invalid isomer:', e.message);
+                }
+            }
+        }
+        
+        // Generate cis-trans isomers if applicable
+        if (parsed.doubleBonds.length > 0 && !parsed.isomer) {
+            const dbPos = parsed.doubleBonds[0];
+            if (dbPos > 1 && dbPos < parsed.chainLength - 1) {
+                // Generate cis isomer
+                try {
+                    const cisParsed = { ...parsed, isomer: 'cis', substituents: [...parsed.substituents] };
+                    const cisMolecule = iupacParser.buildMolecule(cisParsed);
+                    isomers.push({
+                        name: `(E)-${generateFullIUPACName(parsed)}`,
+                        type: 'Izomerie geometrică (cis-trans)',
+                        description: buildDetailedDescription(cisParsed) + '\n(Substituenți pe aceeași parte)',
+                        atoms: cisMolecule.atoms,
+                        bonds: cisMolecule.bonds
+                    });
+                } catch (e) {}
+                
+                // Generate trans isomer
+                try {
+                    const transParsed = { ...parsed, isomer: 'trans', substituents: [...parsed.substituents] };
+                    const transMolecule = iupacParser.buildMolecule(transParsed);
+                    isomers.push({
+                        name: `(Z)-${generateFullIUPACName(parsed)}`,
+                        type: 'Izomerie geometrică (cis-trans)',
+                        description: buildDetailedDescription(transParsed) + '\n(Substituenți pe părți opuse)',
+                        atoms: transMolecule.atoms,
+                        bonds: transMolecule.bonds
+                    });
+                } catch (e) {}
+            }
+        }
+    }
+    
+    // Generate chain isomers for alkanes with 4+ carbons (only for simple alkanes without substituents)
+    if (parsed.chainLength >= 4 && parsed.doubleBonds.length === 0 && parsed.tripleBonds.length === 0 && parsed.substituents.length === 0) {
+        // Add branched isomers
+        if (parsed.chainLength === 4) {
+            // Isobutane
+            isomers.push({
+                name: '2-metilpropan (isobutan)',
+                type: 'Izomerie de catenă',
+                description: 'Lanț principal: 3 atomi de carbon\nSubstituenți: metil la C-2',
+                data: 'butane' // Will use predefined isobutane if we add it
+            });
+        } else if (parsed.chainLength === 5) {
+            // Isopentane and neopentane structures would be added here
+            isomers.push({
+                name: '2-metilbutan (izopentan)',
+                type: 'Izomerie de catenă',
+                description: 'Lanț ramificat cu metil pe C2'
+            });
+            isomers.push({
+                name: '2,2-dimetilpropan (neopentan)',
+                type: 'Izomerie de catenă',
+                description: 'Structură compactă cu carbon central'
+            });
+        }
+    }
+    
+    // Only return isomers if we have more than just the current one
+    return isomers.length > 1 ? { formula, isomers } : null;
+}
+
+function getIsomerType(parsed) {
+    if (parsed.isomer) return 'Izomerie geometrică (cis-trans)';
+    if (parsed.doubleBonds.length > 0 || parsed.tripleBonds.length > 0) return 'Izomerie de poziție';
+    if (parsed.substituents.length > 0) return 'Izomerie de catenă';
+    return 'Structură principală';
+}
+
+function buildDetailedDescription(parsed) {
+    let desc = `Lanț principal: ${parsed.chainLength} atomi de carbon`;
+    
+    if (parsed.doubleBonds.length > 0) {
+        desc += `\nLegături duble la poziția: ${parsed.doubleBonds.join(', ')}`;
+    }
+    
+    if (parsed.tripleBonds.length > 0) {
+        desc += `\nLegături triple la poziția: ${parsed.tripleBonds.join(', ')}`;
+    }
+    
+    if (parsed.substituents.length > 0) {
+        const subList = parsed.substituents
+            .map(s => `${s.type} la C-${s.position}`)
+            .join(', ');
+        desc += `\nSubstituenți: ${subList}`;
+    }
+    
+    return desc;
+}
+
+function generateFullIUPACName(parsed) {
+    const prefixes = ['', 'met', 'et', 'prop', 'but', 'pent', 'hex', 'hept', 'oct', 'non', 'dec'];
+    const multipliers = ['', '', 'di', 'tri', 'tetra', 'penta', 'hexa', 'hepta', 'octa'];
+    
+    // Build substituent part
+    let substituentPart = '';
+    if (parsed.substituents.length > 0) {
+        // Group substituents by type
+        const subGroups = {};
+        parsed.substituents.forEach(s => {
+            const key = s.type;
+            if (!subGroups[key]) subGroups[key] = [];
+            subGroups[key].push(s.position);
+        });
+        
+        const subParts = [];
+        // Sort by substituent type (alphabetically)
+        Object.keys(subGroups).sort().forEach(type => {
+            const positions = subGroups[type].sort((a, b) => a - b);
+            const posStr = positions.join(',');
+            // Use the actual COUNT of substituents, not unique positions
+            const count = positions.length;
+            const multiplier = count > 1 ? multipliers[count] : '';
+            subParts.push(`${posStr}-${multiplier}${type}`);
+        });
+        
+        substituentPart = subParts.join('-') + '-';
+    }
+    
+    // Build main chain part
+    let mainPart = prefixes[parsed.chainLength] || parsed.chainLength;
+    
+    if (parsed.doubleBonds.length > 0) {
+        mainPart += `-${parsed.doubleBonds.join(',')}-enă`;
+    } else if (parsed.tripleBonds.length > 0) {
+        mainPart += `-${parsed.tripleBonds.join(',')}-ină`;
+    } else {
+        mainPart += 'an';
+    }
+    
+    return substituentPart + mainPart;
+}
+
+function calculateMolecularFormula(moleculeData) {
+    const counts = {};
+    moleculeData.atoms.forEach(atom => {
+        counts[atom.element] = (counts[atom.element] || 0) + 1;
+    });
+    
+    // Helper function to convert number to subscript
+    const toSubscript = (num) => {
+        if (num <= 1) return '';
+        const subscripts = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'];
+        return String(num).split('').map(d => subscripts[parseInt(d)]).join('');
+    };
+    
+    let formula = '';
+    if (counts.C) formula += `C${toSubscript(counts.C)}`;
+    if (counts.H) formula += `H${toSubscript(counts.H)}`;
+    if (counts.O) formula += `O${toSubscript(counts.O)}`;
+    if (counts.N) formula += `N${toSubscript(counts.N)}`;
+    
+    return formula;
+}
+
 function init() {
     const container = document.getElementById('moleculeViewer');
     
@@ -1327,6 +1501,21 @@ function loadMolecule(moleculeName) {
     document.getElementById('moleculeFormula').textContent = data.formula;
     document.getElementById('moleculeDescription').textContent = data.description;
     
+    // Reset parent compound when loading a new molecule from sidebar
+    parentCompound = null;
+    
+    // Hide back button
+    document.getElementById('backToParentBtn').style.display = 'none';
+    
+    // Show/hide isomers button
+    const isomersBtn = document.getElementById('showIsomersBtn');
+    if (isomersData[moleculeName]) {
+        isomersBtn.style.display = 'block';
+        isomersBtn.onclick = () => showIsomersModal(moleculeName);
+    } else {
+        isomersBtn.style.display = 'none';
+    }
+    
     // Update active button only if called from button click
     if (window.event && window.event.target) {
         document.querySelectorAll('.molecule-btn').forEach(btn => {
@@ -1334,6 +1523,140 @@ function loadMolecule(moleculeName) {
         });
         window.event.target.classList.add('active');
     }
+}
+
+function showIsomersModal(moleculeName) {
+    const data = isomersData[moleculeName];
+    if (!data) return;
+    
+    sounds.click();
+    
+    const modal = document.getElementById('isomersModal');
+    const compoundName = molecules[moleculeName].name;
+    
+    document.getElementById('isomerCompoundName').textContent = compoundName;
+    document.getElementById('isomerFormula').textContent = data.formula;
+    
+    const isomersList = document.getElementById('isomersList');
+    isomersList.innerHTML = '';
+    
+    data.isomers.forEach((isomer, index) => {
+        const card = document.createElement('div');
+        card.className = 'isomer-card';
+        
+        card.innerHTML = `
+            <h3>${isomer.name}</h3>
+            <span class="isomer-type">${isomer.type}</span>
+            <p class="formula">${data.formula}</p>
+            <p>${isomer.description}</p>
+        `;
+        
+        card.addEventListener('mouseenter', () => sounds.hover());
+        card.addEventListener('click', () => {
+            sounds.click();
+            
+            // Store parent compound before switching
+            parentCompound = {
+                name: molecules[moleculeName].name,
+                formula: molecules[moleculeName].formula,
+                description: molecules[moleculeName].description,
+                moleculeName: moleculeName,
+                isomersData: data
+            };
+            
+            // Load the isomer structure
+            if (isomer.data) {
+                loadMolecule(isomer.data);
+            } else {
+                createMolecule(isomer);
+                document.getElementById('moleculeName').textContent = isomer.name;
+                document.getElementById('moleculeFormula').textContent = data.formula;
+                document.getElementById('moleculeDescription').textContent = isomer.description;
+                
+                // Show back button and keep isomers button
+                document.getElementById('backToParentBtn').style.display = 'block';
+                document.getElementById('showIsomersBtn').style.display = 'block';
+                
+                // Update isomers button to show parent's isomers
+                document.getElementById('showIsomersBtn').onclick = () => showIsomersModal(moleculeName);
+            }
+            modal.style.display = 'none';
+        });
+        
+        isomersList.appendChild(card);
+    });
+    
+    modal.style.display = 'block';
+}
+
+function showIUPACIsomersModal(compoundName, isomersData) {
+    sounds.click();
+    
+    const modal = document.getElementById('isomersModal');
+    
+    document.getElementById('isomerCompoundName').textContent = compoundName;
+    document.getElementById('isomerFormula').textContent = isomersData.formula;
+    
+    const isomersList = document.getElementById('isomersList');
+    isomersList.innerHTML = '';
+    
+    isomersData.isomers.forEach((isomer, index) => {
+        const card = document.createElement('div');
+        card.className = 'isomer-card';
+        
+        card.innerHTML = `
+            <h3>${isomer.name}</h3>
+            <span class="isomer-type">${isomer.type}</span>
+            <p class="formula">${isomersData.formula}</p>
+            <p>${isomer.description}</p>
+        `;
+        
+        card.addEventListener('mouseenter', () => sounds.hover());
+        card.addEventListener('click', () => {
+            sounds.click();
+            
+            // Store parent compound before switching (only if not already set)
+            if (!parentCompound || index === 0) {
+                const firstIsomer = isomersData.isomers[0];
+                parentCompound = {
+                    name: firstIsomer.name,
+                    formula: isomersData.formula,
+                    description: firstIsomer.description,
+                    atoms: firstIsomer.atoms,
+                    bonds: firstIsomer.bonds,
+                    isIUPAC: true,
+                    isomersData: isomersData,
+                    compoundName: compoundName
+                };
+            }
+            
+            // Load the isomer structure
+            if (isomer.data) {
+                loadMolecule(isomer.data);
+            } else {
+                createMolecule(isomer);
+                document.getElementById('moleculeName').textContent = isomer.name;
+                document.getElementById('moleculeFormula').textContent = isomersData.formula;
+                document.getElementById('moleculeDescription').textContent = isomer.description;
+                
+                // Show back button if not the first isomer
+                if (index !== 0) {
+                    document.getElementById('backToParentBtn').style.display = 'block';
+                } else {
+                    document.getElementById('backToParentBtn').style.display = 'none';
+                }
+                
+                // Keep isomers button visible
+                document.getElementById('showIsomersBtn').style.display = 'block';
+                document.getElementById('showIsomersBtn').onclick = () => showIUPACIsomersModal(compoundName, isomersData);
+            }
+            modal.style.display = 'none';
+        });
+        
+        isomersList.appendChild(card);
+    });
+    
+    modal.style.display = 'block';
 }
 
 function onWindowResize() {
@@ -1357,39 +1680,18 @@ function animate() {
 document.addEventListener('DOMContentLoaded', () => {
     init();
     
-    // Initialize ambient music system
-    ambientMusic.init();
-    
-    // Set initial volume to 20% and auto-start music
-    const initialVolume = 0.20;
-    ambientMusic.setVolume(initialVolume);
-    ambientMusic.start();
-    
-    // Update button to show playing state
-    const musicBtn = document.getElementById('musicToggle');
-    musicBtn.textContent = '⏸️ Pause Muzică';
-    musicBtn.classList.add('playing');
-    
-    // Music controls
-    document.getElementById('musicToggle').addEventListener('click', () => {
-        const btn = document.getElementById('musicToggle');
-        if (musicPlaying) {
-            ambientMusic.stop();
-            btn.textContent = '▶️ Play Muzică';
-            btn.classList.remove('playing');
-        } else {
-            ambientMusic.start();
-            btn.textContent = '⏸️ Pause Muzică';
-            btn.classList.add('playing');
-        }
-    });
-    
-    // Volume slider
-    document.getElementById('volumeSlider').addEventListener('input', (e) => {
-        const volume = e.target.value / 100;
-        ambientMusic.setVolume(volume);
-        document.getElementById('volumeValue').textContent = e.target.value;
-    });
+    // Function to normalize Romanian diacritics
+    function normalizeDiacritics(text) {
+        const diacriticsMap = {
+            'ă': 'a', 'Ă': 'A',
+            'â': 'a', 'Â': 'A',
+            'î': 'i', 'Î': 'I',
+            'ș': 's', 'Ș': 'S',
+            'ț': 't', 'Ț': 'T'
+        };
+        
+        return text.replace(/[ăâîșțĂÂÎȘȚ]/g, char => diacriticsMap[char] || char);
+    }
     
     // IUPAC search functionality
     document.getElementById('searchBtn').addEventListener('click', () => {
@@ -1399,11 +1701,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             errorElement.textContent = '';
-            const parsed = iupacParser.parse(input);
+            // Normalize Romanian diacritics before parsing
+            const normalizedInput = normalizeDiacritics(input);
+            const parsed = iupacParser.parse(normalizedInput);
             const moleculeData = iupacParser.buildMolecule(parsed);
             
             // Play success sound
             sounds.success();
+            
+            // Reset parent compound when generating a new IUPAC structure
+            parentCompound = null;
             
             // Create molecule from parsed data
             createMolecule(moleculeData);
@@ -1429,9 +1736,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // Update info panel
-            document.getElementById('moleculeName').textContent = input.charAt(0).toUpperCase() + input.slice(1);
+            const compoundName = input.charAt(0).toUpperCase() + input.slice(1);
+            document.getElementById('moleculeName').textContent = compoundName;
             document.getElementById('moleculeFormula').textContent = 'Compus organic generat din nume IUPAC';
             document.getElementById('moleculeDescription').textContent = description;
+            
+            // Hide back button for new IUPAC search
+            document.getElementById('backToParentBtn').style.display = 'none';
+            
+            // Generate and show isomers for IUPAC compounds
+            const generatedIsomers = generateIUPACIsomers(parsed, moleculeData, compoundName);
+            const isomersBtn = document.getElementById('showIsomersBtn');
+            
+            if (generatedIsomers) {
+                // Store generated isomers temporarily
+                window.currentIUPACIsomers = generatedIsomers;
+                isomersBtn.style.display = 'block';
+                isomersBtn.onclick = () => showIUPACIsomersModal(compoundName, generatedIsomers);
+            } else {
+                isomersBtn.style.display = 'none';
+            }
             
             // Clear active buttons
             document.querySelectorAll('.molecule-btn').forEach(btn => {
@@ -1513,6 +1837,76 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentMolecule) {
             loadMolecule(currentMolecule.getAttribute('data-molecule'));
         }
+    });
+    
+    // Modal controls
+    const modal = document.getElementById('isomersModal');
+    const closeBtn = document.querySelector('.close-modal');
+    
+    closeBtn.addEventListener('click', () => {
+        sounds.click();
+        modal.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            sounds.click();
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Back to parent compound button
+    document.getElementById('backToParentBtn').addEventListener('click', () => {
+        sounds.click();
+        
+        if (parentCompound) {
+            if (parentCompound.isIUPAC) {
+                // For IUPAC compounds, load the first isomer (original)
+                const firstIsomer = parentCompound.isomersData.isomers[0];
+                createMolecule(firstIsomer);
+                document.getElementById('moleculeName').textContent = firstIsomer.name;
+                document.getElementById('moleculeFormula').textContent = parentCompound.formula;
+                document.getElementById('moleculeDescription').textContent = firstIsomer.description;
+                
+                // Hide back button, show isomers button
+                document.getElementById('backToParentBtn').style.display = 'none';
+                document.getElementById('showIsomersBtn').style.display = 'block';
+                document.getElementById('showIsomersBtn').onclick = () => 
+                    showIUPACIsomersModal(parentCompound.compoundName, parentCompound.isomersData);
+            } else {
+                // For predefined molecules
+                loadMolecule(parentCompound.moleculeName);
+                
+                // Hide back button
+                document.getElementById('backToParentBtn').style.display = 'none';
+            }
+            
+            sounds.success();
+        }
+    });
+    
+    // Theme Toggle Functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    
+    // Load saved theme preference or use dark mode as default
+    const savedTheme = localStorage.getItem('theme') || 'dark-mode';
+    body.classList.remove('dark-mode', 'light-mode');
+    body.classList.add(savedTheme);
+    
+    // Toggle theme on button click
+    themeToggle.addEventListener('click', () => {
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+            body.classList.add('light-mode');
+            localStorage.setItem('theme', 'light-mode');
+        } else {
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark-mode');
+        }
+        sounds.click();
     });
     
     // Load default molecule
