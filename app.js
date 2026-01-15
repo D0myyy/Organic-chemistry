@@ -1,6 +1,7 @@
 // Three.js scene setup
 let scene, camera, renderer, molecule, controls;
 let isRotating = true;
+let animationPaused = false;
 let currentStyle = 'ballStick';
 
 // Sound effects using Web Audio API
@@ -441,6 +442,104 @@ const molecules = {
         ],
         bonds: [[0,1], [1,2], [0,3], [0,4], [0,5], [1,6], [1,7], [2,8]]
     },
+    propanol: {
+        name: 'Propan-1-ol',
+        formula: 'C₃H₇OH',
+        description: 'Un alcool cu trei carboni, utilizat ca solvent și în sinteze organice.',
+        atoms: [
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0, z: 0 },
+            { element: 'O', x: 1.78, y: 0, z: 0 },
+            { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: 0, z: -1.03 },
+            { element: 'H', x: -0.64, y: 0.89, z: -0.51 },
+            { element: 'H', x: -0.64, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0.64, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0.64, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.38, y: 0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [0,4], [0,5], [0,6], [1,7], [1,8], [2,9], [2,10], [3,11]]
+    },
+    butanol: {
+        name: 'Butan-1-ol',
+        formula: 'C₄H₉OH',
+        description: 'Un alcool cu patru carboni, utilizat ca solvent industrial.',
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'O', x: 2.41, y: 0, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0, y: 0.89, z: 0.51 },
+            { element: 'H', x: 0, y: -0.89, z: -0.51 },
+            { element: 'H', x: 1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: 1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 3.01, y: 0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [0,5], [0,6], [0,7], [1,8], [1,9], [2,10], [2,11], [3,12], [3,13], [4,14]]
+    },
+    pentanol: {
+        name: 'Pentan-1-ol',
+        formula: 'C₅H₁₁OH',
+        description: 'Un alcool cu cinci carboni, utilizat ca solvent și în sinteze organice.',
+        atoms: [
+            { element: 'C', x: -3.18, y: 0, z: 0 },
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0, z: 0 },
+            { element: 'C', x: 1.91, y: 0, z: 0 },
+            { element: 'O', x: 3.05, y: 0, z: 0 },
+            { element: 'H', x: -3.58, y: 0.89, z: 0.51 },
+            { element: 'H', x: -3.58, y: -0.89, z: 0.51 },
+            { element: 'H', x: -3.58, y: 0, z: -1.03 },
+            { element: 'H', x: -1.91, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.91, y: -0.89, z: 0.51 },
+            { element: 'H', x: -0.64, y: 0.89, z: 0.51 },
+            { element: 'H', x: -0.64, y: -0.89, z: -0.51 },
+            { element: 'H', x: 0.64, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0.64, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.91, y: 0.89, z: -0.51 },
+            { element: 'H', x: 1.91, y: -0.89, z: 0.51 },
+            { element: 'H', x: 3.65, y: 0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [0,6], [0,7], [0,8], [1,9], [1,10], [2,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17]]
+    },
+    hexanol: {
+        name: 'Hexan-1-ol',
+        formula: 'C₆H₁₃OH',
+        description: 'Un alcool cu șase carboni, utilizat în parfumerie și ca intermediar chimic.',
+        atoms: [
+            { element: 'C', x: -3.81, y: 0, z: 0 },
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'O', x: 3.68, y: 0, z: 0 },
+            { element: 'H', x: -4.21, y: 0.89, z: 0.51 },
+            { element: 'H', x: -4.21, y: -0.89, z: 0.51 },
+            { element: 'H', x: -4.21, y: 0, z: -1.03 },
+            { element: 'H', x: -2.54, y: 0.89, z: -0.51 },
+            { element: 'H', x: -2.54, y: -0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 0, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 2.54, y: 0.89, z: -0.51 },
+            { element: 'H', x: 2.54, y: -0.89, z: 0.51 },
+            { element: 'H', x: 4.28, y: 0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [2,13], [3,14], [3,15], [4,16], [4,17], [5,18], [5,19], [6,20]]
+    },
     acetone: {
         name: 'Acetonă',
         formula: 'C₃H₆O',
@@ -494,6 +593,263 @@ const molecules = {
 
 // Isomers database
 const isomersData = {
+    methane: {
+        formula: 'CH₄',
+        isomers: [
+            {
+                name: 'Metan',
+                type: 'Singur izomer',
+                description: 'Cel mai simplu alcan, nu are alți izomeri structurali',
+                data: 'methane'
+            }
+        ]
+    },
+    ethane: {
+        formula: 'C₂H₆',
+        isomers: [
+            {
+                name: 'Etan',
+                type: 'Singur izomer',
+                description: 'Nu există alți izomeri structurali pentru C₂H₆',
+                data: 'ethane'
+            }
+        ]
+    },
+    propane: {
+        formula: 'C₃H₈',
+        isomers: [
+            {
+                name: 'Propan',
+                type: 'Singur izomer',
+                description: 'Nu există alți izomeri structurali pentru C₃H₈',
+                data: 'propane'
+            }
+        ]
+    },
+    ethene: {
+        formula: 'C₂H₄',
+        isomers: [
+            {
+                name: 'Etenă (etilenă)',
+                type: 'Singur izomer',
+                description: 'Nu există alți izomeri structurali pentru C₂H₄',
+                data: 'ethene'
+            }
+        ]
+    },
+    ethyne: {
+        formula: 'C₂H₂',
+        isomers: [
+            {
+                name: 'Etină (acetilenă)',
+                type: 'Singur izomer',
+                description: 'Nu există alți izomeri structurali pentru C₂H₂',
+                data: 'ethyne'
+            }
+        ]
+    },
+    propyne: {
+        formula: 'C₃H₄',
+        isomers: [
+            {
+                name: 'Propină',
+                type: 'Izomerie de funcțiune',
+                description: 'Alchină cu legătură triplă terminală',
+                data: 'propyne'
+            },
+            {
+                name: 'Propadienă (alenă)',
+                type: 'Izomerie de funcțiune',
+                description: 'Două legături duble cumulate (C=C=C)',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -1.67, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.67, y: 0.51, z: 0.89 },
+                    { element: 'H', x: 1.67, y: 0.51, z: -0.89 }
+                ],
+                bonds: [[0,1,'double'], [1,2,'double'], [0,3], [0,4], [2,5], [2,6]]
+            }
+        ]
+    },
+    cyclopropane: {
+        formula: 'C₃H₆',
+        isomers: [
+            {
+                name: 'Ciclopropan',
+                type: 'Izomerie de funcțiune',
+                description: 'Compus ciclic cu legături simple',
+                data: 'cyclopropane'
+            },
+            {
+                name: 'Propenă',
+                type: 'Izomerie de funcțiune',
+                description: 'Alchenă cu dubla legătură',
+                data: 'propene'
+            }
+        ]
+    },
+    cyclohexane: {
+        formula: 'C₆H₁₂',
+        isomers: [
+            {
+                name: 'Ciclohexan',
+                type: 'Izomerie de catenă',
+                description: 'Ciclu de 6 carboni',
+                data: 'cyclohexane'
+            },
+            {
+                name: 'Metilciclopentan',
+                type: 'Izomerie de catenă',
+                description: 'Ciclu de 5 carboni cu grup metil',
+                atoms: [
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: -0.95, y: 0.95, z: 0 },
+                    { element: 'C', x: -0.59, y: 2.35, z: 0 },
+                    { element: 'C', x: 0.88, y: 2.35, z: 0 },
+                    { element: 'C', x: 1.24, y: 0.95, z: 0 },
+                    { element: 'C', x: 0.14, y: -1.46, z: 0 },
+                    { element: 'H', x: -0.64, y: 0, z: 0.89 },
+                    { element: 'H', x: -1.98, y: 0.95, z: 0.51 },
+                    { element: 'H', x: -0.95, y: 0.95, z: -1.03 },
+                    { element: 'H', x: -1.19, y: 2.95, z: 0.89 },
+                    { element: 'H', x: -0.59, y: 2.86, z: -0.89 },
+                    { element: 'H', x: 1.48, y: 2.95, z: 0.89 },
+                    { element: 'H', x: 0.88, y: 2.86, z: -0.89 },
+                    { element: 'H', x: 2.27, y: 0.95, z: 0.51 },
+                    { element: 'H', x: 1.24, y: 0.95, z: -1.03 },
+                    { element: 'H', x: 1.01, y: -1.97, z: 0.51 },
+                    { element: 'H', x: -0.73, y: -1.97, z: 0.51 },
+                    { element: 'H', x: 0.14, y: -1.97, z: -1.03 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,0], [0,5], [0,6], [1,7], [1,8], [2,9], [2,10], [3,11], [3,12], [4,13], [4,14], [5,15], [5,16], [5,17]]
+            },
+            {
+                name: 'Etilciclobutan',
+                type: 'Izomerie de catenă',
+                description: 'Ciclu de 4 carboni cu grup etil',
+                atoms: [
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 1.27, z: 0 },
+                    { element: 'C', x: 0, y: 1.27, z: 0 },
+                    { element: 'C', x: 0.64, y: -0.73, z: 1.27 },
+                    { element: 'C', x: 1.27, y: -1.46, z: 2.19 },
+                    { element: 'H', x: 0, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.67, y: 0, z: 1.03 },
+                    { element: 'H', x: -1.67, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.67, y: 1.27, z: 1.03 },
+                    { element: 'H', x: -1.67, y: 1.27, z: -1.03 },
+                    { element: 'H', x: 0, y: 1.27, z: 1.03 },
+                    { element: 'H', x: 0, y: 1.67, z: -0.51 },
+                    { element: 'H', x: -0.23, y: -0.22, z: 1.67 },
+                    { element: 'H', x: 1.51, y: -0.22, z: 1.67 },
+                    { element: 'H', x: 1.67, y: -1.97, z: 3.03 },
+                    { element: 'H', x: 0.40, y: -1.97, z: 2.59 },
+                    { element: 'H', x: 2.14, y: -1.97, z: 1.68 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,0], [0,4], [4,5], [0,6], [1,7], [1,8], [2,9], [2,10], [3,11], [3,12], [4,13], [4,14], [5,15], [5,16], [5,17]]
+            }
+        ]
+    },
+    benzene: {
+        formula: 'C₆H₆',
+        isomers: [
+            {
+                name: 'Benzen',
+                type: 'Singur izomer aromatic',
+                description: 'Structură aromatică unică, nu are alți izomeri structurali stabili',
+                data: 'benzene'
+            }
+        ]
+    },
+    methylamine: {
+        formula: 'CH₅N',
+        isomers: [
+            {
+                name: 'Metilamină',
+                type: 'Singur izomer',
+                description: 'Cea mai simplă amină primară, nu are alți izomeri structurali',
+                data: 'methylamine'
+            }
+        ]
+    },
+    aceticacid: {
+        formula: 'C₂H₄O₂',
+        isomers: [
+            {
+                name: 'Acid acetic',
+                type: 'Izomerie de funcțiune',
+                description: 'Acid carboxilic cu grupă -COOH',
+                data: 'aceticacid'
+            },
+            {
+                name: 'Metil format',
+                type: 'Izomerie de funcțiune',
+                description: 'Ester rezultat din acid formic și metanol',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'O', x: 0.64, y: 0, z: 1.14 },
+                    { element: 'O', x: 0.64, y: 0, z: -1.14 },
+                    { element: 'H', x: -1.67, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -1.67, y: 0, z: -1.03 },
+                    { element: 'H', x: 0, y: 0.89, z: 0.51 }
+                ],
+                bonds: [[0,2], [2,3,'double'], [2,4], [0,1], [0,5], [0,6], [2,7]]
+            }
+        ]
+    },
+    acetone: {
+        formula: 'C₃H₆O',
+        isomers: [
+            {
+                name: 'Acetonă (propanona)',
+                type: 'Izomerie de funcțiune',
+                description: 'Cetonă cu grupă C=O',
+                data: 'acetone'
+            },
+            {
+                name: 'Propanal',
+                type: 'Izomerie de funcțiune',
+                description: 'Aldehidă cu grupă -CHO terminală',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'O', x: 1.91, y: 0, z: 1.14 },
+                    { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -1.67, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -1.67, y: 0, z: -1.03 },
+                    { element: 'H', x: 0, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: 0.89, z: -0.51 }
+                ],
+                bonds: [[0,1], [1,2], [2,3,'double'], [0,4], [0,5], [0,6], [1,7], [1,8], [2,9]]
+            },
+            {
+                name: 'Metil vinil eter',
+                type: 'Izomerie de funcțiune',
+                description: 'Eter nesaturat cu dubla legătură',
+                atoms: [
+                    { element: 'C', x: -1.91, y: 0, z: 0 },
+                    { element: 'O', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 1.14 },
+                    { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.31, y: 0, z: -1.03 },
+                    { element: 'H', x: 0.64, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0.87, y: 0.89, z: 1.67 },
+                    { element: 'H', x: 1.67, y: -0.89, z: 1.67 }
+                ],
+                bonds: [[0,1], [1,2], [2,3,'double'], [0,4], [0,5], [0,6], [2,7], [3,8], [3,9]]
+            }
+        ]
+    },
     pentane: {
         formula: 'C₅H₁₂',
         isomers: [
@@ -681,6 +1037,915 @@ const isomersData = {
                 data: 'cyclopropane'
             }
         ]
+    },
+    hexane: {
+        formula: 'C₆H₁₄',
+        isomers: [
+            {
+                name: 'n-Hexan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț liniar de 6 atomi de carbon',
+                data: 'hexane'
+            },
+            {
+                name: '2-Metilpentan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 5 carboni cu grup metil pe C2',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 2.19, z: 0 },
+                    { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.27, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 0, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.67, y: 2.70, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 2.70, z: -0.51 },
+                    { element: 'H', x: -0.40, y: 2.70, z: -0.51 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [1,5], [0,6], [0,7], [0,8], [1,9], [2,10], [2,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19]]
+            },
+            {
+                name: '3-Metilpentan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 5 carboni cu grup metil pe C3',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 2.19, z: 0 },
+                    { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 0, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: 0.4, y: 2.70, z: 1.03 },
+                    { element: 'H', x: -0.87, y: 2.70, z: 0.51 },
+                    { element: 'H', x: 0.4, y: 2.70, z: -0.89 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [2,5], [0,6], [0,7], [0,8], [1,9], [1,10], [2,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19]]
+            },
+            {
+                name: '2,2-Dimetilbutan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 4 carboni cu două grupuri metil pe C2',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: -0.73, z: 1.27 },
+                    { element: 'C', x: 0, y: -0.73, z: -1.27 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: 0.87, y: -0.22, z: 1.67 },
+                    { element: 'H', x: -0.87, y: -0.22, z: 1.67 },
+                    { element: 'H', x: 0, y: -1.78, z: 1.67 },
+                    { element: 'H', x: 0.87, y: -0.22, z: -1.67 },
+                    { element: 'H', x: -0.87, y: -0.22, z: -1.67 },
+                    { element: 'H', x: 0, y: -1.78, z: -1.67 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [1,4], [1,5], [0,6], [0,7], [0,8], [2,9], [2,10], [3,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19]]
+            },
+            {
+                name: '2,3-Dimetilbutan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 4 carboni cu grupuri metil pe C2 și C3',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: -1.46, z: 0 },
+                    { element: 'C', x: 1.27, y: 2.19, z: 0 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: 0.4, y: -1.97, z: 1.03 },
+                    { element: 'H', x: -0.87, y: -1.97, z: 0.51 },
+                    { element: 'H', x: 0.4, y: -1.97, z: -0.89 },
+                    { element: 'H', x: 1.67, y: 2.70, z: 1.03 },
+                    { element: 'H', x: 0.40, y: 2.70, z: 0.51 },
+                    { element: 'H', x: 2.14, y: 2.70, z: -0.51 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [1,4], [2,5], [0,6], [0,7], [0,8], [1,9], [2,10], [3,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19]]
+            }
+        ]
+    },
+    heptane: {
+        formula: 'C₇H₁₆',
+        isomers: [
+            {
+                name: 'n-Heptan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț liniar de 7 atomi de carbon',
+                data: 'heptane'
+            },
+            {
+                name: '2-Metilhexan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 6 carboni cu grup metil pe C2',
+                atoms: [
+                    { element: 'C', x: -3.18, y: 0, z: 0 },
+                    { element: 'C', x: -1.91, y: 0.73, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0, z: 0 },
+                    { element: 'C', x: 1.91, y: 0, z: 0 },
+                    { element: 'C', x: 3.18, y: 0, z: 0 },
+                    { element: 'C', x: -1.91, y: 2.19, z: 0 },
+                    { element: 'H', x: -3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.91, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -0.64, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -0.64, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 0.64, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 0.64, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 1.91, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.91, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -2.31, y: 2.70, z: 1.03 },
+                    { element: 'H', x: -2.78, y: 2.70, z: -0.51 },
+                    { element: 'H', x: -1.04, y: 2.70, z: -0.51 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [1,6], [0,7], [0,8], [0,9], [1,10], [2,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20], [6,21], [6,22]]
+            },
+            {
+                name: '3-Metilhexan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 6 carboni cu grup metil pe C3',
+                atoms: [
+                    { element: 'C', x: -3.18, y: 0, z: 0 },
+                    { element: 'C', x: -1.91, y: 0, z: 0 },
+                    { element: 'C', x: -0.64, y: 0.73, z: 0 },
+                    { element: 'C', x: 0.64, y: 0, z: 0 },
+                    { element: 'C', x: 1.91, y: 0, z: 0 },
+                    { element: 'C', x: 3.18, y: 0, z: 0 },
+                    { element: 'C', x: -0.64, y: 2.19, z: 0 },
+                    { element: 'H', x: -3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.91, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -1.91, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -0.64, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 0.64, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0.64, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.91, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 1.91, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.24, y: 2.70, z: 1.03 },
+                    { element: 'H', x: -1.51, y: 2.70, z: 0.51 },
+                    { element: 'H', x: -0.24, y: 2.70, z: -0.89 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [2,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20], [6,21], [6,22]]
+            },
+            {
+                name: '2,2-Dimetilpentan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 5 carboni cu două grupuri metil pe C2',
+                atoms: [
+                    { element: 'C', x: -1.91, y: 0.73, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0, z: 0 },
+                    { element: 'C', x: 1.91, y: 0, z: 0 },
+                    { element: 'C', x: 3.18, y: 0, z: 0 },
+                    { element: 'C', x: -0.64, y: -0.73, z: 1.27 },
+                    { element: 'C', x: -0.64, y: -0.73, z: -1.27 },
+                    { element: 'H', x: -2.31, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.78, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.91, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0.64, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0.64, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.91, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 1.91, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: 0.23, y: -0.22, z: 1.67 },
+                    { element: 'H', x: -1.51, y: -0.22, z: 1.67 },
+                    { element: 'H', x: -0.64, y: -1.78, z: 1.67 },
+                    { element: 'H', x: 0.23, y: -0.22, z: -1.67 },
+                    { element: 'H', x: -1.51, y: -0.22, z: -1.67 },
+                    { element: 'H', x: -0.64, y: -1.78, z: -1.67 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [1,5], [1,6], [0,7], [0,8], [0,9], [2,10], [2,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20], [6,21], [6,22]]
+            },
+            {
+                name: '2,3-Dimetilpentan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 5 carboni cu grupuri metil pe C2 și C3',
+                atoms: [
+                    { element: 'C', x: -1.91, y: 0.73, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.91, y: 0, z: 0 },
+                    { element: 'C', x: 3.18, y: 0, z: 0 },
+                    { element: 'C', x: -0.64, y: -1.46, z: 0 },
+                    { element: 'C', x: 0.64, y: 2.19, z: 0 },
+                    { element: 'H', x: -2.31, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.78, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.91, y: 1.78, z: -0.51 },
+                    { element: 'H', x: -0.64, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 0.64, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 1.91, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.91, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.24, y: -1.97, z: 1.03 },
+                    { element: 'H', x: -1.51, y: -1.97, z: 0.51 },
+                    { element: 'H', x: -0.24, y: -1.97, z: -0.89 },
+                    { element: 'H', x: 1.04, y: 2.70, z: 1.03 },
+                    { element: 'H', x: -0.23, y: 2.70, z: 0.51 },
+                    { element: 'H', x: 1.04, y: 2.70, z: -0.89 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [1,5], [2,6], [0,7], [0,8], [0,9], [1,10], [2,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20], [6,21], [6,22]]
+            },
+            {
+                name: '2,4-Dimetilpentan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 5 carboni cu grupuri metil pe C2 și C4',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0.73, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: -1.46, z: 0 },
+                    { element: 'C', x: 1.27, y: 2.19, z: 0 },
+                    { element: 'H', x: -2.94, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -3.41, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -2.54, y: 1.78, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 0, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.87, y: -1.97, z: 1.03 },
+                    { element: 'H', x: -2.14, y: -1.97, z: 0.51 },
+                    { element: 'H', x: -0.87, y: -1.97, z: -0.89 },
+                    { element: 'H', x: 1.67, y: 2.70, z: 1.03 },
+                    { element: 'H', x: 0.40, y: 2.70, z: 0.51 },
+                    { element: 'H', x: 2.14, y: 2.70, z: -0.51 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [1,5], [3,6], [0,7], [0,8], [0,9], [1,10], [2,11], [2,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20], [6,21], [6,22]]
+            },
+            {
+                name: '3,3-Dimetilpentan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 5 carboni cu două grupuri metil pe C3',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0.73, z: 1.27 },
+                    { element: 'C', x: 0, y: 0.73, z: -1.27 },
+                    { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: 0.87, y: 0.22, z: 1.67 },
+                    { element: 'H', x: -0.87, y: 0.22, z: 1.67 },
+                    { element: 'H', x: 0, y: 1.78, z: 1.67 },
+                    { element: 'H', x: 0.87, y: 0.22, z: -1.67 },
+                    { element: 'H', x: -0.87, y: 0.22, z: -1.67 },
+                    { element: 'H', x: 0, y: 1.78, z: -1.67 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [2,5], [2,6], [0,7], [0,8], [0,9], [1,10], [1,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20], [6,21], [6,22]]
+            }
+        ]
+    },
+    octane: {
+        formula: 'C₈H₁₈',
+        isomers: [
+            {
+                name: 'n-Octan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț liniar de 8 atomi de carbon',
+                data: 'octane'
+            },
+            {
+                name: '2-Metilheptan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 7 carboni cu grup metil pe C2',
+                atoms: [
+                    { element: 'C', x: -3.81, y: 0, z: 0 },
+                    { element: 'C', x: -2.54, y: 0.73, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 3.81, y: 0, z: 0 },
+                    { element: 'C', x: -2.54, y: 2.19, z: 0 },
+                    { element: 'H', x: -4.21, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -4.21, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -4.21, y: 0, z: -1.03 },
+                    { element: 'H', x: -2.54, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 0, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 0, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.54, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.54, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 4.21, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: 0, z: -1.03 },
+                    { element: 'H', x: -2.94, y: 2.70, z: 1.03 },
+                    { element: 'H', x: -3.41, y: 2.70, z: -0.51 },
+                    { element: 'H', x: -1.67, y: 2.70, z: -0.51 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6], [1,7], [0,8], [0,9], [0,10], [1,11], [2,12], [2,13], [3,14], [3,15], [4,16], [4,17], [5,18], [5,19], [6,20], [6,21], [6,22], [7,23], [7,24], [7,25]]
+            },
+            {
+                name: '3-Metilheptan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 7 carboni cu grup metil pe C3',
+                atoms: [
+                    { element: 'C', x: -3.81, y: 0, z: 0 },
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 3.81, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 2.19, z: 0 },
+                    { element: 'H', x: -4.21, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -4.21, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -4.21, y: 0, z: -1.03 },
+                    { element: 'H', x: -2.54, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -2.54, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -1.27, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 0, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 2.54, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 2.54, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.87, y: 2.70, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 2.70, z: 0.51 },
+                    { element: 'H', x: -0.87, y: 2.70, z: -0.89 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6], [2,7], [0,8], [0,9], [0,10], [1,11], [1,12], [2,13], [3,14], [3,15], [4,16], [4,17], [5,18], [5,19], [6,20], [6,21], [6,22], [7,23], [7,24], [7,25]]
+            },
+            {
+                name: '2,2-Dimetilhexan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 6 carboni cu două grupuri metil pe C2',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0.73, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 3.81, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: -0.73, z: 1.27 },
+                    { element: 'C', x: -1.27, y: -0.73, z: -1.27 },
+                    { element: 'H', x: -2.94, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -3.41, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -2.54, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 2.54, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 2.54, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.40, y: -0.22, z: 1.67 },
+                    { element: 'H', x: -2.14, y: -0.22, z: 1.67 },
+                    { element: 'H', x: -1.27, y: -1.78, z: 1.67 },
+                    { element: 'H', x: -0.40, y: -0.22, z: -1.67 },
+                    { element: 'H', x: -2.14, y: -0.22, z: -1.67 },
+                    { element: 'H', x: -1.27, y: -1.78, z: -1.67 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [1,6], [1,7], [0,8], [0,9], [0,10], [2,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20], [6,21], [6,22], [7,23], [7,24], [7,25]]
+            },
+            {
+                name: '2,3-Dimetilhexan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 6 carboni cu grupuri metil pe C2 și C3',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0.73, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 3.81, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: -1.46, z: 0 },
+                    { element: 'C', x: 0, y: 2.19, z: 0 },
+                    { element: 'H', x: -2.94, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -3.41, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -2.54, y: 1.78, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 0, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.54, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.54, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 4.21, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 4.21, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.87, y: -1.97, z: 1.03 },
+                    { element: 'H', x: -2.14, y: -1.97, z: 0.51 },
+                    { element: 'H', x: -0.87, y: -1.97, z: -0.89 },
+                    { element: 'H', x: 0.4, y: 2.70, z: 1.03 },
+                    { element: 'H', x: -0.87, y: 2.70, z: 0.51 },
+                    { element: 'H', x: 0.4, y: 2.70, z: -0.89 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [1,6], [2,7], [0,8], [0,9], [0,10], [1,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20], [6,21], [6,22], [7,23], [7,24], [7,25]]
+            },
+            {
+                name: '2,5-Dimetilhexan',
+                type: 'Izomerie de catenă',
+                description: 'Lanț de 6 carboni cu grupuri metil pe C2 și C5',
+                atoms: [
+                    { element: 'C', x: -3.18, y: 0.73, z: 0 },
+                    { element: 'C', x: -1.91, y: 0, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0, z: 0 },
+                    { element: 'C', x: 1.91, y: 0.73, z: 0 },
+                    { element: 'C', x: 3.18, y: 0, z: 0 },
+                    { element: 'C', x: -1.91, y: -1.46, z: 0 },
+                    { element: 'C', x: 1.91, y: 2.19, z: 0 },
+                    { element: 'H', x: -3.58, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -4.05, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -3.18, y: 1.78, z: -0.51 },
+                    { element: 'H', x: -1.91, y: 0.51, z: 1.03 },
+                    { element: 'H', x: -0.64, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -0.64, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 0.64, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 0.64, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 1.91, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.51, y: -1.97, z: 1.03 },
+                    { element: 'H', x: -2.78, y: -1.97, z: 0.51 },
+                    { element: 'H', x: -1.51, y: -1.97, z: -0.89 },
+                    { element: 'H', x: 2.31, y: 2.70, z: 1.03 },
+                    { element: 'H', x: 1.04, y: 2.70, z: 0.51 },
+                    { element: 'H', x: 2.78, y: 2.70, z: -0.51 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [1,6], [4,7], [0,8], [0,9], [0,10], [1,11], [2,12], [2,13], [3,14], [3,15], [4,16], [5,17], [5,18], [5,19], [6,20], [6,21], [6,22], [7,23], [7,24], [7,25]]
+            }
+        ]
+    },
+    propanol: {
+        formula: 'C₃H₈O',
+        isomers: [
+            {
+                name: 'Propan-1-ol',
+                type: 'Izomerie de poziție',
+                description: 'Alcool primar cu -OH pe C1',
+                data: 'propanol'
+            },
+            {
+                name: 'Propan-2-ol (izopropanol)',
+                type: 'Izomerie de poziție',
+                description: 'Alcool secundar cu -OH pe C2',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'O', x: 0, y: -1.4, z: 0 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: -2.0, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [1,3], [0,4], [0,5], [0,6], [1,7], [2,8], [2,9], [2,10], [3,11]]
+            }
+        ]
+    },
+    butanol: {
+        formula: 'C₄H₁₀O',
+        isomers: [
+            {
+                name: 'Butan-1-ol',
+                type: 'Izomerie de poziție',
+                description: 'Alcool primar cu -OH pe C1',
+                data: 'butanol'
+            },
+            {
+                name: 'Butan-2-ol',
+                type: 'Izomerie de poziție',
+                description: 'Alcool secundar cu -OH pe C2',
+                atoms: [
+                    { element: 'C', x: -1.91, y: 0, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.91, y: 0, z: 0 },
+                    { element: 'O', x: -0.64, y: -1.4, z: 0 },
+                    { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.31, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.64, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 0.64, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 0.64, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 2.31, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.31, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.31, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.64, y: -2.0, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [1,4], [0,5], [0,6], [0,7], [1,8], [2,9], [2,10], [3,11], [3,12], [3,13], [4,14]]
+            },
+            {
+                name: '2-Metilpropan-1-ol (izobutanol)',
+                type: 'Izomerie de catenă',
+                description: 'Alcool primar cu lanț ramificat',
+                atoms: [
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: -1.52, z: 0 },
+                    { element: 'O', x: 0, y: -2.66, z: 0 },
+                    { element: 'H', x: 0, y: 0.51, z: 1.03 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0.87, y: -1.93, z: -0.51 },
+                    { element: 'H', x: -0.87, y: -1.93, z: -0.51 },
+                    { element: 'H', x: 0, y: -3.26, z: 0 }
+                ],
+                bonds: [[0,1], [0,2], [0,3], [3,4], [0,5], [1,6], [1,7], [1,8], [2,9], [2,10], [2,11], [3,12], [3,13], [4,14]]
+            },
+            {
+                name: '2-Metilpropan-2-ol (tert-butanol)',
+                type: 'Izomerie de catenă',
+                description: 'Alcool terțiar cu carbon central',
+                atoms: [
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: -0.73, z: 1.27 },
+                    { element: 'O', x: 0, y: -0.73, z: -1.27 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0.87, y: -0.22, z: 1.67 },
+                    { element: 'H', x: -0.87, y: -0.22, z: 1.67 },
+                    { element: 'H', x: 0, y: -1.78, z: 1.67 },
+                    { element: 'H', x: 0, y: -1.33, z: -1.87 }
+                ],
+                bonds: [[0,1], [0,2], [0,3], [0,4], [1,5], [1,6], [1,7], [2,8], [2,9], [2,10], [3,11], [3,12], [3,13], [4,14]]
+            }
+        ]
+    },
+    pentanol: {
+        formula: 'C₅H₁₂O',
+        isomers: [
+            {
+                name: 'Pentan-1-ol',
+                type: 'Izomerie de poziție',
+                description: 'Alcool primar cu -OH pe C1',
+                data: 'pentanol'
+            },
+            {
+                name: 'Pentan-2-ol',
+                type: 'Izomerie de poziție',
+                description: 'Alcool secundar cu -OH pe C2',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'O', x: -1.27, y: -1.4, z: 0 },
+                    { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.27, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 0, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 0, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.27, y: -2.0, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [1,5], [0,6], [0,7], [0,8], [1,9], [2,10], [2,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17]]
+            },
+            {
+                name: 'Pentan-3-ol',
+                type: 'Izomerie de poziție',
+                description: 'Alcool secundar cu -OH pe C3 (carbon central)',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'O', x: 0, y: -1.4, z: 0 },
+                    { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.27, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: 0, y: -2.0, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [2,5], [0,6], [0,7], [0,8], [1,9], [1,10], [2,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17]]
+            },
+            {
+                name: '2-Metilbutan-1-ol',
+                type: 'Izomerie de catenă',
+                description: 'Alcool primar cu ramificație pe C2',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: -1.52, z: 0 },
+                    { element: 'O', x: 0, y: -2.66, z: 0 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: 0.87, y: -1.93, z: -0.51 },
+                    { element: 'H', x: -0.87, y: -1.93, z: -0.51 },
+                    { element: 'H', x: 0, y: -3.26, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [1,4], [4,5], [0,6], [0,7], [0,8], [1,9], [2,10], [2,11], [3,12], [3,13], [3,14], [4,15], [4,16], [5,17]]
+            },
+            {
+                name: '3-Metilbutan-1-ol',
+                type: 'Izomerie de catenă',
+                description: 'Alcool primar cu ramificație pe C3',
+                atoms: [
+                    { element: 'C', x: -1.91, y: 0, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0.73, z: 0 },
+                    { element: 'C', x: 0.64, y: 2.19, z: 0 },
+                    { element: 'C', x: 1.91, y: 0, z: 0 },
+                    { element: 'O', x: 3.05, y: 0, z: 0 },
+                    { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.31, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.64, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -0.64, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 0.64, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 1.04, y: 2.70, z: 0.89 },
+                    { element: 'H', x: -0.23, y: 2.70, z: 0.51 },
+                    { element: 'H', x: 1.04, y: 2.70, z: -0.89 },
+                    { element: 'H', x: 1.91, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.91, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.65, y: 0, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [2,4], [4,5], [0,6], [0,7], [0,8], [1,9], [1,10], [2,11], [3,12], [3,13], [3,14], [4,15], [4,16], [5,17]]
+            },
+            {
+                name: '2-Metilbutan-2-ol',
+                type: 'Izomerie de catenă',
+                description: 'Alcool terțiar cu ramificație',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: -0.73, z: 1.27 },
+                    { element: 'O', x: 0, y: -0.73, z: -1.27 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: 0.87, y: -0.22, z: 1.67 },
+                    { element: 'H', x: -0.87, y: -0.22, z: 1.67 },
+                    { element: 'H', x: 0, y: -1.78, z: 1.67 },
+                    { element: 'H', x: 0, y: -1.33, z: -1.87 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [1,4], [1,5], [0,6], [0,7], [0,8], [2,9], [2,10], [3,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17]]
+            }
+        ]
+    },
+    hexanol: {
+        formula: 'C₆H₁₄O',
+        isomers: [
+            {
+                name: 'Hexan-1-ol',
+                type: 'Izomerie de poziție',
+                description: 'Alcool primar cu -OH pe C1',
+                data: 'hexanol'
+            },
+            {
+                name: 'Hexan-2-ol',
+                type: 'Izomerie de poziție',
+                description: 'Alcool secundar cu -OH pe C2',
+                atoms: [
+                    { element: 'C', x: -3.18, y: 0, z: 0 },
+                    { element: 'C', x: -1.91, y: 0, z: 0 },
+                    { element: 'C', x: -0.64, y: 0.73, z: 0 },
+                    { element: 'C', x: 0.64, y: 0, z: 0 },
+                    { element: 'C', x: 1.91, y: 0, z: 0 },
+                    { element: 'C', x: 3.18, y: 0, z: 0 },
+                    { element: 'O', x: -1.91, y: -1.4, z: 0 },
+                    { element: 'H', x: -3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.91, y: 0.51, z: 1.03 },
+                    { element: 'H', x: -0.64, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -0.64, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0.64, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0.64, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.91, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 1.91, y: -0.89, z: -0.51 },
+                    { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.91, y: -2.0, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [1,6], [0,7], [0,8], [0,9], [1,10], [2,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
+            },
+            {
+                name: 'Hexan-3-ol',
+                type: 'Izomerie de poziție',
+                description: 'Alcool secundar cu -OH pe C3',
+                atoms: [
+                    { element: 'C', x: -3.18, y: 0, z: 0 },
+                    { element: 'C', x: -1.91, y: 0.73, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.91, y: 0, z: 0 },
+                    { element: 'C', x: 3.18, y: 0, z: 0 },
+                    { element: 'O', x: -0.64, y: -1.4, z: 0 },
+                    { element: 'H', x: -3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.91, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -1.91, y: 1.78, z: -0.51 },
+                    { element: 'H', x: -0.64, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 0.64, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 0.64, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 1.91, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.91, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: -0.64, y: -2.0, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [2,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
+            },
+            {
+                name: '2-Metilpentan-1-ol',
+                type: 'Izomerie de catenă',
+                description: 'Alcool primar cu ramificație pe C2',
+                atoms: [
+                    { element: 'C', x: -1.91, y: 0.73, z: 0 },
+                    { element: 'C', x: -0.64, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.91, y: 0, z: 0 },
+                    { element: 'C', x: 3.18, y: 0, z: 0 },
+                    { element: 'C', x: -0.64, y: -1.52, z: 0 },
+                    { element: 'O', x: -0.64, y: -2.66, z: 0 },
+                    { element: 'H', x: -2.31, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.78, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.91, y: 1.78, z: -0.51 },
+                    { element: 'H', x: -0.64, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 0.64, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 0.64, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 1.91, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.91, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 3.58, y: 0, z: -1.03 },
+                    { element: 'H', x: 0.23, y: -1.93, z: -0.51 },
+                    { element: 'H', x: -1.51, y: -1.93, z: -0.51 },
+                    { element: 'H', x: -0.64, y: -3.26, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4], [1,5], [5,6], [0,7], [0,8], [0,9], [1,10], [2,11], [2,12], [3,13], [3,14], [4,15], [4,16], [4,17], [5,18], [5,19], [6,20]]
+            },
+            {
+                name: '3-Metilpentan-1-ol',
+                type: 'Izomerie de catenă',
+                description: 'Alcool primar cu ramificație pe C3',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 2.19, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 2.54, y: 0, z: 0 },
+                    { element: 'O', x: 3.68, y: 0, z: 0 },
+                    { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 0, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 0.4, y: 2.70, z: 0.89 },
+                    { element: 'H', x: -0.87, y: 2.70, z: 0.51 },
+                    { element: 'H', x: 0.4, y: 2.70, z: -0.89 },
+                    { element: 'H', x: 1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 2.54, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 2.54, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 4.28, y: 0, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [2,4], [4,5], [5,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [3,13], [3,14], [3,15], [4,16], [4,17], [5,18], [5,19], [6,20]]
+            },
+            {
+                name: '2,3-Dimetilbutan-1-ol',
+                type: 'Izomerie de catenă',
+                description: 'Alcool primar cu două ramificații metil',
+                atoms: [
+                    { element: 'C', x: 0, y: 2.19, z: 0 },
+                    { element: 'C', x: 0, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: -1.46, z: 0 },
+                    { element: 'C', x: 2.54, y: 0.73, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'O', x: -2.41, y: 0, z: 0 },
+                    { element: 'H', x: 0.4, y: 2.70, z: 0.89 },
+                    { element: 'H', x: -0.87, y: 2.70, z: 0.51 },
+                    { element: 'H', x: 0.4, y: 2.70, z: -0.89 },
+                    { element: 'H', x: 0, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 1.27, y: 0.51, z: 1.03 },
+                    { element: 'H', x: 1.67, y: -1.97, z: 0.89 },
+                    { element: 'H', x: 0.4, y: -1.97, z: 0.51 },
+                    { element: 'H', x: 1.67, y: -1.97, z: -0.89 },
+                    { element: 'H', x: 2.94, y: 0.22, z: 0.51 },
+                    { element: 'H', x: 2.94, y: 0.73, z: -1.03 },
+                    { element: 'H', x: 2.54, y: 1.78, z: 0.51 },
+                    { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -3.01, y: 0, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [2,4], [1,5], [5,6], [0,7], [0,8], [0,9], [1,10], [2,11], [3,12], [3,13], [3,14], [4,15], [4,16], [4,17], [5,18], [5,19], [6,20]]
+            }
+        ]
     }
 };
 
@@ -851,7 +2116,7 @@ class IUPACParser {
         }
         
         if (result.chainLength === 0) {
-            throw new Error('Nu s-a putut determina lungimea lanțului. Exemple valide: "hexan", "but-1-ena", "2,3-dimetilhexan"');
+            throw new Error('Nu s-a putut determina lungimea lanțului. Exemple valide: "hexan", "but-1-ena", "2,3-dimetil-hexan"');
         }
         
         return result;
@@ -1075,6 +2340,301 @@ class IUPACParser {
 
 const iupacParser = new IUPACParser();
 
+// Alkane Isomer Generator - generates all possible structural isomers
+class AlkaneIsomerGenerator {
+    constructor() {
+        this.MAX_ISOMERS = 25;
+        this.generatedStructures = new Set();
+    }
+    
+    // Generate all isomers for a given carbon count
+    generateAllIsomers(carbonCount) {
+        this.generatedStructures.clear();
+        const isomers = [];
+        
+        // Generate all possible carbon skeletons
+        const skeletons = this.generateCarbonSkeletons(carbonCount);
+        
+        // Convert each skeleton to 3D structure
+        for (const skeleton of skeletons) {
+            if (isomers.length >= this.MAX_ISOMERS) break;
+            
+            const canonical = this.getCanonicalForm(skeleton);
+            if (!this.generatedStructures.has(canonical)) {
+                this.generatedStructures.add(canonical);
+                const structure = this.skeletonTo3D(skeleton, carbonCount);
+                if (structure) {
+                    isomers.push(structure);
+                }
+            }
+        }
+        
+        return isomers;
+    }
+    
+    // Generate all possible carbon skeletons recursively
+    generateCarbonSkeletons(n, current = [0], used = new Set([0]), startFrom = 0) {
+        if (current.length === n) {
+            return [current.slice()];
+        }
+        
+        const results = [];
+        
+        // Try attaching to each existing carbon
+        for (let i = startFrom; i < current.length; i++) {
+            const carbonIndex = current[i];
+            const connections = current.filter(c => c === carbonIndex).length;
+            
+            // Carbon can have max 4 bonds (including to other carbons)
+            if (connections < 4) {
+                const newCarbon = current.length;
+                const newSkeleton = [...current, carbonIndex];
+                const subResults = this.generateCarbonSkeletons(n, newSkeleton, used, i);
+                results.push(...subResults);
+            }
+        }
+        
+        return results;
+    }
+    
+    // Convert skeleton array to canonical string for duplicate detection
+    getCanonicalForm(skeleton) {
+        const adjacencyList = {};
+        
+        skeleton.forEach((parent, child) => {
+            if (child === 0) return;
+            if (!adjacencyList[parent]) adjacencyList[parent] = [];
+            if (!adjacencyList[child]) adjacencyList[child] = [];
+            adjacencyList[parent].push(child);
+            adjacencyList[child].push(parent);
+        });
+        
+        // Create a canonical string representation
+        const visited = new Set();
+        const dfs = (node) => {
+            visited.add(node);
+            const neighbors = (adjacencyList[node] || []).filter(n => !visited.has(n));
+            if (neighbors.length === 0) return '()';
+            
+            const childStrings = neighbors.map(n => dfs(n)).sort();
+            return '(' + childStrings.join('') + ')';
+        };
+        
+        return dfs(0);
+    }
+    
+    // Convert skeleton to 3D coordinates
+    skeletonTo3D(skeleton, carbonCount) {
+        const atoms = [];
+        const bonds = [];
+        const positions = {};
+        const adjacencyList = {};
+        
+        // Build adjacency list
+        skeleton.forEach((parent, child) => {
+            if (!adjacencyList[parent]) adjacencyList[parent] = [];
+            if (!adjacencyList[child]) adjacencyList[child] = [];
+            if (child > 0) {
+                adjacencyList[parent].push(child);
+                adjacencyList[child].push(parent);
+            }
+        });
+        
+        // Position carbons using BFS for better spatial distribution
+        const queue = [0];
+        const visited = new Set([0]);
+        positions[0] = { x: 0, y: 0, z: 0 };
+        
+        const bondLength = 1.27;
+        const angleOffset = Math.PI * 2 / 3; // 120 degrees
+        
+        while (queue.length > 0) {
+            const current = queue.shift();
+            const currentPos = positions[current];
+            const neighbors = adjacencyList[current] || [];
+            const unvisitedNeighbors = neighbors.filter(n => !visited.has(n));
+            
+            unvisitedNeighbors.forEach((neighbor, index) => {
+                visited.add(neighbor);
+                queue.push(neighbor);
+                
+                // Position in a tetrahedral-like arrangement
+                const angle = angleOffset * index + Math.random() * 0.3;
+                const verticalOffset = (index % 2 === 0 ? 0.5 : -0.5) * bondLength;
+                
+                positions[neighbor] = {
+                    x: currentPos.x + Math.cos(angle) * bondLength,
+                    y: currentPos.y + verticalOffset,
+                    z: currentPos.z + Math.sin(angle) * bondLength
+                };
+            });
+        }
+        
+        // Add carbon atoms
+        for (let i = 0; i < carbonCount; i++) {
+            const pos = positions[i] || { x: i * 1.27, y: 0, z: 0 };
+            atoms.push({
+                element: 'C',
+                x: pos.x,
+                y: pos.y,
+                z: pos.z
+            });
+        }
+        
+        // Add bonds between carbons
+        skeleton.forEach((parent, child) => {
+            if (child > 0) {
+                bonds.push([parent, child]);
+            }
+        });
+        
+        // Add hydrogens
+        for (let i = 0; i < carbonCount; i++) {
+            const connections = (adjacencyList[i] || []).length;
+            const hydrogenCount = 4 - connections;
+            this.addHydrogens(atoms, bonds, i, hydrogenCount);
+        }
+        
+        // Generate IUPAC name
+        const name = this.generateName(skeleton, carbonCount);
+        
+        return {
+            name: name,
+            type: 'Izomerie de catenă',
+            description: this.generateDescription(skeleton, carbonCount),
+            atoms: atoms,
+            bonds: bonds
+        };
+    }
+    
+    // Add hydrogen atoms
+    addHydrogens(atoms, bonds, carbonIndex, count) {
+        const carbon = atoms[carbonIndex];
+        const bondLength = 1.09;
+        
+        const tetrahedralAngles = [
+            { x: 1, y: 1, z: 1 },
+            { x: -1, y: -1, z: 1 },
+            { x: -1, y: 1, z: -1 },
+            { x: 1, y: -1, z: -1 }
+        ];
+        
+        for (let i = 0; i < count && i < tetrahedralAngles.length; i++) {
+            const angle = tetrahedralAngles[i];
+            const len = Math.sqrt(angle.x**2 + angle.y**2 + angle.z**2);
+            
+            atoms.push({
+                element: 'H',
+                x: carbon.x + (angle.x / len) * bondLength,
+                y: carbon.y + (angle.y / len) * bondLength,
+                z: carbon.z + (angle.z / len) * bondLength
+            });
+            bonds.push([carbonIndex, atoms.length - 1]);
+        }
+    }
+    
+    // Generate IUPAC name from skeleton
+    generateName(skeleton, carbonCount) {
+        const prefixes = ['', 'metan', 'etan', 'propan', 'butan', 'pentan', 'hexan', 'heptan', 'octan', 'nonan', 'decan'];
+        
+        // Find longest chain
+        const longestChain = this.findLongestChain(skeleton, carbonCount);
+        const mainChainLength = longestChain.length;
+        
+        // If it's a straight chain
+        if (mainChainLength === carbonCount) {
+            return 'n-' + prefixes[carbonCount].charAt(0).toUpperCase() + prefixes[carbonCount].slice(1);
+        }
+        
+        // Find substituents
+        const substituents = this.findSubstituents(skeleton, longestChain, carbonCount);
+        
+        if (substituents.length === 0) {
+            return prefixes[mainChainLength].charAt(0).toUpperCase() + prefixes[mainChainLength].slice(1);
+        }
+        
+        // Build name with substituents
+        const substituentCounts = {};
+        substituents.forEach(s => {
+            const key = s.position + '-' + s.name;
+            substituentCounts[key] = (substituentCounts[key] || 0) + 1;
+        });
+        
+        const multipliers = ['', '', 'di', 'tri', 'tetra', 'penta'];
+        let nameParts = [];
+        
+        Object.entries(substituentCounts).forEach(([key, count]) => {
+            const [pos, name] = key.split('-');
+            const prefix = count > 1 ? multipliers[count] : '';
+            nameParts.push(pos + '-' + prefix + name);
+        });
+        
+        return nameParts.join(',') + '-' + prefixes[mainChainLength];
+    }
+    
+    // Find longest carbon chain
+    findLongestChain(skeleton, carbonCount) {
+        const adjacencyList = {};
+        skeleton.forEach((parent, child) => {
+            if (child > 0) {
+                if (!adjacencyList[parent]) adjacencyList[parent] = [];
+                if (!adjacencyList[child]) adjacencyList[child] = [];
+                adjacencyList[parent].push(child);
+                adjacencyList[child].push(parent);
+            }
+        });
+        
+        let longest = [0];
+        
+        const dfs = (node, path, visited) => {
+            if (path.length > longest.length) {
+                longest = [...path];
+            }
+            
+            const neighbors = adjacencyList[node] || [];
+            for (const neighbor of neighbors) {
+                if (!visited.has(neighbor)) {
+                    visited.add(neighbor);
+                    dfs(neighbor, [...path, neighbor], visited);
+                    visited.delete(neighbor);
+                }
+            }
+        };
+        
+        dfs(0, [0], new Set([0]));
+        return longest;
+    }
+    
+    // Find substituents on main chain
+    findSubstituents(skeleton, mainChain, carbonCount) {
+        const substituents = [];
+        const mainChainSet = new Set(mainChain);
+        
+        skeleton.forEach((parent, child) => {
+            if (child > 0 && mainChainSet.has(parent) && !mainChainSet.has(child)) {
+                const position = mainChain.indexOf(parent) + 1;
+                substituents.push({ position, name: 'metil' });
+            }
+        });
+        
+        return substituents;
+    }
+    
+    // Generate description
+    generateDescription(skeleton, carbonCount) {
+        const longestChain = this.findLongestChain(skeleton, carbonCount);
+        const substituents = this.findSubstituents(skeleton, longestChain, carbonCount);
+        
+        let desc = `Lanț principal: ${longestChain.length} atomi de carbon`;
+        if (substituents.length > 0) {
+            desc += `\nRamificații: ${substituents.length} grup(uri) metil`;
+        }
+        return desc;
+    }
+}
+
+const alkaneIsomerGenerator = new AlkaneIsomerGenerator();
+
 // Store parent compound information
 let parentCompound = null;
 
@@ -1091,6 +2651,25 @@ function generateIUPACIsomers(parsed, currentMoleculeData, currentName) {
         atoms: currentMoleculeData.atoms,
         bonds: currentMoleculeData.bonds
     });
+    
+    // For alkanes (no double/triple bonds), generate ALL structural isomers automatically
+    if (parsed.doubleBonds.length === 0 && parsed.tripleBonds.length === 0 && parsed.chainLength >= 4 && parsed.chainLength <= 10) {
+        console.log(`Generare automată izomeri pentru C${parsed.chainLength}...`);
+        const generatedIsomers = alkaneIsomerGenerator.generateAllIsomers(parsed.chainLength);
+        
+        // Add generated isomers (limit to 25 total including current)
+        generatedIsomers.forEach(isom => {
+            if (isomers.length < 25) {
+                // Check if this isomer is different from current structure
+                const isDifferent = isom.name !== currentName;
+                if (isDifferent) {
+                    isomers.push(isom);
+                }
+            }
+        });
+        
+        console.log(`Au fost găsiți ${isomers.length} izomeri unici`);
+    }
     
     // Generate positional isomers for alkenes (keeping substituents)
     if (parsed.doubleBonds.length > 0) {
@@ -1535,7 +3114,7 @@ function showIsomersModal(moleculeName) {
     const compoundName = molecules[moleculeName].name;
     
     document.getElementById('isomerCompoundName').textContent = compoundName;
-    document.getElementById('isomerFormula').textContent = data.formula;
+    document.getElementById('isomerFormula').textContent = `${data.formula} (${data.isomers.length} izomeri găsiți)`;
     
     const isomersList = document.getElementById('isomersList');
     isomersList.innerHTML = '';
@@ -1580,12 +3159,14 @@ function showIsomersModal(moleculeName) {
                 // Update isomers button to show parent's isomers
                 document.getElementById('showIsomersBtn').onclick = () => showIsomersModal(moleculeName);
             }
+            animationPaused = false;
             modal.style.display = 'none';
         });
         
         isomersList.appendChild(card);
     });
     
+    animationPaused = true;
     modal.style.display = 'block';
 }
 
@@ -1595,7 +3176,7 @@ function showIUPACIsomersModal(compoundName, isomersData) {
     const modal = document.getElementById('isomersModal');
     
     document.getElementById('isomerCompoundName').textContent = compoundName;
-    document.getElementById('isomerFormula').textContent = isomersData.formula;
+    document.getElementById('isomerFormula').textContent = `${isomersData.formula} (${isomersData.isomers.length} izomeri găsiți)`;
     
     const isomersList = document.getElementById('isomersList');
     isomersList.innerHTML = '';
@@ -1650,12 +3231,14 @@ function showIUPACIsomersModal(compoundName, isomersData) {
                 document.getElementById('showIsomersBtn').style.display = 'block';
                 document.getElementById('showIsomersBtn').onclick = () => showIUPACIsomersModal(compoundName, isomersData);
             }
+            animationPaused = false;
             modal.style.display = 'none';
         });
         
         isomersList.appendChild(card);
     });
     
+    animationPaused = true;
     modal.style.display = 'block';
 }
 
@@ -1668,6 +3251,9 @@ function onWindowResize() {
 
 function animate() {
     requestAnimationFrame(animate);
+    
+    // Skip rendering completely when modal is open
+    if (animationPaused) return;
     
     if (molecule && isRotating) {
         molecule.rotation.y += 0.005;
@@ -1845,6 +3431,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     closeBtn.addEventListener('click', () => {
         sounds.click();
+        animationPaused = false;
         modal.style.display = 'none';
     });
     
@@ -1852,6 +3439,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
             sounds.click();
+            animationPaused = false;
             modal.style.display = 'none';
         }
     });
