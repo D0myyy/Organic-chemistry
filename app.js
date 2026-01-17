@@ -429,6 +429,11 @@ const molecules = {
         name: 'Etanol',
         formula: 'C₂H₅OH',
         description: 'Un alcool cu doi carboni, găsit frecvent în băuturi și ca combustibil.',
+        properties: {
+            physical: 'Punct de fierbere: 78.4°C | Punct de topire: -114.1°C | Densitate: 0.789 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Alcool primar. Oxidare la acetaldehidă, apoi la acid acetic. Reacții de esterificare, deshidratare la etenă.',
+            uses: 'Utilizări: băuturi alcoolice, combustibil (bioetanol), dezinfectant, solvent în parfumuri și medicamente, sinteza organică'
+        },
         atoms: [
             { element: 'C', x: -1.14, y: 0, z: 0 },
             { element: 'C', x: 0, y: 0, z: 0 },
@@ -446,6 +451,11 @@ const molecules = {
         name: 'Propan-1-ol',
         formula: 'C₃H₇OH',
         description: 'Un alcool cu trei carboni, utilizat ca solvent și în sinteze organice.',
+        properties: {
+            physical: 'Punct de fierbere: 97°C | Punct de topire: -126°C | Densitate: 0.804 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Alcool primar (-OH legat de carbon primar). Oxidare la propanal (aldehidă), apoi la acid propanoic. Reacții de esterificare.',
+            uses: 'Utilizări: solvent pentru rășini și celuloid, intermediar în sinteza organică, producerea propionatului de etil (arome), dezinfectant'
+        },
         atoms: [
             { element: 'C', x: -1.91, y: 0, z: 0 },
             { element: 'C', x: -0.64, y: 0, z: 0 },
@@ -466,6 +476,11 @@ const molecules = {
         name: 'Butan-1-ol',
         formula: 'C₄H₉OH',
         description: 'Un alcool cu patru carboni, utilizat ca solvent industrial.',
+        properties: {
+            physical: 'Punct de fierbere: 117.7°C | Punct de topire: -89.8°C | Densitate: 0.810 g/cm³ | Solubilitate: 7.7 g/100mL apă',
+            chemical: 'Alcool primar. Oxidare la butanal, apoi la acid butanoic. Reacții de esterificare pentru producerea aromelor.',
+            uses: 'Utilizări: solvent în lacuri și vopsele, producerea acrilatului de butil, plastifiant, extractant în parfumerie, intermediar chimic'
+        },
         atoms: [
             { element: 'C', x: -2.54, y: 0, z: 0 },
             { element: 'C', x: -1.27, y: 0, z: 0 },
@@ -489,6 +504,11 @@ const molecules = {
         name: 'Pentan-1-ol',
         formula: 'C₅H₁₁OH',
         description: 'Un alcool cu cinci carboni, utilizat ca solvent și în sinteze organice.',
+        properties: {
+            physical: 'Punct de fierbere: 138°C | Punct de topire: -78°C | Densitate: 0.814 g/cm³ | Solubilitate: 2.2 g/100mL apă',
+            chemical: 'Alcool primar. Oxidare la pentanal, apoi la acid pentanoic. Reacții de esterificare.',
+            uses: 'Utilizări: solvent pentru lacuri și rășini, aditiv în lubrifianți, intermediar în sinteza esterilor pentru arome (banană, măr), extractant'
+        },
         atoms: [
             { element: 'C', x: -3.18, y: 0, z: 0 },
             { element: 'C', x: -1.91, y: 0, z: 0 },
@@ -515,6 +535,11 @@ const molecules = {
         name: 'Hexan-1-ol',
         formula: 'C₆H₁₃OH',
         description: 'Un alcool cu șase carboni, utilizat în parfumerie și ca intermediar chimic.',
+        properties: {
+            physical: 'Punct de fierbere: 157°C | Punct de topire: -47°C | Densitate: 0.814 g/cm³ | Solubilitate în apă: 5.9 g/L',
+            chemical: 'Alcool primar (-OH legat de carbon primar). Reacționează cu acizi formând esteri. Oxidare la hexanal (aldehidă), apoi la acid hexanoic.',
+            uses: 'Utilizări: parfumerie (note florale), sinteza plastifianților, solvent pentru rășini și lacuri, intermediar în producerea detergenților'
+        },
         atoms: [
             { element: 'C', x: -3.81, y: 0, z: 0 },
             { element: 'C', x: -2.54, y: 0, z: 0 },
@@ -539,6 +564,314 @@ const molecules = {
             { element: 'H', x: 4.28, y: 0, z: 0 }
         ],
         bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [2,13], [3,14], [3,15], [4,16], [4,17], [5,18], [5,19], [6,20]]
+    },
+    // Propanol isomers (C3H8O)
+    'propan-2-ol': {
+        name: 'Propan-2-ol (Izopropanol)',
+        formula: 'C₃H₇OH',
+        description: 'Alcool secundar cu grupa -OH pe al doilea carbon. Izomer de poziție al propan-1-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 82.6°C | Punct de topire: -89°C | Densitate: 0.786 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Alcool secundar. Oxidare la acetonă (cetonă). Mai volatil decât propan-1-ol. Reacții de esterificare și deshidratare.',
+            uses: 'Utilizări: dezinfectant (70% soluție), solvent pentru rășini și lacuri, antigel, producerea acetonei, curățarea electronică'
+        },
+        atoms: [
+            { element: 'C', x: -1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'O', x: 0, y: -1.4, z: 0 },
+            { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 0, y: 0.51, z: -1.03 },
+            { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 0, y: -2.0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [1,3], [0,4], [0,5], [0,6], [1,7], [2,8], [2,9], [2,10], [3,11]]
+    },
+    // Butanol isomers (C4H10O)
+    'butan-2-ol': {
+        name: 'Butan-2-ol',
+        formula: 'C₄H₉OH',
+        description: 'Alcool secundar cu grupa -OH pe al doilea carbon. Izomer de poziție al butan-1-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 99.5°C | Punct de topire: -115°C | Densitate: 0.806 g/cm³ | Solubilitate: 29 g/100mL apă',
+            chemical: 'Alcool secundar. Oxidare la butan-2-onă (metil etil cetonă). Centru chiral - există în forme enantiomerice (R și S).',
+            uses: 'Utilizări: solvent pentru rășini, lacuri, vopsele, extractant în industria farmaceutică, intermediar organic'
+        },
+        atoms: [
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0, z: 0 },
+            { element: 'C', x: 1.91, y: 0, z: 0 },
+            { element: 'O', x: -0.64, y: 1.4, z: 0 },
+            { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: 0, z: -1.03 },
+            { element: 'H', x: -0.64, y: -0.51, z: -1.03 },
+            { element: 'H', x: 0.64, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0.64, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.31, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.31, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.31, y: 0, z: -1.03 },
+            { element: 'H', x: -0.64, y: 2.0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [1,4], [0,5], [0,6], [0,7], [1,8], [2,9], [2,10], [3,11], [3,12], [3,13], [4,14]]
+    },
+    '2-metilpropan-1-ol': {
+        name: '2-Metilpropan-1-ol (Izobutanol)',
+        formula: 'C₄H₉OH',
+        description: 'Alcool primar ramificat. Izomer de catenă al butan-1-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 108°C | Punct de topire: -108°C | Densitate: 0.802 g/cm³ | Solubilitate: 8.5 g/100mL apă',
+            chemical: 'Alcool primar ramificat. Oxidare la izobutanal, apoi acid izobutanoic. Reacții de esterificare.',
+            uses: 'Utilizări: producerea esterilor pentru arome și parfumuri, solvent în lacuri și vopsele, intermediar în sinteza organică'
+        },
+        atoms: [
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 0, y: -1.52, z: 0 },
+            { element: 'O', x: 0, y: -2.66, z: 0 },
+            { element: 'H', x: 0.51, y: 0, z: 1.03 },
+            { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 0.87, y: -1.52, z: -0.51 },
+            { element: 'H', x: -0.87, y: -1.52, z: -0.51 },
+            { element: 'H', x: 0, y: -3.26, z: 0 }
+        ],
+        bonds: [[0,1], [0,2], [0,3], [3,4], [0,5], [1,6], [1,7], [1,8], [2,9], [2,10], [2,11], [3,12], [3,13], [4,14]]
+    },
+    '2-metilpropan-2-ol': {
+        name: '2-Metilpropan-2-ol (Terc-butanol)',
+        formula: 'C₄H₉OH',
+        description: 'Alcool terțiar - grupa -OH legată de carbon terțiar. Izomer de poziție și catenă.',
+        properties: {
+            physical: 'Punct de fierbere: 82.4°C | Punct de topire: 25.5°C | Densitate: 0.789 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Alcool terțiar - nu se oxidează ușor. Deshidratare foarte ușoară la izobutenă. Nucleofil slab.',
+            uses: 'Utilizări: solvent polar aprotic, intermediar chimic, octane booster pentru benzină, producerea MTBE (metil terc-butil eter)'
+        },
+        atoms: [
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 0, y: -1.03, z: 0.73 },
+            { element: 'O', x: 0, y: -0.51, z: -1.27 },
+            { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 0, y: -2.08, z: 0.73 },
+            { element: 'H', x: 0.89, y: -0.73, z: 1.27 },
+            { element: 'H', x: -0.89, y: -0.73, z: 1.27 },
+            { element: 'H', x: 0, y: -0.51, z: -1.87 }
+        ],
+        bonds: [[0,1], [0,2], [0,3], [0,4], [1,5], [1,6], [1,7], [2,8], [2,9], [2,10], [3,11], [3,12], [3,13], [4,14]]
+    },
+    // Pentanol isomers (C5H12O) 
+    'pentan-2-ol': {
+        name: 'Pentan-2-ol',
+        formula: 'C₅H₁₁OH',
+        description: 'Alcool secundar cu grupa -OH pe al doilea carbon.',
+        properties: {
+            physical: 'Punct de fierbere: 119°C | Punct de topire: -50°C | Densitate: 0.809 g/cm³ | Solubilitate: 4.5 g/100mL apă',
+            chemical: 'Alcool secundar chiral. Oxidare la pentan-2-onă. Centru stereogenic - există forme enantiomerice.',
+            uses: 'Utilizări: solvent, intermediar în sinteza organică, producerea aromelor și parfumurilor'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'O', x: -1.27, y: 1.4, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: -0.51, z: -1.03 },
+            { element: 'H', x: 0, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 2.0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [1,5], [0,6], [0,7], [0,8], [1,9], [2,10], [2,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17]]
+    },
+    'pentan-3-ol': {
+        name: 'Pentan-3-ol',
+        formula: 'C₅H₁₁OH',
+        description: 'Alcool secundar simetric cu grupa -OH pe al treilea carbon.',
+        properties: {
+            physical: 'Punct de fierbere: 116°C | Punct de topire: -69°C | Densitate: 0.815 g/cm³ | Solubilitate: 5.9 g/100mL apă',
+            chemical: 'Alcool secundar. Oxidare la pentan-3-onă (dietil cetonă). Moleculă achiralăcăa datorită simetriei.',
+            uses: 'Utilizări: solvent pentru rășini și lacuri, intermediar în sinteza farmaceutică, extractant'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'O', x: 0, y: 1.4, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0, y: -0.51, z: -1.03 },
+            { element: 'H', x: 1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: 0, z: -1.03 },
+            { element: 'H', x: 0, y: 2.0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [2,5], [0,6], [0,7], [0,8], [1,9], [1,10], [2,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17]]
+    },
+    '2-metilbutan-1-ol': {
+        name: '2-Metilbutan-1-ol',
+        formula: 'C₅H₁₁OH',
+        description: 'Alcool primar ramificat. Izomer de catenă al pentan-1-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 128°C | Punct de topire: -70°C | Densitate: 0.815 g/cm³ | Solubilitate: 3 g/100mL apă',
+            chemical: 'Alcool primar ramificat chiral. Oxidare la 2-metilbutanal. Reacții de esterificare.',
+            uses: 'Utilizări: solvent organic, producerea esterilor pentru arome (mere, fructe), intermediar farmaceutic'
+        },
+        atoms: [
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0, z: 0 },
+            { element: 'C', x: 1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 1.52, z: 0 },
+            { element: 'O', x: 3.05, y: 0, z: 0 },
+            { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: 0, z: -1.03 },
+            { element: 'H', x: -0.64, y: -0.51, z: -1.03 },
+            { element: 'H', x: 0.64, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0.64, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.91, y: 0.89, z: -0.51 },
+            { element: 'H', x: 1.91, y: -0.89, z: 0.51 },
+            { element: 'H', x: -1.51, y: 1.91, z: 0.51 },
+            { element: 'H', x: 0.23, y: 1.91, z: 0.51 },
+            { element: 'H', x: -0.64, y: 1.91, z: -1.03 },
+            { element: 'H', x: 3.65, y: 0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,5], [1,4], [0,6], [0,7], [0,8], [1,9], [2,10], [2,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17]]
+    },
+    // Hexanol isomers (C6H14O)
+    'hexan-2-ol': {
+        name: 'Hexan-2-ol',
+        formula: 'C₆H₁₃OH',
+        description: 'Alcool secundar cu grupa -OH pe al doilea carbon.',
+        properties: {
+            physical: 'Punct de fierbere: 140°C | Punct de topire: -46°C | Densitate: 0.815 g/cm³ | Solubilitate: 1.4 g/100mL apă',
+            chemical: 'Alcool secundar chiral. Oxidare la hexan-2-onă. Centru stereogenic.',
+            uses: 'Utilizări: solvent pentru lacuri, arome fructate (prune), intermediar în sinteza organică'
+        },
+        atoms: [
+            { element: 'C', x: -3.18, y: 0, z: 0 },
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0, z: 0 },
+            { element: 'C', x: 1.91, y: 0, z: 0 },
+            { element: 'C', x: 3.18, y: 0, z: 0 },
+            { element: 'O', x: -1.91, y: 1.4, z: 0 },
+            { element: 'H', x: -3.58, y: 0.89, z: 0.51 },
+            { element: 'H', x: -3.58, y: -0.89, z: 0.51 },
+            { element: 'H', x: -3.58, y: 0, z: -1.03 },
+            { element: 'H', x: -1.91, y: -0.51, z: -1.03 },
+            { element: 'H', x: -0.64, y: 0.89, z: -0.51 },
+            { element: 'H', x: -0.64, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0.64, y: 0.89, z: 0.51 },
+            { element: 'H', x: 0.64, y: -0.89, z: -0.51 },
+            { element: 'H', x: 1.91, y: 0.89, z: -0.51 },
+            { element: 'H', x: 1.91, y: -0.89, z: 0.51 },
+            { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+            { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+            { element: 'H', x: 3.58, y: 0, z: -1.03 },
+            { element: 'H', x: -1.91, y: 2.0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [1,6], [0,7], [0,8], [0,9], [1,10], [2,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
+    },
+    'hexan-3-ol': {
+        name: 'Hexan-3-ol',
+        formula: 'C₆H₁₃OH',
+        description: 'Alcool secundar cu grupa -OH pe al treilea carbon.',
+        properties: {
+            physical: 'Punct de fierbere: 135°C | Punct de topire: -42°C | Densitate: 0.818 g/cm³ | Solubilitate: 1.6 g/100mL apă',
+            chemical: 'Alcool secundar chiral. Oxidare la hexan-3-onă (etil propil cetonă).',
+            uses: 'Utilizări: solvent industrial, producerea aromelor, intermediar chimic'
+        },
+        atoms: [
+            { element: 'C', x: -3.18, y: 0, z: 0 },
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0, z: 0 },
+            { element: 'C', x: 1.91, y: 0, z: 0 },
+            { element: 'C', x: 3.18, y: 0, z: 0 },
+            { element: 'O', x: -0.64, y: 1.4, z: 0 },
+            { element: 'H', x: -3.58, y: 0.89, z: 0.51 },
+            { element: 'H', x: -3.58, y: -0.89, z: 0.51 },
+            { element: 'H', x: -3.58, y: 0, z: -1.03 },
+            { element: 'H', x: -1.91, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.91, y: -0.89, z: 0.51 },
+            { element: 'H', x: -0.64, y: -0.51, z: -1.03 },
+            { element: 'H', x: 0.64, y: 0.89, z: 0.51 },
+            { element: 'H', x: 0.64, y: -0.89, z: -0.51 },
+            { element: 'H', x: 1.91, y: 0.89, z: -0.51 },
+            { element: 'H', x: 1.91, y: -0.89, z: 0.51 },
+            { element: 'H', x: 3.58, y: 0.89, z: 0.51 },
+            { element: 'H', x: 3.58, y: -0.89, z: 0.51 },
+            { element: 'H', x: 3.58, y: 0, z: -1.03 },
+            { element: 'H', x: -0.64, y: 2.0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [2,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
+    },
+    '2-metilpentan-1-ol': {
+        name: '2-Metilpentan-1-ol',
+        formula: 'C₆H₁₃OH',
+        description: 'Alcool primar ramificat. Izomer de catenă al hexan-1-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 148°C | Punct de topire: -90°C | Densitate: 0.826 g/cm³ | Solubilitate: 1.5 g/100mL apă',
+            chemical: 'Alcool primar ramificat chiral. Oxidare la 2-metilpentanal. Reacții de esterificare.',
+            uses: 'Utilizări: solvent pentru rășini, producerea plastifianților, intermediar în sinteza organică'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 1.52, z: 0 },
+            { element: 'O', x: 3.68, y: 0, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: -0.51, z: -1.03 },
+            { element: 'H', x: 0, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 2.54, y: 0.89, z: -0.51 },
+            { element: 'H', x: 2.54, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.14, y: 1.91, z: 0.51 },
+            { element: 'H', x: -0.40, y: 1.91, z: 0.51 },
+            { element: 'H', x: -1.27, y: 1.91, z: -1.03 },
+            { element: 'H', x: 4.28, y: 0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,6], [1,5], [0,7], [0,8], [0,9], [1,10], [2,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
     },
     acetone: {
         name: 'Acetonă',
@@ -2010,6 +2343,7 @@ class IUPACParser {
             substituents: [],
             doubleBonds: [],
             tripleBonds: [],
+            alcohol: null,  // Position of -OH group
             isomer: null  // 'cis' or 'trans'
         };
         
@@ -2022,6 +2356,19 @@ class IUPACParser {
             name = name.substring(6);
         }
         
+        // Check for alcohol (-ol)
+        let alcoholMatch = null;
+        if (name.includes('-ol')) {
+            // Pattern: butan-1-ol, propan-2-ol, 2-metilpropan-1-ol
+            alcoholMatch = name.match(/-(\d+)-ol$/);
+            if (alcoholMatch) {
+                result.alcohol = parseInt(alcoholMatch[1]);
+            } else {
+                // Simple pattern: propanol (assume -1-ol)
+                result.alcohol = 1;
+            }
+        }
+        
         // Parse substituents (e.g., "2,3-dimetil", "2-etil")
         const substituentRegex = /(\d+(?:,\d+)*)-([a-z]+)/g;
         let match;
@@ -2031,11 +2378,12 @@ class IUPACParser {
             const positions = match[1].split(',').map(Number);
             const substituentName = match[2];
             
-            // Skip if this is the main chain (ends with -an, -ena, -ina, -diena)
+            // Skip if this is the main chain (ends with -an, -ena, -ina, -diena, -ol)
             if (substituentName.endsWith('an') || 
                 substituentName.endsWith('ena') || 
                 substituentName.endsWith('ina') ||
-                substituentName.endsWith('diena')) {
+                substituentName.endsWith('diena') ||
+                substituentName.endsWith('ol')) {
                 continue;
             }
             
@@ -2063,7 +2411,12 @@ class IUPACParser {
         }
         
         // Parse main chain and functional groups
-        // Examples: "hexan", "but-1-ena", "but-1,3-diena", "but-1-ina"
+        // Examples: "hexan", "but-1-ena", "but-1,3-diena", "but-1-ina", "butan-1-ol"
+        
+        // Remove -ol suffix for chain parsing
+        if (nameWithoutSubstituents.includes('-ol')) {
+            nameWithoutSubstituents = nameWithoutSubstituents.replace(/-\d+-ol$/, 'an').replace(/-ol$/, 'an');
+        }
         
         // Check for alkyne (-ina)
         if (nameWithoutSubstituents.includes('-ina')) {
@@ -2116,7 +2469,7 @@ class IUPACParser {
         }
         
         if (result.chainLength === 0) {
-            throw new Error('Nu s-a putut determina lungimea lanțului. Exemple valide: "hexan", "but-1-ena", "2,3-dimetil-hexan"');
+            throw new Error('Nu s-a putut determina lungimea lanțului. Exemple valide: "hexan", "but-1-ena", "2,3-dimetil-hexan", "propan-2-ol"');
         }
         
         return result;
@@ -2131,6 +2484,7 @@ class IUPACParser {
         const substituents = parsed.substituents;
         const doubleBonds = parsed.doubleBonds;
         const tripleBonds = parsed.tripleBonds;
+        const alcoholPosition = parsed.alcohol;
         
         // Build carbon chain with zig-zag geometry
         for (let i = 0; i < chainLength; i++) {
@@ -2164,6 +2518,44 @@ class IUPACParser {
         for (let i = 0; i < chainLength; i++) {
             if (i > 0) occupiedPositions[i].push('left');
             if (i < chainLength - 1) occupiedPositions[i].push('right');
+        }
+        
+        // Add alcohol group (-OH) if present
+        if (alcoholPosition !== null && alcoholPosition > 0 && alcoholPosition <= chainLength) {
+            const carbonIndex = alcoholPosition - 1;
+            const availablePositions = this.getAvailableTetrahedralPositions(
+                atoms[carbonIndex], 
+                occupiedPositions[carbonIndex],
+                carbonIndex,
+                chainLength
+            );
+            
+            if (availablePositions.length > 0) {
+                const position = availablePositions[0];
+                
+                // Add oxygen atom
+                const oxygenAtom = {
+                    element: 'O',
+                    x: atoms[carbonIndex].x + position.x * spacing * 0.75,
+                    y: atoms[carbonIndex].y + position.y * spacing * 0.75,
+                    z: atoms[carbonIndex].z + position.z * spacing * 0.75
+                };
+                const oxygenIndex = atoms.length;
+                atoms.push(oxygenAtom);
+                bonds.push([carbonIndex, oxygenIndex]);
+                
+                // Add hydrogen to oxygen
+                const hydrogenAtom = {
+                    element: 'H',
+                    x: oxygenAtom.x + position.x * 0.96,
+                    y: oxygenAtom.y + position.y * 0.96,
+                    z: oxygenAtom.z + position.z * 0.96
+                };
+                atoms.push(hydrogenAtom);
+                bonds.push([oxygenIndex, atoms.length - 1]);
+                
+                occupiedPositions[carbonIndex].push(position.name);
+            }
         }
         
         // Add substituents (metil, etil groups)
@@ -3078,7 +3470,15 @@ function loadMolecule(moleculeName) {
     
     document.getElementById('moleculeName').textContent = data.name;
     document.getElementById('moleculeFormula').textContent = data.formula;
-    document.getElementById('moleculeDescription').textContent = data.description;
+    
+    // Build description with properties if available
+    let descriptionHTML = data.description;
+    if (data.properties) {
+        descriptionHTML += '<br><br><strong>📊 Proprietăți Fizice:</strong><br>' + data.properties.physical;
+        descriptionHTML += '<br><br><strong>⚗️ Proprietăți Chimice:</strong><br>' + data.properties.chemical;
+        descriptionHTML += '<br><br><strong>🏭 Utilizări:</strong><br>' + data.properties.uses;
+    }
+    document.getElementById('moleculeDescription').innerHTML = descriptionHTML;
     
     // Reset parent compound when loading a new molecule from sidebar
     parentCompound = null;
@@ -3150,7 +3550,15 @@ function showIsomersModal(moleculeName) {
                 createMolecule(isomer);
                 document.getElementById('moleculeName').textContent = isomer.name;
                 document.getElementById('moleculeFormula').textContent = data.formula;
-                document.getElementById('moleculeDescription').textContent = isomer.description;
+                
+                // Build description with properties if available
+                let descriptionHTML = isomer.description;
+                if (isomer.properties) {
+                    descriptionHTML += '<br><br><strong>📊 Proprietăți Fizice:</strong><br>' + isomer.properties.physical;
+                    descriptionHTML += '<br><br><strong>⚗️ Proprietăți Chimice:</strong><br>' + isomer.properties.chemical;
+                    descriptionHTML += '<br><br><strong>🏭 Utilizări:</strong><br>' + isomer.properties.uses;
+                }
+                document.getElementById('moleculeDescription').innerHTML = descriptionHTML;
                 
                 // Show back button and keep isomers button
                 document.getElementById('backToParentBtn').style.display = 'block';
@@ -3218,7 +3626,15 @@ function showIUPACIsomersModal(compoundName, isomersData) {
                 createMolecule(isomer);
                 document.getElementById('moleculeName').textContent = isomer.name;
                 document.getElementById('moleculeFormula').textContent = isomersData.formula;
-                document.getElementById('moleculeDescription').textContent = isomer.description;
+                
+                // Build description with properties if available
+                let descriptionHTML = isomer.description;
+                if (isomer.properties) {
+                    descriptionHTML += '<br><br><strong>📊 Proprietăți Fizice:</strong><br>' + isomer.properties.physical;
+                    descriptionHTML += '<br><br><strong>⚗️ Proprietăți Chimice:</strong><br>' + isomer.properties.chemical;
+                    descriptionHTML += '<br><br><strong>🏭 Utilizări:</strong><br>' + isomer.properties.uses;
+                }
+                document.getElementById('moleculeDescription').innerHTML = descriptionHTML;
                 
                 // Show back button if not the first isomer
                 if (index !== 0) {
@@ -3289,6 +3705,16 @@ document.addEventListener('DOMContentLoaded', () => {
             errorElement.textContent = '';
             // Normalize Romanian diacritics before parsing
             const normalizedInput = normalizeDiacritics(input);
+            
+            // Check if this compound exists in the predefined list
+            const predefinedCompound = molecules[normalizedInput.toLowerCase()];
+            if (predefinedCompound) {
+                // Use predefined data instead of generating
+                sounds.success();
+                loadMolecule(normalizedInput.toLowerCase());
+                return;
+            }
+            
             const parsed = iupacParser.parse(normalizedInput);
             const moleculeData = iupacParser.buildMolecule(parsed);
             
@@ -3303,6 +3729,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Build description
             let description = `Lanț principal: ${parsed.chainLength} atomi de carbon`;
+            
+            if (parsed.alcohol !== null) {
+                description += `\nGrupă hidroxil (-OH) la poziția: ${parsed.alcohol}`;
+                description += `\nTip: ${parsed.alcohol === 1 ? 'Alcool primar' : parsed.alcohol === parsed.chainLength ? 'Alcool primar' : 'Alcool secundar'}`;
+            }
             
             if (parsed.doubleBonds.length > 0) {
                 description += `\nLegături duble la poziția: ${parsed.doubleBonds.join(', ')}`;
