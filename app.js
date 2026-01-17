@@ -3030,6 +3030,224 @@ const alkaneIsomerGenerator = new AlkaneIsomerGenerator();
 // Store parent compound information
 let parentCompound = null;
 
+// Function to generate alcohol isomers (isomers with same number of oxygen atoms)
+function generateAlcoholIsomers(parsed, isomers, currentName) {
+    const chainLen = parsed.chainLength;
+    
+    // Generate positional isomers - move -OH to different positions
+    for (let pos = 1; pos <= chainLen; pos++) {
+        if (pos !== parsed.alcohol) {
+            try {
+                const newParsed = {
+                    ...parsed,
+                    alcohol: pos,
+                    substituents: [...parsed.substituents]
+                };
+                const newMolecule = iupacParser.buildMolecule(newParsed);
+                const newName = generateFullIUPACName(newParsed);
+                
+                // Skip if this is the same as current structure
+                if (newName !== currentName) {
+                    isomers.push({
+                        name: newName,
+                        type: 'Izomerie de poziție (alcool)',
+                        description: buildDetailedDescription(newParsed) + '\nGrupa -OH la poziția ' + pos,
+                        atoms: newMolecule.atoms,
+                        bonds: newMolecule.bonds
+                    });
+                }
+            } catch (e) {
+                console.log('Skipped invalid alcohol isomer:', e.message);
+            }
+        }
+    }
+    
+    // Generate chain isomers - move substituents while keeping -OH
+    if (parsed.substituents.length > 0 && chainLen >= 4) {
+        // Try different substituent positions
+        for (let newPos = 2; newPos <= Math.floor(chainLen / 2) + 1; newPos++) {
+            try {
+                // Create a variant with substituent at different position
+                const modifiedSubstituents = parsed.substituents.map(sub => ({
+                    ...sub,
+                    position: newPos
+                }));
+                
+                const newParsed = {
+                    ...parsed,
+                    substituents: modifiedSubstituents,
+                    alcohol: parsed.alcohol
+                };
+                
+                const newMolecule = iupacParser.buildMolecule(newParsed);
+                const newName = generateFullIUPACName(newParsed);
+                
+                if (newName !== currentName && !isomers.some(iso => iso.name === newName)) {
+                    isomers.push({
+                        name: newName,
+                        type: 'Izomerie de catenă (alcool)',
+                        description: buildDetailedDescription(newParsed),
+                        atoms: newMolecule.atoms,
+                        bonds: newMolecule.bonds
+                    });
+                }
+            } catch (e) {
+                // Skip invalid structures
+            }
+        }
+    }
+    
+    // Generate ether isomers (functional group isomers) - for alcohols with 2+ carbons
+    // Ethers have the same formula CnH(2n+2)O but different structure (R-O-R instead of R-OH)
+    if (chainLen >= 2) {
+        try {
+            // For example, C2H6O: ethanol <-> dimethyl ether
+            // C3H8O: propanol <-> ethyl methyl eter
+            // C4H10O: butanol <-> diethyl eter, methyl propyl eter
+            // C5H12O: pentanol <-> methyl butyl eter, ethyl propyl eter
+            
+            const etherIsomers = generateEtherIsomersForAlcohol(chainLen);
+            etherIsomers.forEach(ether => {
+                if (!isomers.some(iso => iso.name === ether.name)) {
+                    isomers.push(ether);
+                }
+            });
+        } catch (e) {
+            console.log('Error generating ether isomers:', e.message);
+        }
+    }
+}
+
+// Generate ether isomers for a given carbon count (functional group isomers of alcohols)
+function generateEtherIsomersForAlcohol(carbonCount) {
+    const ethers = [];
+    
+    // Generate all possible combinations of R-O-R where R1 + R2 = carbonCount
+    for (let r1 = 1; r1 < carbonCount; r1++) {
+        const r2 = carbonCount - r1;
+        
+        // Only generate if r1 <= r2 to avoid duplicates (methyl ethyl = ethyl methyl)
+        if (r1 <= r2) {
+            try {
+                const etherName = generateEtherName(r1, r2);
+                const etherStructure = buildEtherStructure(r1, r2);
+                
+                if (etherStructure) {
+                    ethers.push({
+                        name: etherName,
+                        type: 'Izomerie de funcțiune (eter)',
+                        description: `Eter cu ${r1} și ${r2} atomi de carbon legați la oxigen`,
+                        atoms: etherStructure.atoms,
+                        bonds: etherStructure.bonds
+                    });
+                }
+            } catch (e) {
+                // Skip invalid ether structures
+            }
+        }
+    }
+    
+    return ethers;
+}
+
+// Generate IUPAC name for ether
+function generateEtherName(r1, r2) {
+    const alkylNames = ['', 'metil', 'etil', 'propil', 'butil', 'pentil', 'hexil'];
+    
+    if (r1 === r2) {
+        return `di${alkylNames[r1]} eter`;
+    } else {
+        return `${alkylNames[r1]} ${alkylNames[r2]} eter`;
+    }
+}
+
+// Build 3D structure for an ether R1-O-R2
+function buildEtherStructure(r1, r2) {
+    const atoms = [];
+    const bonds = [];
+    const spacing = 1.27;
+    
+    // Build R1 chain (left side)
+    for (let i = 0; i < r1; i++) {
+        atoms.push({
+            element: 'C',
+            x: -spacing * (r1 - i),
+            y: 0,
+            z: 0
+        });
+    }
+    
+    // Add oxygen atom
+    const oxygenIndex = atoms.length;
+    atoms.push({
+        element: 'O',
+        x: 0,
+        y: 0,
+        z: 0
+    });
+    
+    // Build R2 chain (right side)
+    for (let i = 0; i < r2; i++) {
+        atoms.push({
+            element: 'C',
+            x: spacing * (i + 1),
+            y: 0,
+            z: 0
+        });
+    }
+    
+    // Add bonds for R1 chain to oxygen
+    for (let i = 0; i < r1 - 1; i++) {
+        bonds.push([i, i + 1]);
+    }
+    if (r1 > 0) {
+        bonds.push([r1 - 1, oxygenIndex]);
+    }
+    
+    // Add bonds for R2 chain from oxygen
+    if (r2 > 0) {
+        bonds.push([oxygenIndex, oxygenIndex + 1]);
+        for (let i = oxygenIndex + 1; i < oxygenIndex + r2; i++) {
+            bonds.push([i, i + 1]);
+        }
+    }
+    
+    // Add hydrogens to all carbons
+    const carbonIndices = [];
+    for (let i = 0; i < atoms.length; i++) {
+        if (atoms[i].element === 'C') {
+            carbonIndices.push(i);
+        }
+    }
+    
+    carbonIndices.forEach((carbonIdx, arrayIdx) => {
+        // Count carbon bonds
+        let carbonBonds = 0;
+        bonds.forEach(bond => {
+            if (bond[0] === carbonIdx || bond[1] === carbonIdx) {
+                carbonBonds++;
+            }
+        });
+        
+        const hydrogensNeeded = 4 - carbonBonds;
+        
+        // Add hydrogens with tetrahedral geometry
+        for (let h = 0; h < hydrogensNeeded; h++) {
+            const angle = (Math.PI * 2 / hydrogensNeeded) * h + Math.PI / 2;
+            const hPos = {
+                element: 'H',
+                x: atoms[carbonIdx].x + Math.cos(angle) * 1.09,
+                y: atoms[carbonIdx].y + Math.sin(angle) * 1.09,
+                z: atoms[carbonIdx].z + (h % 2 === 0 ? 0.5 : -0.5)
+            };
+            atoms.push(hPos);
+            bonds.push([carbonIdx, atoms.length - 1]);
+        }
+    });
+    
+    return { atoms, bonds };
+}
+
 // Function to generate isomers for IUPAC compounds
 function generateIUPACIsomers(parsed, currentMoleculeData, currentName) {
     const isomers = [];
@@ -3044,8 +3262,13 @@ function generateIUPACIsomers(parsed, currentMoleculeData, currentName) {
         bonds: currentMoleculeData.bonds
     });
     
-    // For alkanes (no double/triple bonds), generate ALL structural isomers automatically
-    if (parsed.doubleBonds.length === 0 && parsed.tripleBonds.length === 0 && parsed.chainLength >= 4 && parsed.chainLength <= 10) {
+    // Check if molecule has functional groups (alcohol, etc.)
+    const hasOxygen = currentMoleculeData.atoms.some(atom => atom.element === 'O');
+    const hasNitrogen = currentMoleculeData.atoms.some(atom => atom.element === 'N');
+    const hasFunctionalGroup = hasOxygen || hasNitrogen || parsed.alcohol !== null;
+    
+    // For alkanes (no double/triple bonds and NO functional groups), generate ALL structural isomers automatically
+    if (parsed.doubleBonds.length === 0 && parsed.tripleBonds.length === 0 && !hasFunctionalGroup && parsed.chainLength >= 4 && parsed.chainLength <= 10) {
         console.log(`Generare automată izomeri pentru C${parsed.chainLength}...`);
         const generatedIsomers = alkaneIsomerGenerator.generateAllIsomers(parsed.chainLength);
         
@@ -3061,6 +3284,12 @@ function generateIUPACIsomers(parsed, currentMoleculeData, currentName) {
         });
         
         console.log(`Au fost găsiți ${isomers.length} izomeri unici`);
+    }
+    
+    // For alcohols (molecules with -OH group), generate alcohol isomers
+    if (parsed.alcohol !== null && parsed.chainLength >= 3) {
+        console.log(`Generare izomeri de alcool pentru ${currentName}...`);
+        generateAlcoholIsomers(parsed, isomers, currentName);
     }
     
     // Generate positional isomers for alkenes (keeping substituents)
@@ -3165,6 +3394,10 @@ function getIsomerType(parsed) {
 function buildDetailedDescription(parsed) {
     let desc = `Lanț principal: ${parsed.chainLength} atomi de carbon`;
     
+    if (parsed.alcohol !== null) {
+        desc += `\nGrupa hidroxil (-OH) la poziția: ${parsed.alcohol}`;
+    }
+    
     if (parsed.doubleBonds.length > 0) {
         desc += `\nLegături duble la poziția: ${parsed.doubleBonds.join(', ')}`;
     }
@@ -3215,7 +3448,10 @@ function generateFullIUPACName(parsed) {
     // Build main chain part
     let mainPart = prefixes[parsed.chainLength] || parsed.chainLength;
     
-    if (parsed.doubleBonds.length > 0) {
+    // Check if it's an alcohol (has -OH group)
+    if (parsed.alcohol !== null) {
+        mainPart += `an-${parsed.alcohol}-ol`;
+    } else if (parsed.doubleBonds.length > 0) {
         mainPart += `-${parsed.doubleBonds.join(',')}-enă`;
     } else if (parsed.tripleBonds.length > 0) {
         mainPart += `-${parsed.tripleBonds.join(',')}-ină`;
