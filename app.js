@@ -873,6 +873,272 @@ const molecules = {
         ],
         bonds: [[0,1], [1,2], [2,3], [3,4], [4,6], [1,5], [0,7], [0,8], [0,9], [1,10], [2,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
     },
+    '3-metilbutan-2-ol': {
+        name: '3-Metilbutan-2-ol',
+        formula: 'C₅H₁₁OH',
+        description: 'Alcool secundar ramificat. Izomer de catenă al pentan-2-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 112°C | Punct de topire: -117°C | Densitate: 0.818 g/cm³ | Solubilitate: 5.5 g/100mL apă',
+            chemical: 'Alcool secundar chiral. Oxidare la 3-metilbutan-2-onă. Centru stereogenic.',
+            uses: 'Utilizări: solvent, intermediar în sinteza organică, producerea esterilor'
+        },
+        atoms: [
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0.73, z: 0 },
+            { element: 'C', x: 0.64, y: 2.19, z: 0 },
+            { element: 'C', x: 1.91, y: 0, z: 0 },
+            { element: 'O', x: -0.64, y: -1.4, z: 0 },
+            { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: 0, z: -1.03 },
+            { element: 'H', x: -0.64, y: 0.51, z: 1.03 },
+            { element: 'H', x: 0.64, y: 0.73, z: 1.03 },
+            { element: 'H', x: 1.04, y: 2.70, z: 0.89 },
+            { element: 'H', x: -0.23, y: 2.70, z: 0.51 },
+            { element: 'H', x: 1.04, y: 2.70, z: -0.89 },
+            { element: 'H', x: 2.31, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.31, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.31, y: 0, z: -1.03 },
+            { element: 'H', x: -0.64, y: -2.0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [2,4], [1,5], [0,6], [0,7], [0,8], [1,9], [2,10], [3,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17]]
+    },
+    '2,2-dimetilpropan-1-ol': {
+        name: '2,2-Dimetilpropan-1-ol (Neopentil alcool)',
+        formula: 'C₅H₁₁OH',
+        description: 'Alcool primar foarte ramificat. Izomer de catenă al pentan-1-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 113°C | Punct de topire: 53°C | Densitate: 0.812 g/cm³ | Solubilitate: 3.3 g/100mL apă',
+            chemical: 'Alcool primar compact cu impiedicare sterică. Reactivitate redusă în esterificări datorită efectului steric.',
+            uses: 'Utilizări: intermediar în sinteza organică, producerea poliolilor, agent de blocare steric'
+        },
+        atoms: [
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 0, y: -0.73, z: 1.27 },
+            { element: 'C', x: 0, y: -0.73, z: -1.27 },
+            { element: 'O', x: 0, y: -1.87, z: -1.87 },
+            { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 0.89, y: -0.22, z: 1.67 },
+            { element: 'H', x: -0.89, y: -0.22, z: 1.67 },
+            { element: 'H', x: 0, y: -1.78, z: 1.67 },
+            { element: 'H', x: 0.87, y: -0.22, z: -1.67 },
+            { element: 'H', x: -0.87, y: -0.22, z: -1.67 },
+            { element: 'H', x: 0, y: -2.47, z: -2.47 }
+        ],
+        bonds: [[0,1], [0,2], [0,3], [0,4], [4,5], [1,6], [1,7], [1,8], [2,9], [2,10], [2,11], [3,12], [3,13], [3,14], [4,15], [4,16], [5,17]]
+    },
+    '3-metilpentan-2-ol': {
+        name: '3-Metilpentan-2-ol',
+        formula: 'C₆H₁₃OH',
+        description: 'Alcool secundar ramificat. Izomer de catenă al hexan-2-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 134°C | Punct de topire: -103°C | Densitate: 0.824 g/cm³ | Solubilitate: 2.0 g/100mL apă',
+            chemical: 'Alcool secundar chiral cu ramificație. Oxidare la 3-metilpentan-2-onă. Are doi centri stereogenici.',
+            uses: 'Utilizări: solvent, intermediar chimic, producerea aromelor'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0.73, z: 0 },
+            { element: 'C', x: 0, y: 2.19, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'O', x: -1.27, y: -1.4, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.51, z: 1.03 },
+            { element: 'H', x: 0, y: 0.73, z: 1.03 },
+            { element: 'H', x: 0.4, y: 2.70, z: 0.89 },
+            { element: 'H', x: -0.87, y: 2.70, z: 0.51 },
+            { element: 'H', x: 0.4, y: 2.70, z: -0.89 },
+            { element: 'H', x: 1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: 1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: -2.0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [2,4], [4,5], [1,6], [0,7], [0,8], [0,9], [1,10], [2,11], [3,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
+    },
+    '3-metilpentan-3-ol': {
+        name: '3-Metilpentan-3-ol',
+        formula: 'C₆H₁₃OH',
+        description: 'Alcool terțiar ramificat. Izomer de catenă al hexan-3-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 123°C | Punct de topire: -23°C | Densitate: 0.828 g/cm³ | Solubilitate: 4.9 g/100mL apă',
+            chemical: 'Alcool terțiar - nu se oxidează. Deshidratare ușoară la alchenă. Moleculă simetrică.',
+            uses: 'Utilizări: solvent, intermediar în sinteza organică, agent de deshidratare'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 1.52 },
+            { element: 'O', x: 0, y: 1.4, z: -0.6 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: 0, z: -1.03 },
+            { element: 'H', x: 0.87, y: -0.51, z: 1.92 },
+            { element: 'H', x: -0.87, y: -0.51, z: 1.92 },
+            { element: 'H', x: 0, y: 1.03, z: 1.92 },
+            { element: 'H', x: 0, y: 2.0, z: -1.2 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [2,5], [2,6], [0,7], [0,8], [0,9], [1,10], [1,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
+    },
+    '4-metilpentan-1-ol': {
+        name: '4-Metilpentan-1-ol (Izohexanol)',
+        formula: 'C₆H₁₃OH',
+        description: 'Alcool primar ramificat. Izomer de catenă al hexan-1-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 151°C | Punct de topire: -90°C | Densitate: 0.813 g/cm³ | Solubilitate: 1.5 g/100mL apă',
+            chemical: 'Alcool primar ramificat. Oxidare la 4-metilpentanal. Reacții de esterificare.',
+            uses: 'Utilizări: solvent pentru rășini, producerea plastifianților și aromelor, intermediar chimic'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 1.27, y: 2.19, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'O', x: 3.68, y: 0, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+            { element: 'H', x: 1.67, y: 2.70, z: 0.89 },
+            { element: 'H', x: 0.4, y: 2.70, z: 0.51 },
+            { element: 'H', x: 1.67, y: 2.70, z: -0.89 },
+            { element: 'H', x: 2.54, y: 0.89, z: -0.51 },
+            { element: 'H', x: 2.54, y: -0.89, z: 0.51 },
+            { element: 'H', x: 4.28, y: 0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [3,5], [5,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [2,13], [3,14], [4,15], [4,16], [4,17], [5,18], [5,19], [6,20]]
+    },
+    '4-metilpentan-2-ol': {
+        name: '4-Metilpentan-2-ol',
+        formula: 'C₆H₁₃OH',
+        description: 'Alcool secundar ramificat. Izomer de catenă al hexan-2-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 131°C | Punct de topire: -90°C | Densitate: 0.807 g/cm³ | Solubilitate: 2.3 g/100mL apă',
+            chemical: 'Alcool secundar chiral. Oxidare la 4-metilpentan-2-onă (metil izobutil cetonă, MIBK).',
+            uses: 'Utilizări: solvent, intermediar pentru producerea MIBK (solvent important industrial)'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 1.27, y: 2.19, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'O', x: -1.27, y: -1.4, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.51, z: 1.03 },
+            { element: 'H', x: 0, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+            { element: 'H', x: 1.67, y: 2.70, z: 0.89 },
+            { element: 'H', x: 0.4, y: 2.70, z: 0.51 },
+            { element: 'H', x: 1.67, y: 2.70, z: -0.89 },
+            { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: -2.0, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [3,5], [1,6], [0,7], [0,8], [0,9], [1,10], [2,11], [2,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
+    },
+    '2,3-dimetilbutan-2-ol': {
+        name: '2,3-Dimetilbutan-2-ol',
+        formula: 'C₆H₁₃OH',
+        description: 'Alcool terțiar ramificat. Izomer de catenă al hexan-2-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 119°C | Punct de topire: -13°C | Densitate: 0.823 g/cm³ | Solubilitate: 9 g/100mL apă',
+            chemical: 'Alcool terțiar - nu se oxidează. Deshidratare ușoară datorită stabilității carbocationului terțiar.',
+            uses: 'Utilizări: solvent, intermediar chimic, agent de deshidratare'
+        },
+        atoms: [
+            { element: 'C', x: -1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 1.27, y: 2.19, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'C', x: 0, y: -0.73, z: 1.27 },
+            { element: 'O', x: 0, y: -0.73, z: -1.27 },
+            { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+            { element: 'H', x: 1.67, y: 2.70, z: 0.89 },
+            { element: 'H', x: 0.4, y: 2.70, z: 0.51 },
+            { element: 'H', x: 1.67, y: 2.70, z: -0.89 },
+            { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: 0, z: -1.03 },
+            { element: 'H', x: 0.87, y: -0.22, z: 1.67 },
+            { element: 'H', x: -0.87, y: -0.22, z: 1.67 },
+            { element: 'H', x: 0, y: -1.78, z: 1.67 },
+            { element: 'H', x: 0, y: -1.33, z: -1.87 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [2,4], [1,5], [1,6], [0,7], [0,8], [0,9], [2,10], [3,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17], [5,18], [5,19], [6,20]]
+    },
+    '2,2-dimetilbutan-1-ol': {
+        name: '2,2-Dimetilbutan-1-ol',
+        formula: 'C₆H₁₃OH',
+        description: 'Alcool primar foarte ramificat. Izomer de catenă al hexan-1-ol.',
+        properties: {
+            physical: 'Punct de fierbere: 136°C | Punct de topire: -15°C | Densitate: 0.828 g/cm³ | Solubilitate: 2.0 g/100mL apă',
+            chemical: 'Alcool primar cu impiedicare sterică mare. Reactivitate redusă în reacții de substituție și esterificare.',
+            uses: 'Utilizări: intermediar în sinteza organică, producerea poliolilor, agent de blocare steric'
+        },
+        atoms: [
+            { element: 'C', x: -1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'C', x: 0, y: -0.73, z: 1.27 },
+            { element: 'C', x: 0, y: -0.73, z: -1.27 },
+            { element: 'O', x: 0, y: -1.87, z: -1.87 },
+            { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 1.27, y: 0.73, z: 1.03 },
+            { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: 0, z: -1.03 },
+            { element: 'H', x: 0.87, y: -0.22, z: 1.67 },
+            { element: 'H', x: -0.87, y: -0.22, z: 1.67 },
+            { element: 'H', x: 0, y: -1.78, z: 1.67 },
+            { element: 'H', x: 0.87, y: -0.22, z: -1.67 },
+            { element: 'H', x: -0.87, y: -0.22, z: -1.67 },
+            { element: 'H', x: 0, y: -2.47, z: -2.47 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [1,4], [1,5], [5,6], [0,7], [0,8], [0,9], [2,10], [2,11], [3,12], [3,13], [3,14], [4,15], [4,16], [4,17], [5,18], [5,19], [6,20]]
+    },
     acetone: {
         name: 'Acetonă',
         formula: 'C₃H₆O',
@@ -880,7 +1146,7 @@ const molecules = {
         atoms: [
             { element: 'C', x: -1.27, y: 0, z: 0 },
             { element: 'C', x: 0, y: 0, z: 0 },
-            { element: 'O', x: 0, y: 1.22, z: 0 },
+            { element: 'O', x: 0.6, y: 1.04, z: 0 },
             { element: 'C', x: 1.27, y: -0.5, z: 0 },
             { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
             { element: 'H', x: -1.67, y: -0.89, z: 0.51 },
@@ -2121,6 +2387,18 @@ const isomersData = {
                     { element: 'H', x: 0, y: -1.33, z: -1.87 }
                 ],
                 bonds: [[0,1], [1,2], [2,3], [1,4], [1,5], [0,6], [0,7], [0,8], [2,9], [2,10], [3,11], [3,12], [3,13], [4,14], [4,15], [4,16], [5,17]]
+            },
+            {
+                name: '3-Metilbutan-2-ol',
+                type: 'Izomerie de catenă',
+                description: 'Alcool secundar ramificat chiral',
+                data: '3-metilbutan-2-ol'
+            },
+            {
+                name: '2,2-Dimetilpropan-1-ol',
+                type: 'Izomerie de catenă',
+                description: 'Alcool primar foarte ramificat (neopentil alcool)',
+                data: '2,2-dimetilpropan-1-ol'
             }
         ]
     },
