@@ -423,7 +423,7 @@ const molecules = {
             { element: 'H', x: -1.54, y: 0.89, z: 0 },
             { element: 'H', x: 0, y: 1.78, z: 0 }
         ],
-        bonds: [[0,1,'aromatic'], [1,2,'aromatic'], [2,3,'aromatic'], [3,4,'aromatic'], [4,5,'aromatic'], [5,0,'aromatic'], [0,6], [1,7], [2,8], [3,9], [4,10], [5,11]]
+        bonds: [[0,1,'double'], [1,2], [2,3,'double'], [3,4], [4,5,'double'], [5,0], [0,6], [1,7], [2,8], [3,9], [4,10], [5,11]]
     },
     ethanol: {
         name: 'Etanol',
@@ -567,7 +567,7 @@ const molecules = {
     },
     // Propanol isomers (C3H8O)
     'propan-2-ol': {
-        name: 'Propan-2-ol (Izopropanol)',
+        name: 'Propan-2-ol',
         formula: 'C₃H₇OH',
         description: 'Alcool secundar cu grupa -OH pe al doilea carbon. Izomer de poziție al propan-1-ol.',
         properties: {
@@ -1173,10 +1173,170 @@ const molecules = {
         ],
         bonds: [[0,1], [1,2,'double'], [1,3], [0,4], [0,5], [0,6], [3,7]]
     },
+    // Acizi carboxilici
+    formicacid: {
+        name: 'Acid formic',
+        formula: 'HCOOH',
+        description: 'Cel mai simplu acid carboxilic, găsit în veninul furnicilorși urzicilor.',
+        properties: {
+            physical: 'Punct de fierbere: 100.8°C | Punct de topire: 8.4°C | Densitate: 1.220 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Acid carboxilic puternic (pKa=3.75). Reducere la metanol. Decarboxilare la CO₂ și H₂. Reacții de esterificare.',
+            uses: 'Utilizări: agent de conservare și antibacterian în furajele pentru animale, agent de coagulare în producția cauciucului natural, curățarea textilelor, descalcifierea instalațiilor'
+        },
+        atoms: [
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: -1.14, y: 0, z: 0 },
+            { element: 'O', x: 0.57, y: 0.99, z: 0 },
+            { element: 'H', x: 0.57, y: -0.81, z: 0 },
+            { element: 'H', x: 1.47, y: 0.99, z: 0 }
+        ],
+        bonds: [[0,1,'double'], [0,2], [0,3], [2,4]]
+    },
+    aceticacid: {
+        name: 'Acid acetic',
+        formula: 'CH₃COOH',
+        description: 'Acid carboxilic care conferă oțetului mirosul și gustul caracteristic.',
+        properties: {
+            physical: 'Punct de fierbere: 118.1°C | Punct de topire: 16.6°C | Densitate: 1.049 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Acid slab (pKa=4.76). Esterificare cu alcooli. Reacție cu baze formând acetați. Deshidratare la anhidridă acetică.',
+            uses: 'Utilizări: producerea oțetului (4-8% soluție apoasă), fabricarea anhidridei acetice și esterilor, solvent pentru rășini, producția acetat de vinil pentru PVA'
+        },
+        atoms: [
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: 0.57, y: 0.99, z: 0 },
+            { element: 'O', x: 0.57, y: -0.99, z: 0 },
+            { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.67, y: -0.89, z: 0.51 },
+            { element: 'H', x: -1.67, y: 0, z: -1.03 },
+            { element: 'H', x: 1.47, y: -0.99, z: 0 }
+        ],
+        bonds: [[0,1], [1,2,'double'], [1,3], [0,4], [0,5], [0,6], [3,7]]
+    },
+    propionicacid: {
+        name: 'Acid propionic',
+        formula: 'C₃H₆O₂',
+        description: 'Acid carboxilic cu trei carboni, utilizat ca conservant alimentar.',
+        properties: {
+            physical: 'Punct de fierbere: 141°C | Punct de topire: -20.5°C | Densitate: 0.993 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Acid carboxilic (pKa=4.87). Esterificare cu alcooli. Formează propionați cu baze. Oxidare cu permanganat.',
+            uses: 'Utilizări: conservant alimentar (E280), inhibitor de mucegai în produsele de panificație, producerea esterilor pentru arome artificiale, herbicide, sinteza vitaminei B12'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: 0.57, y: 0.99, z: 0 },
+            { element: 'O', x: 0.57, y: -0.99, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.47, y: -0.99, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3,'double'], [2,4], [0,5], [0,6], [0,7], [1,8], [1,9], [4,10]]
+    },
+    butyricacid: {
+        name: 'Acid butanoic',
+        formula: 'C₄H₈O₂',
+        description: 'Acid carboxilic cu patru carboni, responsabil pentru mirosul untului rânced.',
+        properties: {
+            physical: 'Punct de fierbere: 163.5°C | Punct de topire: -5.1°C | Densitate: 0.958 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Acid carboxilic (pKa=4.82). Esterificare formând butirați cu arome de fructe. Neutralizare cu baze.',
+            uses: 'Utilizări: producerea esterilor pentru arome (ananas, banană), intermediar în sinteza farmaceutică, fabricarea celuloasei butirat pentru filme fotografice'
+        },
+        atoms: [
+            { element: 'C', x: -3.81, y: 0, z: 0 },
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: 0.57, y: 0.99, z: 0 },
+            { element: 'O', x: 0.57, y: -0.99, z: 0 },
+            { element: 'H', x: -4.21, y: 0.89, z: 0.51 },
+            { element: 'H', x: -4.21, y: -0.89, z: 0.51 },
+            { element: 'H', x: -4.21, y: 0, z: -1.03 },
+            { element: 'H', x: -2.54, y: 0.89, z: -0.51 },
+            { element: 'H', x: -2.54, y: -0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 1.47, y: -0.99, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4,'double'], [3,5], [0,6], [0,7], [0,8], [1,9], [1,10], [2,11], [2,12], [5,13]]
+    },
+    pentanoicacid: {
+        name: 'Acid pentanoic',
+        formula: 'C₅H₁₀O₂',
+        description: 'Acid carboxilic cu cinci carboni, cunoscut și ca acid valeric, cu miros neplăcut.',
+        properties: {
+            physical: 'Punct de fierbere: 186.1°C | Punct de topire: -33.6°C | Densitate: 0.939 g/cm³ | Solubilitate: 4.97 g/100mL apă',
+            chemical: 'Acid carboxilic (pKa=4.84). Esterificare cu alcooli. Formează pentanoați. Reacții de substituție pe lanțul carbonat.',
+            uses: 'Utilizări: sinteza esterilor pentru parfumerie și arome, intermediar farmaceutic (acid valproic - anticonvulsivant), lubrifianți, plastifianți'
+        },
+        atoms: [
+            { element: 'C', x: -5.08, y: 0, z: 0 },
+            { element: 'C', x: -3.81, y: 0, z: 0 },
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: 0.57, y: 0.99, z: 0 },
+            { element: 'O', x: 0.57, y: -0.99, z: 0 },
+            { element: 'H', x: -5.48, y: 0.89, z: 0.51 },
+            { element: 'H', x: -5.48, y: -0.89, z: 0.51 },
+            { element: 'H', x: -5.48, y: 0, z: -1.03 },
+            { element: 'H', x: -3.81, y: 0.89, z: -0.51 },
+            { element: 'H', x: -3.81, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.54, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.54, y: -0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.47, y: -0.99, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,5,'double'], [4,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [2,13], [3,14], [3,15], [6,16]]
+    },
+    hexanoicacid: {
+        name: 'Acid hexanoic',
+        formula: 'C₆H₁₂O₂',
+        description: 'Acid carboxilic cu șase carboni, cunoscut și ca acid caproic, cu miros de capră.',
+        properties: {
+            physical: 'Punct de fierbere: 205°C | Punct de topire: -3.4°C | Densitate: 0.929 g/cm³ | Solubilitate: 1.08 g/100mL apă',
+            chemical: 'Acid carboxilic (pKa=4.85). Esterificare formând hexanoați cu arome de fructe. Reacții cu baze formând săpunuri.',
+            uses: 'Utilizări: producerea esterilor pentru arome (ananas, banană), fabricarea parfumurilor, sinteza cauciucului, intermediar în producția pesticidelor și farmaceuticelor'
+        },
+        atoms: [
+            { element: 'C', x: -6.35, y: 0, z: 0 },
+            { element: 'C', x: -5.08, y: 0, z: 0 },
+            { element: 'C', x: -3.81, y: 0, z: 0 },
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: 0.57, y: 0.99, z: 0 },
+            { element: 'O', x: 0.57, y: -0.99, z: 0 },
+            { element: 'H', x: -6.75, y: 0.89, z: 0.51 },
+            { element: 'H', x: -6.75, y: -0.89, z: 0.51 },
+            { element: 'H', x: -6.75, y: 0, z: -1.03 },
+            { element: 'H', x: -5.08, y: 0.89, z: -0.51 },
+            { element: 'H', x: -5.08, y: -0.89, z: 0.51 },
+            { element: 'H', x: -3.81, y: 0.89, z: 0.51 },
+            { element: 'H', x: -3.81, y: -0.89, z: -0.51 },
+            { element: 'H', x: -2.54, y: 0.89, z: -0.51 },
+            { element: 'H', x: -2.54, y: -0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 1.47, y: -0.99, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6,'double'], [5,7], [0,8], [0,9], [0,10], [1,11], [1,12], [2,13], [2,14], [3,15], [3,16], [4,17], [4,18], [7,19]]
+    },
+    // Amine
     methylamine: {
         name: 'Metilamină',
         formula: 'CH₃NH₂',
-        description: 'O amină simplă, cea mai simplă amină primară.',
+        description: 'Cea mai simplă amină primară, gaz cu miros asemănător peștelui.',
+        properties: {
+            physical: 'Punct de fierbere: -6.3°C | Punct de topire: -93.5°C | Densitate: 0.699 g/cm³ (lichid) | Solubilitate: foarte solubilă în apă',
+            chemical: 'Amină primară bazică (pKb=3.36). Reacționează cu acizi formând săruri de amoniu. Alchilare formând amine secundare și terțiare. Reacții de condensare.',
+            uses: 'Utilizări: sinteza pesticidelor, farmaceutice, tensioactive, solvenți, producerea N,N-dimetilformamidei, intermediar în sinteza coloranților'
+        },
         atoms: [
             { element: 'C', x: -0.76, y: 0, z: 0 },
             { element: 'N', x: 0.76, y: 0, z: 0 },
@@ -1187,6 +1347,151 @@ const molecules = {
             { element: 'H', x: 1.16, y: -0.78, z: 0 }
         ],
         bonds: [[0,1], [0,2], [0,3], [0,4], [1,5], [1,6]]
+    },
+    ethylamine: {
+        name: 'Etilamină',
+        formula: 'C₂H₅NH₂',
+        description: 'Amină primară cu doi carboni, lichid volatil cu miros puternic.',
+        properties: {
+            physical: 'Punct de fierbere: 16.6°C | Punct de topire: -80.6°C | Densitate: 0.689 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Amină primară bazică (pKb=3.19). Formează săruri cu acizi. Reacții de alchilare, acilare. Formează liganzi în complexe metalice.',
+            uses: 'Utilizări: intermediar în sinteza farmaceuticelor, coloranților, pesticidelor, fungicide, stabilizator pentru cauciuc latex, catalizator în sinteza organică'
+        },
+        atoms: [
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'N', x: 1.14, y: 0, z: 0 },
+            { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.67, y: -0.89, z: 0.51 },
+            { element: 'H', x: -1.67, y: 0, z: -1.03 },
+            { element: 'H', x: 0, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.54, y: 0.78, z: 0 },
+            { element: 'H', x: 1.54, y: -0.78, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [0,3], [0,4], [0,5], [1,6], [1,7], [2,8], [2,9]]
+    },
+    propylamine: {
+        name: 'Propilamină',
+        formula: 'C₃H₇NH₂',
+        description: 'Amină primară cu trei carboni, utilizată ca intermediar chimic.',
+        properties: {
+            physical: 'Punct de fierbere: 47.8°C | Punct de topire: -83°C | Densitate: 0.717 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Amină primară bazică (pKb=3.33). Reacții cu acizi formând săruri de propil-amoniu. Alchilare, acilare, oxidare.',
+            uses: 'Utilizări: sinteza pesticidelor și herbicidelor, intermediar farmaceutic, producerea tensioactivilor, agenți de vulcanizare pentru cauciuc, sinteza răsinilor epoxidice'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'N', x: 1.14, y: 0, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0, y: 0.89, z: 0.51 },
+            { element: 'H', x: 0, y: -0.89, z: -0.51 },
+            { element: 'H', x: 1.54, y: 0.78, z: 0 },
+            { element: 'H', x: 1.54, y: -0.78, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [0,4], [0,5], [0,6], [1,7], [1,8], [2,9], [2,10], [3,11], [3,12]]
+    },
+    butylamine: {
+        name: 'Butilamină',
+        formula: 'C₄H₉NH₂',
+        description: 'Amină primară cu patru carboni, lichid cu miros caracteristic aminelor.',
+        properties: {
+            physical: 'Punct de fierbere: 77.8°C | Punct de topire: -49.1°C | Densitate: 0.741 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Amină primară bazică (pKb=3.39). Formează săruri cristalizare cu acizi. Reacții de substituție nucleofilă, acilare.',
+            uses: 'Utilizări: intermediar în sinteza pesticidelor, farmaceutice (antiretrovirale), inhibitori de coroziune, catalizatori pentru producerea poliuretanilor, tensioactive'
+        },
+        atoms: [
+            { element: 'C', x: -3.81, y: 0, z: 0 },
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'N', x: 1.14, y: 0, z: 0 },
+            { element: 'H', x: -4.21, y: 0.89, z: 0.51 },
+            { element: 'H', x: -4.21, y: -0.89, z: 0.51 },
+            { element: 'H', x: -4.21, y: 0, z: -1.03 },
+            { element: 'H', x: -2.54, y: 0.89, z: -0.51 },
+            { element: 'H', x: -2.54, y: -0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 0, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.54, y: 0.78, z: 0 },
+            { element: 'H', x: 1.54, y: -0.78, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [0,5], [0,6], [0,7], [1,8], [1,9], [2,10], [2,11], [3,12], [3,13], [4,14], [4,15]]
+    },
+    pentylamine: {
+        name: 'Pentilamină',
+        formula: 'C₅H₁₁NH₂',
+        description: 'Amină primară cu cinci carboni, utilizată în sinteza organică.',
+        properties: {
+            physical: 'Punct de fierbere: 104.4°C | Punct de topire: -55°C | Densitate: 0.754 g/cm³ | Solubilitate: 1.5 g/100mL apă',
+            chemical: 'Amină primară bazică (pKb≈3.4). Reacții de protonare formând săruri. Acilare formând amide. Oxidare la nitrili.',
+            uses: 'Utilizări: intermediar în sinteza farmaceutică, emulgatori pentru produse petroliere, catalizatori pentru epoxy, inhibitori de coroziune, sinteza coloranților'
+        },
+        atoms: [
+            { element: 'C', x: -5.08, y: 0, z: 0 },
+            { element: 'C', x: -3.81, y: 0, z: 0 },
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'N', x: 1.14, y: 0, z: 0 },
+            { element: 'H', x: -5.48, y: 0.89, z: 0.51 },
+            { element: 'H', x: -5.48, y: -0.89, z: 0.51 },
+            { element: 'H', x: -5.48, y: 0, z: -1.03 },
+            { element: 'H', x: -3.81, y: 0.89, z: -0.51 },
+            { element: 'H', x: -3.81, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.54, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.54, y: -0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0, y: 0.89, z: 0.51 },
+            { element: 'H', x: 0, y: -0.89, z: -0.51 },
+            { element: 'H', x: 1.54, y: 0.78, z: 0 },
+            { element: 'H', x: 1.54, y: -0.78, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [0,6], [0,7], [0,8], [1,9], [1,10], [2,11], [2,12], [3,13], [3,14], [4,15], [4,16], [5,17], [5,18]]
+    },
+    hexylamine: {
+        name: 'Hexilamină',
+        formula: 'C₆H₁₃NH₂',
+        description: 'Amină primară cu șase carboni, utilizată în industria chimică.',
+        properties: {
+            physical: 'Punct de fierbere: 130°C | Punct de topire: -19°C | Densitate: 0.766 g/cm³ | Solubilitate: 0.6 g/100mL apă',
+            chemical: 'Amină primară bazică (pKb≈3.4). Formează săruri cuatemare de amoniu. Reacții de condensare cu aldehide și cetone. Acilare.',
+            uses: 'Utilizări: intermediar pentru surfactanți și emulgatori, inhibitori de coroziune în industria petrolului, catalizatori pentru poliuretani, sinteza farmaceuticelor și pesticidelor'
+        },
+        atoms: [
+            { element: 'C', x: -6.35, y: 0, z: 0 },
+            { element: 'C', x: -5.08, y: 0, z: 0 },
+            { element: 'C', x: -3.81, y: 0, z: 0 },
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'N', x: 1.14, y: 0, z: 0 },
+            { element: 'H', x: -6.75, y: 0.89, z: 0.51 },
+            { element: 'H', x: -6.75, y: -0.89, z: 0.51 },
+            { element: 'H', x: -6.75, y: 0, z: -1.03 },
+            { element: 'H', x: -5.08, y: 0.89, z: -0.51 },
+            { element: 'H', x: -5.08, y: -0.89, z: 0.51 },
+            { element: 'H', x: -3.81, y: 0.89, z: 0.51 },
+            { element: 'H', x: -3.81, y: -0.89, z: -0.51 },
+            { element: 'H', x: -2.54, y: 0.89, z: -0.51 },
+            { element: 'H', x: -2.54, y: -0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: -0.51 },
+            { element: 'H', x: 0, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.54, y: 0.78, z: 0 },
+            { element: 'H', x: 1.54, y: -0.78, z: 0 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [2,13], [3,14], [3,15], [4,16], [4,17], [5,18], [5,19], [6,20], [6,21]]
     }
 };
 
@@ -1446,6 +1751,266 @@ const isomersData = {
                     { element: 'H', x: 1.67, y: -0.89, z: 1.67 }
                 ],
                 bonds: [[0,1], [1,2], [2,3,'double'], [0,4], [0,5], [0,6], [2,7], [3,8], [3,9]]
+            }
+        ]
+    },
+    // Seria omoloagă acizi carboxilici
+    formicacid: {
+        formula: 'HCOOH',
+        isomers: [
+            {
+                name: 'Acid formic',
+                type: 'Singur izomer',
+                description: 'Cel mai simplu acid carboxilic, nu are izomeri structurali',
+                data: 'formicacid'
+            }
+        ]
+    },
+    propionicacid: {
+        formula: 'C₃H₆O₂',
+        isomers: [
+            {
+                name: 'Acid propionic',
+                type: 'Izomerie de funcțiune',
+                description: 'Acid carboxilic cu lanț liniar',
+                data: 'propionicacid'
+            },
+            {
+                name: 'Etil format',
+                type: 'Izomerie de funcțiune',
+                description: 'Ester format din acid formic și etanol',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'O', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 0.64, y: 0, z: 1.14 },
+                    { element: 'O', x: 1.78, y: 0, z: 1.14 },
+                    { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 0.64, y: 0.89, z: 1.67 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4,'double'], [0,5], [0,6], [0,7], [1,8], [1,9], [3,10]]
+            },
+            {
+                name: 'Metil acetat',
+                type: 'Izomerie de funcțiune',
+                description: 'Ester format din acid acetic și metanol',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'O', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'O', x: 1.84, y: 0, z: 1.14 },
+                    { element: 'O', x: 1.84, y: 0, z: -1.14 },
+                    { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: 0, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0, y: -0.89, z: 0.51 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [3,4,'double'], [3,5], [0,6], [0,7], [0,8], [2,9], [2,10]]
+            }
+        ]
+    },
+    butyricacid: {
+        formula: 'C₄H₈O₂',
+        isomers: [
+            {
+                name: 'Acid butanoic (n-butanoic)',
+                type: 'Izomerie de catenă',
+                description: 'Acid carboxilic cu lanț liniar de 4 carboni',
+                data: 'butyricacid'
+            },
+            {
+                name: 'Acid izobutanoic (2-metilpropanoic)',
+                type: 'Izomerie de catenă',
+                description: 'Acid carboxilic ramificat cu grup metil',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0.73, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: -2.54, y: -0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'O', x: 0.57, y: 0.99, z: 0 },
+                    { element: 'O', x: 0.57, y: -0.99, z: 0 },
+                    { element: 'H', x: -2.94, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -3.41, y: 0.73, z: -0.51 },
+                    { element: 'H', x: -2.54, y: 1.78, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 0, z: -1.03 },
+                    { element: 'H', x: -2.94, y: -0.73, z: 1.03 },
+                    { element: 'H', x: -3.41, y: -0.73, z: -0.51 },
+                    { element: 'H', x: -2.54, y: -1.78, z: -0.51 },
+                    { element: 'H', x: 1.47, y: -0.99, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [1,3], [3,4,'double'], [3,5], [0,6], [0,7], [0,8], [1,9], [2,10], [2,11], [2,12], [5,13]]
+            }
+        ]
+    },
+    // Seria omoloagă amine
+    ethylamine: {
+        formula: 'C₂H₅NH₂',
+        isomers: [
+            {
+                name: 'Etilamină',
+                type: 'Izomerie de funcțiune',
+                description: 'Amină primară',
+                data: 'ethylamine'
+            },
+            {
+                name: 'Dimetilamină',
+                type: 'Izomerie de funcțiune',
+                description: 'Amină secundară cu doi radicali metil',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'N', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: -0.78, z: 0 },
+                    { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 1.78, z: -0.51 }
+                ],
+                bonds: [[0,1], [1,2], [0,3], [0,4], [0,5], [1,6], [2,7], [2,8], [2,9]]
+            }
+        ]
+    },
+    propylamine: {
+        formula: 'C₃H₇NH₂',
+        isomers: [
+            {
+                name: 'Propilamină (n-propilamină)',
+                type: 'Izomerie de poziție',
+                description: 'Amină primară cu lanț liniar',
+                data: 'propylamine'
+            },
+            {
+                name: 'Izopropilamină',
+                type: 'Izomerie de poziție',
+                description: 'Amină primară cu grupa NH₂ pe carbon secundar',
+                atoms: [
+                    { element: 'C', x: -1.27, y: 0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 1.27, y: 0.73, z: 0 },
+                    { element: 'N', x: 0, y: -1.4, z: 0 },
+                    { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: 0.51, z: -1.03 },
+                    { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+                    { element: 'H', x: 2.14, y: 0.22, z: -0.51 },
+                    { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: -1.8, z: 0.78 },
+                    { element: 'H', x: 0, y: -1.8, z: -0.78 }
+                ],
+                bonds: [[0,1], [1,2], [1,3], [0,4], [0,5], [0,6], [1,7], [2,8], [2,9], [2,10], [3,11], [3,12]]
+            },
+            {
+                name: 'Trimetilamină',
+                type: 'Izomerie de funcțiune',
+                description: 'Amină terțiară cu trei radicali metil',
+                atoms: [
+                    { element: 'N', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 1.4, z: 0 },
+                    { element: 'C', x: -1.21, y: -0.7, z: 0 },
+                    { element: 'C', x: 1.21, y: -0.7, z: 0 },
+                    { element: 'H', x: 0, y: 1.8, z: 1.03 },
+                    { element: 'H', x: 0.87, y: 1.8, z: -0.51 },
+                    { element: 'H', x: -0.87, y: 1.8, z: -0.51 },
+                    { element: 'H', x: -1.61, y: -0.7, z: 1.03 },
+                    { element: 'H', x: -2.08, y: -0.7, z: -0.51 },
+                    { element: 'H', x: -1.21, y: -1.75, z: -0.51 },
+                    { element: 'H', x: 1.61, y: -0.7, z: 1.03 },
+                    { element: 'H', x: 2.08, y: -0.7, z: -0.51 },
+                    { element: 'H', x: 1.21, y: -1.75, z: -0.51 }
+                ],
+                bonds: [[0,1], [0,2], [0,3], [1,4], [1,5], [1,6], [2,7], [2,8], [2,9], [3,10], [3,11], [3,12]]
+            }
+        ]
+    },
+    butylamine: {
+        formula: 'C₄H₉NH₂',
+        isomers: [
+            {
+                name: 'Butilamină (n-butilamină)',
+                type: 'Izomerie de poziție și catenă',
+                description: 'Amină primară cu lanț liniar',
+                data: 'butylamine'
+            },
+            {
+                name: 'sec-Butilamină',
+                type: 'Izomerie de poziție',
+                description: 'Amină primară cu NH₂ pe carbon secundar',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: 0, y: 0.73, z: 0 },
+                    { element: 'C', x: 1.27, y: 0, z: 0 },
+                    { element: 'N', x: 0, y: -0.73, z: 1.27 },
+                    { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+                    { element: 'H', x: -2.94, y: 0, z: -1.03 },
+                    { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+                    { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 0, y: 1.24, z: -0.51 },
+                    { element: 'H', x: 1.67, y: 0, z: 1.03 },
+                    { element: 'H', x: 2.14, y: 0.51, z: -0.51 },
+                    { element: 'H', x: 1.27, y: -1.05, z: -0.51 },
+                    { element: 'H', x: 0, y: -0.22, z: 2.1 },
+                    { element: 'H', x: 0, y: -1.73, z: 1.54 }
+                ],
+                bonds: [[0,1], [1,2], [2,3], [2,4], [0,5], [0,6], [0,7], [1,8], [1,9], [2,10], [3,11], [3,12], [3,13], [4,14], [4,15]]
+            },
+            {
+                name: 'Izobutilamină',
+                type: 'Izomerie de catenă',
+                description: 'Amină primară ramificată (2-metilpropilamină)',
+                atoms: [
+                    { element: 'C', x: -2.54, y: 0.73, z: 0 },
+                    { element: 'C', x: -1.27, y: 0, z: 0 },
+                    { element: 'C', x: -2.54, y: -0.73, z: 0 },
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'N', x: 1.14, y: 0, z: 0 },
+                    { element: 'H', x: -2.94, y: 0.73, z: 1.03 },
+                    { element: 'H', x: -3.41, y: 0.73, z: -0.51 },
+                    { element: 'H', x: -2.54, y: 1.78, z: -0.51 },
+                    { element: 'H', x: -1.27, y: 0, z: -1.03 },
+                    { element: 'H', x: -2.94, y: -0.73, z: 1.03 },
+                    { element: 'H', x: -3.41, y: -0.73, z: -0.51 },
+                    { element: 'H', x: -2.54, y: -1.78, z: -0.51 },
+                    { element: 'H', x: 0, y: 0.89, z: -0.51 },
+                    { element: 'H', x: 0, y: -0.89, z: 0.51 },
+                    { element: 'H', x: 1.54, y: 0.78, z: 0 },
+                    { element: 'H', x: 1.54, y: -0.78, z: 0 }
+                ],
+                bonds: [[0,1], [1,2], [1,3], [3,4], [0,5], [0,6], [0,7], [1,8], [2,9], [2,10], [2,11], [3,12], [3,13], [4,14], [4,15]]
+            },
+            {
+                name: 'tert-Butilamină',
+                type: 'Izomerie de poziție',
+                description: 'Amină primară cu NH₂ pe carbon terțiar',
+                atoms: [
+                    { element: 'C', x: 0, y: 0, z: 0 },
+                    { element: 'C', x: 0.9, y: 0.9, z: 0.9 },
+                    { element: 'C', x: -0.9, y: -0.9, z: 0.9 },
+                    { element: 'C', x: -0.9, y: 0.9, z: -0.9 },
+                    { element: 'N', x: 0.9, y: -0.9, z: -0.9 },
+                    { element: 'H', x: 1.3, y: 1.3, z: 1.8 },
+                    { element: 'H', x: 1.77, y: 0.4, z: 0.4 },
+                    { element: 'H', x: 0.4, y: 1.77, z: 0.4 },
+                    { element: 'H', x: -1.3, y: -1.3, z: 1.8 },
+                    { element: 'H', x: -1.77, y: -0.4, z: 0.4 },
+                    { element: 'H', x: -0.4, y: -1.77, z: 0.4 },
+                    { element: 'H', x: -1.3, y: 1.3, z: -1.8 },
+                    { element: 'H', x: -1.77, y: 0.4, z: -0.4 },
+                    { element: 'H', x: -0.4, y: 1.77, z: -0.4 },
+                    { element: 'H', x: 1.3, y: -0.4, z: -1.77 },
+                    { element: 'H', x: 0.4, y: -1.77, z: -0.4 }
+                ],
+                bonds: [[0,1], [0,2], [0,3], [0,4], [1,5], [1,6], [1,7], [2,8], [2,9], [2,10], [3,11], [3,12], [3,13], [4,14], [4,15]]
             }
         ]
     },
@@ -3910,7 +4475,16 @@ function createMolecule(moleculeData) {
     
     // Create bonds
     moleculeData.bonds.forEach(bond => {
-        const [atom1Idx, atom2Idx, bondType] = bond;
+        let atom1Idx, atom2Idx, bondType;
+        
+        // Support both [atom1, atom2, 'type'] and [atom1, atom2] formats
+        if (bond.length === 3) {
+            [atom1Idx, atom2Idx, bondType] = bond;
+        } else {
+            [atom1Idx, atom2Idx] = bond;
+            bondType = 'single';
+        }
+        
         const atom1 = moleculeData.atoms[atom1Idx];
         const atom2 = moleculeData.atoms[atom2Idx];
         
@@ -3951,24 +4525,26 @@ function createBond(start, end, length, horizontalOffset = 0, verticalOffset = 0
     
     const bond = new THREE.Mesh(geometry, material);
     
-    const direction = new THREE.Vector3().subVectors(end, start);
-    const midpoint = new THREE.Vector3().addVectors(start, direction.multiplyScalar(0.5));
+    const direction = new THREE.Vector3().subVectors(end, start).normalize();
+    const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
     
-    // Apply horizontal offset for double/triple bonds (perpendicular in XZ plane)
+    // Calculate perpendicular vectors for offset
+    // For bonds in XY plane (z=0), we need offset perpendicular to the bond
+    if (verticalOffset !== 0) {
+        // Create perpendicular vector in XY plane (rotate 90 degrees around Z axis)
+        const perpendicular = new THREE.Vector3(-direction.y, direction.x, 0).normalize();
+        midpoint.add(perpendicular.multiplyScalar(verticalOffset));
+    }
+    
     if (horizontalOffset !== 0) {
         const perpendicular = new THREE.Vector3(direction.z, 0, -direction.x).normalize();
         midpoint.add(perpendicular.multiplyScalar(horizontalOffset));
     }
     
-    // Apply vertical offset (Y axis) - this makes bonds stack vertically
-    if (verticalOffset !== 0) {
-        midpoint.y += verticalOffset;
-    }
-    
     bond.position.copy(midpoint);
     
     const axis = new THREE.Vector3(0, 1, 0);
-    bond.quaternion.setFromUnitVectors(axis, direction.normalize());
+    bond.quaternion.setFromUnitVectors(axis, direction);
     
     bond.castShadow = true;
     bond.receiveShadow = true;
