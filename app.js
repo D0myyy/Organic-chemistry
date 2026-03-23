@@ -1140,9 +1140,14 @@ const molecules = {
         bonds: [[0,1], [1,2], [2,3], [1,4], [1,5], [5,6], [0,7], [0,8], [0,9], [2,10], [2,11], [3,12], [3,13], [3,14], [4,15], [4,16], [4,17], [5,18], [5,19], [6,20]]
     },
     acetone: {
-        name: 'Acetonă',
+        name: 'Acetonă (Propan-2-ona)',
         formula: 'C₃H₆O',
         description: 'O cetonă cu o grupă carbonil, utilizată pe scară largă ca solvent.',
+        properties: {
+            physical: 'Punct de fierbere: 56.05°C | Punct de topire: -95°C | Densitate: 0.791 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Cetonă simetrică. Nu suportă oxidare ușor. Reacții de condensare cu aldehide. Reacții de adunare nucleofilă pe legatura C=O.',
+            uses: 'Utilizări: solvent universal (lacuri, vopsele, rășini), îndepărtare de lac de unghii, producerea compușilor chimici, curățarea sticlei optice, intermediar în sinteza organică'
+        },
         atoms: [
             { element: 'C', x: -1.27, y: 0, z: 0 },
             { element: 'C', x: 0, y: 0, z: 0 },
@@ -1156,6 +1161,305 @@ const molecules = {
             { element: 'H', x: 1.67, y: 0.39, z: -0.51 }
         ],
         bonds: [[0,1], [1,2,'double'], [1,3], [0,4], [0,5], [0,6], [3,7], [3,8], [3,9]]
+    },
+    // Aldehide
+    metanal: {
+        name: 'Metanal (Formaldehidă)',
+        formula: 'CH₂O',
+        description: 'Cea mai simplă aldehidă, utilizată pe scară largă în producția de materiale',
+        properties: {
+            physical: 'Punct de fierbiere: -19°C (gaz) | Punct de topire: -92°C | Densitate: 0.815 g/cm³ (soluție 37%) | Solubilitate: completă în apă',
+            chemical: 'Aldehidă foarte reactivă. Ușor oxidabilă la acid formic. Polimerizare ușoară. Reacții de condensare. Reducere la metanol.',
+            uses: 'Utilizări: producția de rășini (melamin, uree-formaldehidă), dezinfectant și conservant, producția de materiale termosetabile, sinteza organică, industria textilă'
+        },
+        atoms: [
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: 1.14, y: 0, z: 0 },
+            { element: 'H', x: -0.57, y: 0.99, z: 0 },
+            { element: 'H', x: -0.57, y: -0.99, z: 0 }
+        ],
+        bonds: [[0,1,'double'], [0,2], [0,3]]
+    },
+    etanal: {
+        name: 'Etanal (Acetaldehidă)',
+        formula: 'C₂H₄O',
+        description: 'O aldehidă cu doi carboni, intermediar important în sinteza organică și metabolismul alcoolului.',
+        properties: {
+            physical: 'Punct de fierbiere: 20.2°C | Punct de topire: -123.5°C | Densitate: 0.778 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Aldehidă reactivă. Ușor oxidabilă la acid acetic. Reacții de condensare cu amini și alcooli. Reducere la etanol.',
+            uses: 'Utilizări: producția de acid acetic (oxidare Wacker), intermediar în sinteza acizilor și acetalilor, producția de acetal, silvicultura (înmuiere a lemnului)'
+        },
+        atoms: [
+            { element: 'C', x: -0.76, y: 0, z: 0 },
+            { element: 'C', x: 0.76, y: 0, z: 0 },
+            { element: 'O', x: 1.36, y: 1.04, z: 0 },
+            { element: 'H', x: -1.16, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.16, y: -0.97, z: 0.26 },
+            { element: 'H', x: -1.16, y: 0.08, z: -1.03 },
+            { element: 'H', x: 1.36, y: 0, z: -1.03 }
+        ],
+        bonds: [[0,1], [1,2,'double'], [0,3], [0,4], [0,5], [1,6]]
+    },
+    propanal: {
+        name: 'Propanal',
+        formula: 'C₃H₆O',
+        description: 'O aldehidă cu trei carboni, utilizată ca intermediar chimic și dezinfectant.',
+        properties: {
+            physical: 'Punct de fierbiere: 48.8°C | Punct de topire: -81°C | Densitate: 0.807 g/cm³ | Solubilitate: partial în apă (16 g/100mL)',
+            chemical: 'Aldehidă moderată reactivă. Ușor oxidabilă la acid propanoic. Reacții de adunare nucleofilă. Polimerizare la tripropanal.',
+            uses: 'Utilizări: producția de acid propanoic, intermediar în sinteza vitaminei B1, conservant pentru produse lactate, producție de polimeri'
+        },
+        atoms: [
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'O', x: 1.87, y: 1.04, z: 0 },
+            { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.67, y: -0.97, z: 0.26 },
+            { element: 'H', x: -1.67, y: 0.08, z: -1.03 },
+            { element: 'H', x: 0, y: 0.89, z: -0.51 },
+            { element: 'H', x: 0, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.87, y: 0, z: -1.03 }
+        ],
+        bonds: [[0,1], [1,2], [2,3,'double'], [0,4], [0,5], [0,6], [1,7], [1,8], [2,9]]
+    },
+    butanal: {
+        name: 'Butanal (Butiraldehidă)',
+        formula: 'C₄H₈O',
+        description: 'O aldehidă cu patru carboni, utilizată în sinteza chimică și ca intermediar industrial.',
+        properties: {
+            physical: 'Punct de fierbiere: 74.8°C | Punct de topire: -96°C | Densitate: 0.802 g/cm³ | Solubilitate: 7 g/100mL apă',
+            chemical: 'Aldehidă moderată reactivă. Oxidare la acid butiric. Reacții de condensare. Polimerizare la aldoli și crotonaldehidă.',
+            uses: 'Utilizări: producția de acid butiric și butirol, sinteza acetalilor, producția plastifianților, intermediar în fabricarea coloranților, producță de compuși chimici fine'
+        },
+        atoms: [
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0, z: 0 },
+            { element: 'C', x: 1.91, y: 0, z: 0 },
+            { element: 'O', x: 2.51, y: 1.04, z: 0 },
+            { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: 0, z: -1.03 },
+            { element: 'H', x: -0.64, y: 0.89, z: -0.51 },
+            { element: 'H', x: -0.64, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0.64, y: 0.89, z: 0.51 },
+            { element: 'H', x: 0.64, y: -0.89, z: -0.51 },
+            { element: 'H', x: 2.51, y: 0, z: -1.03 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4,'double'], [0,5], [0,6], [0,7], [1,8], [1,9], [2,10], [2,11], [3,12]]
+    },
+    pentanal: {
+        name: 'Pentanal (Valeradehidă)',
+        formula: 'C₅H₁₀O',
+        description: 'O aldehidă cu cinci carboni, cu miros caragros, utilizată în industria chimică.',
+        properties: {
+            physical: 'Punct de fierbiere: 103°C | Punct de topire: -91.5°C | Densitate: 0.820 g/cm³ | Solubilitate: 1.1 g/100mL apă',
+            chemical: 'Aldehidă oxidabilă. Reacții de adunare nucleofilă. Polimerizare. Condensare aldolică. Reacții de esterificare.',
+            uses: 'Utilizări: intermediar în producția de compuși chimici, synthesis de polimeri, producție de arome și parfumuri, intermediar în farmacologie'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'O', x: 3.14, y: 1.04, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0, y: 0.89, z: 0.51 },
+            { element: 'H', x: 0, y: -0.89, z: -0.51 },
+            { element: 'H', x: 1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: 1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 3.14, y: 0, z: -1.03 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4], [4,5,'double'], [0,6], [0,7], [0,8], [1,9], [1,10], [2,11], [2,12], [3,13], [3,14], [4,15]]
+    },
+    // Cetone
+    'propan-2-ona': {
+        name: 'Propan-2-ona (Acetonă)',
+        formula: 'C₃H₆O',
+        description: 'O cetonă simetrică, cea mai comună cetonă, utilizată pe scară largă ca solvent.',
+        properties: {
+            physical: 'Punct de fierbiere: 56.05°C | Punct de topire: -95°C | Densitate: 0.791 g/cm³ | Solubilitate: completă în apă',
+            chemical: 'Cetonă simetrică. Nu suportă oxidare ușor. Reacții de condensare cu aldehide. Reacții de adunare nucleofilă pe legatura C=O.',
+            uses: 'Utilizări: solvent universal (lacuri, vopsele, rășini), îndepărtare de lac de unghii, producerea compușilor chimici, curățarea sticlei optice, intermediar în sinteza organică'
+        },
+        atoms: [
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: 0.6, y: 1.04, z: 0 },
+            { element: 'C', x: 1.27, y: -0.5, z: 0 },
+            { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
+            { element: 'H', x: -1.67, y: -0.89, z: 0.51 },
+            { element: 'H', x: -1.67, y: 0, z: -1.03 },
+            { element: 'H', x: 1.67, y: -0.39, z: 1.03 },
+            { element: 'H', x: 1.67, y: -1.39, z: -0.51 },
+            { element: 'H', x: 1.67, y: 0.39, z: -0.51 }
+        ],
+        bonds: [[0,1], [1,2,'double'], [1,3], [0,4], [0,5], [0,6], [3,7], [3,8], [3,9]]
+    },
+    'butan-2-ona': {
+        name: 'Butan-2-ona (Metilpropil cetonă)',
+        formula: 'C₄H₈O',
+        description: 'O cetonă asimetrică cu patru carboni, utilizată ca solvent și intermediar chimic.',
+        properties: {
+            physical: 'Punct de fierbiere: 79.6°C | Punct de topire: -86.2°C | Densitate: 0.805 g/cm³ | Solubilitate: 26 g/100mL apă',
+            chemical: 'Cetonă asimetrică. Reacții de adunare nucleofilă pe grupul C=O. Reacții de condensare. Oxidare dificilă.',
+            uses: 'Utilizări: solvent industrial, producință de fibre sintetice, intermediar în sinteza chimică, producția de polimeri, ingredient în produse chimice fine'
+        },
+        atoms: [
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0, z: 0 },
+            { element: 'O', x: 1.24, y: 1.04, z: 0 },
+            { element: 'C', x: 0.64, y: -1.27, z: 0 },
+            { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.31, y: 0, z: -1.03 },
+            { element: 'H', x: -0.64, y: 0.89, z: -0.51 },
+            { element: 'H', x: -0.64, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0.64, y: 0.89, z: 0.51 },
+            { element: 'H', x: 1.04, y: -1.27, z: 1.03 },
+            { element: 'H', x: 0.64, y: -2.27, z: -0.51 },
+            { element: 'H', x: 0.24, y: -1.27, z: 0.51 }
+        ],
+        bonds: [[0,1], [1,2], [2,3,'double'], [2,4], [0,5], [0,6], [0,7], [1,8], [1,9], [2,10], [4,11], [4,12], [4,13]]
+    },
+    'pentan-2-ona': {
+        name: 'Pentan-2-ona (Metilpropil cetonă)',
+        formula: 'C₅H₁₀O',
+        description: 'O cetonă cu cinci carboni, utilizată ca solvent și intermediar chimic.',
+        properties: {
+            physical: 'Punct de fierbiere: 102.2°C | Punct de topire: -78.9°C | Densitate: 0.809 g/cm³ | Solubilitate: 8.7 g/100mL apă',
+            chemical: 'Cetonă cu carbon secundar. Reacții de adunare nucleofilă. Reacții de condensare aldolică. Oxidare ușoară la acid carboxilic.',
+            uses: 'Utilizări: solvent organic, intermediar în industrial chimic, producția de fibre sintetice, ingredient în compuși chimici fine'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'C', x: 1.27, y: 0, z: 0 },
+            { element: 'O', x: 1.87, y: 1.04, z: 0 },
+            { element: 'C', x: 1.27, y: -1.27, z: 0 },
+            { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: -2.94, y: 0, z: -1.03 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 0, y: 0.89, z: 0.51 },
+            { element: 'H', x: 0, y: -0.89, z: -0.51 },
+            { element: 'H', x: 1.67, y: -1.27, z: 1.03 },
+            { element: 'H', x: 1.27, y: -2.27, z: -0.51 },
+            { element: 'H', x: 0.87, y: -1.27, z: 0.51 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4,'double'], [3,5], [0,6], [0,7], [0,8], [1,9], [1,10], [2,11], [2,12], [5,13], [5,14], [5,15]]
+    },
+    'pentan-3-ona': {
+        name: 'Pentan-3-ona (Dietil cetonă)',
+        formula: 'C₅H₁₀O',
+        description: 'O cetonă simetrică cu cinci carboni, izomer de cea pentan-2-ona, utilizată ca solvent.',
+        properties: {
+            physical: 'Punct de fierbiere: 101.9°C | Punct de topire: -40.8°C | Densitate: 0.809 g/cm³ | Solubilitate: 8.8 g/100mL apă',
+            chemical: 'Cetonă simetrică. Nu poate suferi oxidare să formeze acid. Reacții de adunare nucleofilă pe legatura C=O. Reacții de condensare.',
+            uses: 'Utilizări: solvent organic, intermediar în sínteza chimică, producția compușilor organici, ingredient în polimeri'
+        },
+        atoms: [
+            { element: 'C', x: -1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: 0.6, y: 1.04, z: 0 },
+            { element: 'C', x: 1.27, y: -0.73, z: 0 },
+            { element: 'C', x: -1.27, y: -0.73, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'H', x: -1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: -2.14, y: 0.22, z: -0.51 },
+            { element: 'H', x: -1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 1.67, y: -0.73, z: 1.03 },
+            { element: 'H', x: 2.14, y: -0.22, z: 0.51 },
+            { element: 'H', x: 1.27, y: -1.78, z: -0.51 },
+            { element: 'H', x: -1.67, y: -0.73, z: 1.03 },
+            { element: 'H', x: -2.14, y: -1.22, z: -0.51 },
+            { element: 'H', x: -1.27, y: -1.78, z: -0.51 },
+            { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: 2.14, y: 1.22, z: -0.51 },
+            { element: 'H', x: 1.27, y: 1.78, z: -0.51 }
+        ],
+        bonds: [[0,1], [1,2,'double'], [1,3], [1,4], [1,5], [0,6], [0,7], [0,8], [3,9], [3,10], [3,11], [4,12], [4,13], [4,14], [5,15], [5,16], [5,17]]
+    },
+    'hexan-2-ona': {
+        name: 'Hexan-2-ona (Butil metil cetonă)',
+        formula: 'C₆H₁₂O',
+        description: 'O cetonă cu șase carboni, utilizată ca solvent și intermediar chimic industrial.',
+        properties: {
+            physical: 'Punct de fierbiere: 127.6°C | Punct de topire: -55.5°C | Densitate: 0.811 g/cm³ | Solubilitate: 1.7 g/100mL apă',
+            chemical: 'Cetonă asimetrică. Reacții de adunare nucleofilă. Condensare alcolică. Oxidare dificilă. Reacții de esterificare cu acizi.',
+            uses: 'Utilizări: solvent puternic industrial, producția fibrelor sintetice, agent de decapant, intermediar chimie fine, ingredient în lacuri și vernituri'
+        },
+        atoms: [
+            { element: 'C', x: -3.18, y: 0, z: 0 },
+            { element: 'C', x: -1.91, y: 0, z: 0 },
+            { element: 'C', x: -0.64, y: 0, z: 0 },
+            { element: 'C', x: 0.64, y: 0, z: 0 },
+            { element: 'O', x: 1.24, y: 1.04, z: 0 },
+            { element: 'C', x: 0.64, y: -1.27, z: 0 },
+            { element: 'C', x: 1.91, y: 0, z: 0 },
+            { element: 'H', x: -3.58, y: 0.89, z: 0.51 },
+            { element: 'H', x: -3.58, y: -0.89, z: 0.51 },
+            { element: 'H', x: -3.58, y: 0, z: -1.03 },
+            { element: 'H', x: -1.91, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.91, y: -0.89, z: 0.51 },
+            { element: 'H', x: -0.64, y: 0.89, z: 0.51 },
+            { element: 'H', x: -0.64, y: -0.89, z: -0.51 },
+            { element: 'H', x: 0.64, y: 0.89, z: 0.51 },
+            { element: 'H', x: 1.04, y: -1.27, z: 1.03 },
+            { element: 'H', x: 0.64, y: -2.27, z: -0.51 },
+            { element: 'H', x: 0.24, y: -1.27, z: 0.51 },
+            { element: 'H', x: 2.31, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.31, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.31, y: 0, z: -1.03 }
+        ],
+        bonds: [[0,1], [1,2], [2,3], [3,4,'double'], [3,5], [3,6], [0,7], [0,8], [0,9], [1,10], [1,11], [2,12], [2,13], [5,14], [5,15], [5,16], [6,17], [6,18], [6,19], [6,20]]
+    },
+    'hexan-3-ona': {
+        name: 'Hexan-3-ona (Etil propil cetonă)',
+        formula: 'C₆H₁₂O',
+        description: 'O cetonă asimetrică cu șase carboni, izomer de hexan-2-ona, utilizată ca solvent.',
+        properties: {
+            physical: 'Punct de fierbiere: 123.5°C | Punct de topire: -45°C | Densitate: 0.818 g/cm³ | Solubilitate: 1.4 g/100mL apă',
+            chemical: 'Cetonă asimetrică. Reacții de adunare nucleofilă. Oxidare ușoară la mix de acizi. Reacții de condensare aldolică.',
+            uses: 'Utilizări: solvent industrial, intermediar chimic, producția fibrelor sintetice, ingredient în produse chimice fine'
+        },
+        atoms: [
+            { element: 'C', x: -2.54, y: 0.73, z: 0 },
+            { element: 'C', x: -1.27, y: 0, z: 0 },
+            { element: 'C', x: 0, y: 0, z: 0 },
+            { element: 'O', x: 0.6, y: 1.04, z: 0 },
+            { element: 'C', x: 1.27, y: -0.73, z: 0 },
+            { element: 'C', x: -2.54, y: -0.73, z: 0 },
+            { element: 'C', x: 1.27, y: 0.73, z: 0 },
+            { element: 'C', x: 2.54, y: 0, z: 0 },
+            { element: 'H', x: -2.94, y: 0.73, z: 1.03 },
+            { element: 'H', x: -3.41, y: 0.22, z: -0.51 },
+            { element: 'H', x: -2.54, y: 1.78, z: -0.51 },
+            { element: 'H', x: -1.27, y: 0.89, z: -0.51 },
+            { element: 'H', x: -1.27, y: -0.89, z: 0.51 },
+            { element: 'H', x: 1.67, y: -0.73, z: 1.03 },
+            { element: 'H', x: 2.14, y: -0.22, z: -0.51 },
+            { element: 'H', x: 1.27, y: -1.78, z: -0.51 },
+            { element: 'H', x: -2.94, y: -0.73, z: -0.51 },
+            { element: 'H', x: -3.41, y: -1.22, z: 0.51 },
+            { element: 'H', x: -2.54, y: -1.78, z: 0.51 },
+            { element: 'H', x: 1.67, y: 0.73, z: 1.03 },
+            { element: 'H', x: 2.14, y: 1.22, z: -0.51 },
+            { element: 'H', x: 1.27, y: 1.78, z: -0.51 },
+            { element: 'H', x: 2.94, y: 0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: -0.89, z: 0.51 },
+            { element: 'H', x: 2.94, y: 0, z: -1.03 }
+        ],
+        bonds: [[0,1], [1,2], [2,3,'double'], [2,4], [0,5], [2,6], [4,7], [0,8], [0,9], [0,10], [1,11], [1,12], [4,13], [4,14], [4,15], [5,16], [5,17], [5,18], [6,19], [6,20], [6,21], [7,22], [7,23], [7,24]]
     },
     aceticacid: {
         name: 'Acid Acetic',
