@@ -4711,6 +4711,137 @@ function init() {
     animate();
 }
 
+// Normalize hydrogen positions to fixed 90-degree angles from carbon atoms
+function normalizeHydrogenPositions(moleculeData) {
+    // Create a deep copy to avoid modifying the original
+    const data = JSON.parse(JSON.stringify(moleculeData));
+    
+    // Parse bonds to find carbon-hydrogen and carbon-carbon connections
+    const carbonBonds = {}; // carbonIndex -> [hydrogenIndices]
+    const carbonCarbonBonds = {}; // carbonIndex -> [connectedCarbonIndices]
+    const carbonOtherAtomBonds = {}; // carbonIndex -> [connectedAtomIndices] (O, N, etc)
+    
+    data.bonds.forEach(bond => {
+        const [idx1, idx2] = bond;
+        const atom1 = data.atoms[idx1];
+        const atom2 = data.atoms[idx2];
+        
+        // Check if this is a C-H bond
+        if (atom1.element === 'C' && atom2.element === 'H') {
+            if (!carbonBonds[idx1]) carbonBonds[idx1] = [];
+            carbonBonds[idx1].push(idx2);
+        } else if (atom2.element === 'C' && atom1.element === 'H') {
+            if (!carbonBonds[idx2]) carbonBonds[idx2] = [];
+            carbonBonds[idx2].push(idx1);
+        }
+        
+        // Check if this is a C-C bond
+        if (atom1.element === 'C' && atom2.element === 'C') {
+            if (!carbonCarbonBonds[idx1]) carbonCarbonBonds[idx1] = [];
+            carbonCarbonBonds[idx1].push(idx2);
+            if (!carbonCarbonBonds[idx2]) carbonCarbonBonds[idx2] = [];
+            carbonCarbonBonds[idx2].push(idx1);
+        }
+        
+        // Check if this is a C-O or C-N bond (for OH groups, etc)
+        if (atom1.element === 'C' && (atom2.element === 'O' || atom2.element === 'N')) {
+            if (!carbonOtherAtomBonds[idx1]) carbonOtherAtomBonds[idx1] = [];
+            carbonOtherAtomBonds[idx1].push(idx2);
+        } else if (atom2.element === 'C' && (atom1.element === 'O' || atom1.element === 'N')) {
+            if (!carbonOtherAtomBonds[idx2]) carbonOtherAtomBonds[idx2] = [];
+            carbonOtherAtomBonds[idx2].push(idx1);
+        }
+    });
+    
+    // Distance for hydrogen atoms from carbon
+    const H_DISTANCE = 0.9;
+    
+    // 90-degree positions around carbon (tetrahedral-like but at 90 degrees)
+    const positions90Deg = [
+        { dx: H_DISTANCE, dy: 0, dz: 0 },           // +X (right)
+        { dx: -H_DISTANCE, dy: 0, dz: 0 },          // -X (left)
+        { dx: 0, dy: H_DISTANCE, dz: 0 },           // +Y (top)
+        { dx: 0, dy: -H_DISTANCE, dz: 0 },          // -Y (bottom)
+        { dx: 0, dy: 0, dz: H_DISTANCE },           // +Z (forward)
+        { dx: 0, dy: 0, dz: -H_DISTANCE }           // -Z (backward)
+    ];
+    
+    // For each carbon, position its hydrogens at 90-degree angles
+    Object.keys(carbonBonds).forEach(carbonIdx => {
+        const cIdx = parseInt(carbonIdx);
+        const carbon = data.atoms[cIdx];
+        const hydrogenIndices = carbonBonds[cIdx];
+        const connectedCarbons = carbonCarbonBonds[cIdx] || [];
+        const connectedOtherAtoms = carbonOtherAtomBonds[cIdx] || []; // O, N, etc
+        
+        // Determine which directions to avoid (directions of C-C bonds and C-O/C-N bonds)
+        const avoidDirections = new Set();
+        
+        // Avoid directions of C-C bonds
+        connectedCarbons.forEach(otherCIdx => {
+            const otherCarbon = data.atoms[otherCIdx];
+            const dx = otherCarbon.x - carbon.x;
+            const dy = otherCarbon.y - carbon.y;
+            const dz = otherCarbon.z - carbon.z;
+            
+            // Determine which axis this carbon is mainly along
+            const absDx = Math.abs(dx);
+            const absDy = Math.abs(dy);
+            const absDz = Math.abs(dz);
+            
+            if (absDx > absDy && absDx > absDz) {
+                // Along X axis
+                avoidDirections.add(dx > 0 ? 0 : 1); // 0 = +X, 1 = -X
+            } else if (absDy > absDx && absDy > absDz) {
+                // Along Y axis
+                avoidDirections.add(dy > 0 ? 2 : 3); // 2 = +Y, 3 = -Y
+            } else if (absDz > absDx && absDz > absDy) {
+                // Along Z axis
+                avoidDirections.add(dz > 0 ? 4 : 5); // 4 = +Z, 5 = -Z
+            }
+        });
+        
+        // Avoid directions of C-O/C-N bonds (OH groups, etc)
+        connectedOtherAtoms.forEach(otherAtomIdx => {
+            const otherAtom = data.atoms[otherAtomIdx];
+            const dx = otherAtom.x - carbon.x;
+            const dy = otherAtom.y - carbon.y;
+            const dz = otherAtom.z - carbon.z;
+            
+            // Determine which axis this atom is mainly along
+            const absDx = Math.abs(dx);
+            const absDy = Math.abs(dy);
+            const absDz = Math.abs(dz);
+            
+            if (absDx > absDy && absDx > absDz) {
+                // Along X axis
+                avoidDirections.add(dx > 0 ? 0 : 1); // 0 = +X, 1 = -X
+            } else if (absDy > absDx && absDy > absDz) {
+                // Along Y axis
+                avoidDirections.add(dy > 0 ? 2 : 3); // 2 = +Y, 3 = -Y
+            } else if (absDz > absDx && absDz > absDy) {
+                // Along Z axis
+                avoidDirections.add(dz > 0 ? 4 : 5); // 4 = +Z, 5 = -Z
+            }
+        });
+        
+        // Get available positions (not in avoided directions)
+        const availablePositions = positions90Deg.filter((_, idx) => !avoidDirections.has(idx));
+        
+        // Position each hydrogen at an available position
+        hydrogenIndices.forEach((hIdx, position) => {
+            if (position < availablePositions.length) {
+                const pos = availablePositions[position];
+                data.atoms[hIdx].x = carbon.x + pos.dx;
+                data.atoms[hIdx].y = carbon.y + pos.dy;
+                data.atoms[hIdx].z = carbon.z + pos.dz;
+            }
+        });
+    });
+    
+    return data;
+}
+
 function createMolecule(moleculeData) {
     if (molecule) {
         scene.remove(molecule);
@@ -4860,7 +4991,10 @@ function loadMolecule(moleculeName) {
     const data = molecules[moleculeName];
     if (!data) return;
     
-    createMolecule(data);
+    // Normalize hydrogen positions to 90 degrees
+    const normalizedData = normalizeHydrogenPositions(data);
+    
+    createMolecule(normalizedData);
     
     document.getElementById('moleculeName').textContent = data.name;
     document.getElementById('moleculeFormula').textContent = data.formula;
@@ -4941,7 +5075,8 @@ function showIsomersModal(moleculeName) {
             if (isomer.data) {
                 loadMolecule(isomer.data);
             } else {
-                createMolecule(isomer);
+                const normalizedIsomer = normalizeHydrogenPositions(isomer);
+                createMolecule(normalizedIsomer);
                 document.getElementById('moleculeName').textContent = isomer.name;
                 document.getElementById('moleculeFormula').textContent = data.formula;
                 
@@ -5017,7 +5152,8 @@ function showIUPACIsomersModal(compoundName, isomersData) {
             if (isomer.data) {
                 loadMolecule(isomer.data);
             } else {
-                createMolecule(isomer);
+                const normalizedIsomer = normalizeHydrogenPositions(isomer);
+                createMolecule(normalizedIsomer);
                 document.getElementById('moleculeName').textContent = isomer.name;
                 document.getElementById('moleculeFormula').textContent = isomersData.formula;
                 
@@ -5119,7 +5255,8 @@ document.addEventListener('DOMContentLoaded', () => {
             parentCompound = null;
             
             // Create molecule from parsed data
-            createMolecule(moleculeData);
+            const normalizedMolecule = normalizeHydrogenPositions(moleculeData);
+            createMolecule(normalizedMolecule);
             
             // Build description
             let description = `Lanț principal: ${parsed.chainLength} atomi de carbon`;
@@ -5277,7 +5414,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (parentCompound.isIUPAC) {
                 // For IUPAC compounds, load the first isomer (original)
                 const firstIsomer = parentCompound.isomersData.isomers[0];
-                createMolecule(firstIsomer);
+                const normalizedFirstIsomer = normalizeHydrogenPositions(firstIsomer);
+                createMolecule(normalizedFirstIsomer);
                 document.getElementById('moleculeName').textContent = firstIsomer.name;
                 document.getElementById('moleculeFormula').textContent = parentCompound.formula;
                 document.getElementById('moleculeDescription').textContent = firstIsomer.description;
