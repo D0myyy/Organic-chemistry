@@ -367,15 +367,15 @@ const molecules = {
         formula: 'C₃H₆',
         description: 'O structură în inel cu trei membri, foarte tensionată.',
         atoms: [
-            { element: 'C', x: 0, y: 0.58, z: 0 },
-            { element: 'C', x: -0.5, y: -0.29, z: 0 },
-            { element: 'C', x: 0.5, y: -0.29, z: 0 },
-            { element: 'H', x: 0, y: 1.18, z: 0.9 },
-            { element: 'H', x: 0, y: 1.18, z: -0.9 },
-            { element: 'H', x: -1.0, y: -0.59, z: 0.9 },
-            { element: 'H', x: -1.0, y: -0.59, z: -0.9 },
-            { element: 'H', x: 1.0, y: -0.59, z: 0.9 },
-            { element: 'H', x: 1.0, y: -0.59, z: -0.9 }
+            { element: 'C', x: 0, y: 0.73, z: 0 },
+            { element: 'C', x: -0.63, y: -0.36, z: 0 },
+            { element: 'C', x: 0.63, y: -0.36, z: 0 },
+            { element: 'H', x: -0.56, y: 1.62, z: 0 },
+            { element: 'H', x: 0.56, y: 1.62, z: 0 },
+            { element: 'H', x: -1.68, y: -0.12, z: 0 },
+            { element: 'H', x: -0.85, y: -1.39, z: 0 },
+            { element: 'H', x: 1.68, y: -0.12, z: 0 },
+            { element: 'H', x: 0.85, y: -1.39, z: 0 }
         ],
         bonds: [[0,1], [1,2], [2,0], [0,3], [0,4], [1,5], [1,6], [2,7], [2,8]]
     },
@@ -390,18 +390,18 @@ const molecules = {
             { element: 'C', x: -0.87, y: -0.5, z: 0 },
             { element: 'C', x: -0.87, y: 0.5, z: 0 },
             { element: 'C', x: 0, y: 1, z: 0 },
-            { element: 'H', x: 1.54, y: 0.89, z: 0.7 },
-            { element: 'H', x: 1.54, y: 0.89, z: -0.7 },
-            { element: 'H', x: 1.54, y: -0.89, z: 0.7 },
-            { element: 'H', x: 1.54, y: -0.89, z: -0.7 },
-            { element: 'H', x: 0, y: -1.78, z: 0.7 },
-            { element: 'H', x: 0, y: -1.78, z: -0.7 },
-            { element: 'H', x: -1.54, y: -0.89, z: 0.7 },
-            { element: 'H', x: -1.54, y: -0.89, z: -0.7 },
-            { element: 'H', x: -1.54, y: 0.89, z: 0.7 },
-            { element: 'H', x: -1.54, y: 0.89, z: -0.7 },
-            { element: 'H', x: 0, y: 1.78, z: 0.7 },
-            { element: 'H', x: 0, y: 1.78, z: -0.7 }
+            { element: 'H', x: 1.35, y: 1.15, z: 0 },
+            { element: 'H', x: 1.75, y: 0.5, z: 0 },
+            { element: 'H', x: 1.75, y: -0.5, z: 0 },
+            { element: 'H', x: 1.35, y: -1.15, z: 0 },
+            { element: 'H', x: 0.35, y: -1.65, z: 0 },
+            { element: 'H', x: -0.35, y: -1.65, z: 0 },
+            { element: 'H', x: -1.35, y: -1.15, z: 0 },
+            { element: 'H', x: -1.75, y: -0.5, z: 0 },
+            { element: 'H', x: -1.75, y: 0.5, z: 0 },
+            { element: 'H', x: -1.35, y: 1.15, z: 0 },
+            { element: 'H', x: -0.35, y: 1.65, z: 0 },
+            { element: 'H', x: 0.35, y: 1.65, z: 0 }
         ],
         bonds: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,0], [0,6], [0,7], [1,8], [1,9], [2,10], [2,11], [3,12], [3,13], [4,14], [4,15], [5,16], [5,17]]
     },
@@ -1151,7 +1151,7 @@ const molecules = {
         atoms: [
             { element: 'C', x: -1.27, y: 0, z: 0 },
             { element: 'C', x: 0, y: 0, z: 0 },
-            { element: 'O', x: 0.6, y: 1.04, z: 0 },
+            { element: 'O', x: 0, y: 1.18, z: 0 },
             { element: 'C', x: 1.27, y: -0.5, z: 0 },
             { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
             { element: 'H', x: -1.67, y: -0.89, z: 0.51 },
@@ -1174,9 +1174,9 @@ const molecules = {
         },
         atoms: [
             { element: 'C', x: 0, y: 0, z: 0 },
-            { element: 'O', x: 1.14, y: 0, z: 0 },
-            { element: 'H', x: -0.57, y: 0.99, z: 0 },
-            { element: 'H', x: -0.57, y: -0.99, z: 0 }
+            { element: 'O', x: 0, y: 1.18, z: 0 },
+            { element: 'H', x: -1.05, y: -1.05, z: 0 },
+            { element: 'H', x: 1.05, y: -1.05, z: 0 }
         ],
         bonds: [[0,1,'double'], [0,2], [0,3]]
     },
@@ -1315,7 +1315,7 @@ const molecules = {
             { element: 'C', x: -1.91, y: 0, z: 0 },
             { element: 'C', x: -0.64, y: 0, z: 0 },
             { element: 'C', x: 0.64, y: 0, z: 0 },
-            { element: 'O', x: 1.24, y: 1.04, z: 0 },
+            { element: 'O', x: 0.64, y: 1.18, z: 0 },
             { element: 'C', x: 0.64, y: -1.27, z: 0 },
             { element: 'H', x: -2.31, y: 0.89, z: 0.51 },
             { element: 'H', x: -2.31, y: -0.89, z: 0.51 },
@@ -1343,7 +1343,7 @@ const molecules = {
             { element: 'C', x: -1.27, y: 0, z: 0 },
             { element: 'C', x: 0, y: 0, z: 0 },
             { element: 'C', x: 1.27, y: 0, z: 0 },
-            { element: 'O', x: 1.87, y: 1.04, z: 0 },
+            { element: 'O', x: 1.27, y: 1.18, z: 0 },
             { element: 'C', x: 1.27, y: -1.27, z: 0 },
             { element: 'H', x: -2.94, y: 0.89, z: 0.51 },
             { element: 'H', x: -2.94, y: -0.89, z: 0.51 },
@@ -1370,7 +1370,7 @@ const molecules = {
         atoms: [
             { element: 'C', x: -1.27, y: 0.73, z: 0 },
             { element: 'C', x: 0, y: 0, z: 0 },
-            { element: 'O', x: 0.6, y: 1.04, z: 0 },
+            { element: 'O', x: 0, y: 1.18, z: 0 },
             { element: 'C', x: 1.27, y: -0.73, z: 0 },
             { element: 'C', x: -1.27, y: -0.73, z: 0 },
             { element: 'C', x: 1.27, y: 0.73, z: 0 },
@@ -1403,7 +1403,7 @@ const molecules = {
             { element: 'C', x: -1.91, y: 0, z: 0 },
             { element: 'C', x: -0.64, y: 0, z: 0 },
             { element: 'C', x: 0.64, y: 0, z: 0 },
-            { element: 'O', x: 1.24, y: 1.04, z: 0 },
+            { element: 'O', x: 0.64, y: 1.18, z: 0 },
             { element: 'C', x: 0.64, y: -1.27, z: 0 },
             { element: 'C', x: 1.91, y: 0, z: 0 },
             { element: 'H', x: -3.58, y: 0.89, z: 0.51 },
@@ -1436,7 +1436,7 @@ const molecules = {
             { element: 'C', x: -2.54, y: 0.73, z: 0 },
             { element: 'C', x: -1.27, y: 0, z: 0 },
             { element: 'C', x: 0, y: 0, z: 0 },
-            { element: 'O', x: 0.6, y: 1.04, z: 0 },
+            { element: 'O', x: 0, y: 1.18, z: 0 },
             { element: 'C', x: 1.27, y: -0.73, z: 0 },
             { element: 'C', x: -2.54, y: -0.73, z: 0 },
             { element: 'C', x: 1.27, y: 0.73, z: 0 },
@@ -1874,7 +1874,7 @@ const isomersData = {
                     { element: 'C', x: 0, y: 0, z: 0 },
                     { element: 'C', x: 1.27, y: 0, z: 0 },
                     { element: 'H', x: -1.67, y: 0.89, z: 0.51 },
-                    { element: 'H', x: -1.67, y: -0.89, z: 0.51 },
+                    { element: 'O', x: 0, y: 1.18, z: 0 },
                     { element: 'H', x: 1.67, y: 0.51, z: 0.89 },
                     { element: 'H', x: 1.67, y: 0.51, z: -0.89 }
                 ],
@@ -2427,7 +2427,7 @@ const isomersData = {
                     { element: 'C', x: -1.14, y: 0, z: 0 },
                     { element: 'O', x: 0, y: 0, z: 0 },
                     { element: 'C', x: 1.14, y: 0, z: 0 },
-                    { element: 'H', x: -1.54, y: 0.89, z: 0.51 },
+                    { element: 'O', x: 0, y: 1.18, z: 0 },
                     { element: 'H', x: -1.54, y: -0.89, z: 0.51 },
                     { element: 'H', x: -1.54, y: 0, z: -1.03 },
                     { element: 'H', x: 1.54, y: 0.89, z: 0.51 },
@@ -2677,7 +2677,7 @@ const isomersData = {
                     { element: 'C', x: -3.18, y: 0, z: 0 },
                     { element: 'C', x: -1.91, y: 0, z: 0 },
                     { element: 'C', x: -0.64, y: 0.73, z: 0 },
-                    { element: 'C', x: 0.64, y: 0, z: 0 },
+                    { element: 'O', x: 0, y: 1.18, z: 0 },
                     { element: 'C', x: 1.91, y: 0, z: 0 },
                     { element: 'C', x: 3.18, y: 0, z: 0 },
                     { element: 'C', x: -0.64, y: 2.19, z: 0 },
@@ -3694,9 +3694,9 @@ class IUPACParser {
                 // Add hydrogen to oxygen
                 const hydrogenAtom = {
                     element: 'H',
-                    x: oxygenAtom.x + position.x * 0.96,
-                    y: oxygenAtom.y + position.y * 0.96,
-                    z: oxygenAtom.z + position.z * 0.96
+                    x: oxygenAtom.x + position.x * 1.12,
+                    y: oxygenAtom.y + position.y * 1.12,
+                    z: oxygenAtom.z + position.z * 1.12
                 };
                 atoms.push(hydrogenAtom);
                 bonds.push([oxygenIndex, atoms.length - 1]);
@@ -4715,14 +4715,20 @@ function init() {
 function normalizeHydrogenPositions(moleculeData) {
     // Create a deep copy to avoid modifying the original
     const data = JSON.parse(JSON.stringify(moleculeData));
+
+    if (moleculeData.name === 'Benzen' || moleculeData.name === 'Ciclohexan' || moleculeData.name === 'Ciclopropan') {
+        return data;
+    }
     
     // Parse bonds to find carbon-hydrogen and carbon-carbon connections
     const carbonBonds = {}; // carbonIndex -> [hydrogenIndices]
     const carbonCarbonBonds = {}; // carbonIndex -> [connectedCarbonIndices]
+    const carbonDoubleBonds = {}; // carbonIndex -> [double-bond carbon indices]
+    const carbonDoubleOxygens = {}; // carbonIndex -> [double-bond oxygen indices]
     const carbonOtherAtomBonds = {}; // carbonIndex -> [connectedAtomIndices] (O, N, etc)
     
     data.bonds.forEach(bond => {
-        const [idx1, idx2] = bond;
+        const [idx1, idx2, bondType] = bond;
         const atom1 = data.atoms[idx1];
         const atom2 = data.atoms[idx2];
         
@@ -4741,6 +4747,22 @@ function normalizeHydrogenPositions(moleculeData) {
             carbonCarbonBonds[idx1].push(idx2);
             if (!carbonCarbonBonds[idx2]) carbonCarbonBonds[idx2] = [];
             carbonCarbonBonds[idx2].push(idx1);
+
+            if (bondType === 'double') {
+                if (!carbonDoubleBonds[idx1]) carbonDoubleBonds[idx1] = [];
+                carbonDoubleBonds[idx1].push(idx2);
+                if (!carbonDoubleBonds[idx2]) carbonDoubleBonds[idx2] = [];
+                carbonDoubleBonds[idx2].push(idx1);
+            }
+        }
+
+        // Check if this is a carbonyl C=O bond
+        if (bondType === 'double' && atom1.element === 'C' && atom2.element === 'O') {
+            if (!carbonDoubleOxygens[idx1]) carbonDoubleOxygens[idx1] = [];
+            carbonDoubleOxygens[idx1].push(idx2);
+        } else if (bondType === 'double' && atom2.element === 'C' && atom1.element === 'O') {
+            if (!carbonDoubleOxygens[idx2]) carbonDoubleOxygens[idx2] = [];
+            carbonDoubleOxygens[idx2].push(idx1);
         }
         
         // Check if this is a C-O or C-N bond (for OH groups, etc)
@@ -4754,7 +4776,7 @@ function normalizeHydrogenPositions(moleculeData) {
     });
     
     // Distance for hydrogen atoms from carbon
-    const H_DISTANCE = 0.9;
+    const H_DISTANCE = 1.08;
     
     // 90-degree positions around carbon (tetrahedral-like but at 90 degrees)
     const positions90Deg = [
@@ -4772,7 +4794,30 @@ function normalizeHydrogenPositions(moleculeData) {
         const carbon = data.atoms[cIdx];
         const hydrogenIndices = carbonBonds[cIdx];
         const connectedCarbons = carbonCarbonBonds[cIdx] || [];
+        const doubleBondPartners = carbonDoubleBonds[cIdx] || [];
         const connectedOtherAtoms = carbonOtherAtomBonds[cIdx] || []; // O, N, etc
+
+        const placeHydrogensOnAngles = (angles) => {
+            hydrogenIndices.forEach((hIdx, position) => {
+                const angle = angles[position % angles.length];
+                data.atoms[hIdx].x = carbon.x + Math.cos(angle) * H_DISTANCE;
+                data.atoms[hIdx].y = carbon.y + Math.sin(angle) * H_DISTANCE;
+                data.atoms[hIdx].z = carbon.z;
+            });
+        };
+
+        if (doubleBondPartners.length > 0) {
+            const partnerCarbon = data.atoms[doubleBondPartners[0]];
+            const bondAngle = Math.atan2(partnerCarbon.y - carbon.y, partnerCarbon.x - carbon.x);
+
+            if (hydrogenIndices.length === 2 && connectedCarbons.length === 1) {
+                placeHydrogensOnAngles([
+                    bondAngle + (5 * Math.PI / 6),
+                    bondAngle - (5 * Math.PI / 6)
+                ]);
+                return;
+            }
+        }
         
         // Determine which directions to avoid (directions of C-C bonds and C-O/C-N bonds)
         const avoidDirections = new Set();
@@ -4837,6 +4882,103 @@ function normalizeHydrogenPositions(moleculeData) {
                 data.atoms[hIdx].z = carbon.z + pos.dz;
             }
         });
+    });
+
+    // Shape terminal aldehydes so the carbonyl oxygen angles up-right and the aldehydic
+    // hydrogen angles down-right, matching the reference image.
+    Object.keys(carbonDoubleOxygens).forEach(carbonIdx => {
+        const cIdx = parseInt(carbonIdx);
+        const carbon = data.atoms[cIdx];
+        const oxygenIndices = carbonDoubleOxygens[cIdx] || [];
+        const hydrogenIndices = carbonBonds[cIdx] || [];
+        const carbonNeighbors = (carbonCarbonBonds[cIdx] || []).filter(idx => data.atoms[idx].element === 'C');
+
+        // Ketone-style carbonyl: one oxygen double bond and two carbon neighbors.
+        if (oxygenIndices.length === 1 && carbonNeighbors.length === 2) {
+            const oxygen = data.atoms[oxygenIndices[0]];
+            const carbonylDistance = 1.18;
+
+            oxygen.x = carbon.x;
+            oxygen.y = carbon.y + carbonylDistance;
+            oxygen.z = carbon.z;
+            return;
+        }
+
+        // Formaldehyde-style carbonyl: one oxygen double bond and two hydrogens.
+        if (oxygenIndices.length === 1 && hydrogenIndices.length === 2 && carbonNeighbors.length === 0) {
+            const oxygen = data.atoms[oxygenIndices[0]];
+            const hydrogenLeft = data.atoms[hydrogenIndices[0]];
+            const hydrogenRight = data.atoms[hydrogenIndices[1]];
+            const oxygenDistance = 1.18;
+            const hydrogenDistance = 1.05;
+
+            oxygen.x = carbon.x;
+            oxygen.y = carbon.y + oxygenDistance;
+            oxygen.z = carbon.z;
+
+            hydrogenLeft.x = carbon.x - hydrogenDistance;
+            hydrogenLeft.y = carbon.y - hydrogenDistance;
+            hydrogenLeft.z = carbon.z;
+
+            hydrogenRight.x = carbon.x + hydrogenDistance;
+            hydrogenRight.y = carbon.y - hydrogenDistance;
+            hydrogenRight.z = carbon.z;
+            return;
+        }
+
+        if (oxygenIndices.length !== 1 || hydrogenIndices.length < 1) {
+            return;
+        }
+
+        // Only apply to terminal aldehydes: one carbon neighbor and at least one H.
+        if (carbonNeighbors.length !== 1) {
+            return;
+        }
+
+        const oxygen = data.atoms[oxygenIndices[0]];
+        const chainCarbon = data.atoms[carbonNeighbors[0]];
+        const bondAwayAngle = Math.atan2(carbon.y - chainCarbon.y, carbon.x - chainCarbon.x);
+        const oxygenAngle = bondAwayAngle + (Math.PI / 6);
+        const hydrogenAngle = bondAwayAngle - (Math.PI / 6);
+        const carbonylDistance = 1.25;
+        const aldehydicHydrogenDistance = 1.12;
+
+        oxygen.x = carbon.x + Math.cos(oxygenAngle) * carbonylDistance;
+        oxygen.y = carbon.y + Math.sin(oxygenAngle) * carbonylDistance;
+        oxygen.z = carbon.z;
+
+        const aldehydicHydrogen = data.atoms[hydrogenIndices[0]];
+        aldehydicHydrogen.x = carbon.x + Math.cos(hydrogenAngle) * aldehydicHydrogenDistance;
+        aldehydicHydrogen.y = carbon.y + Math.sin(hydrogenAngle) * aldehydicHydrogenDistance;
+        aldehydicHydrogen.z = carbon.z;
+    });
+
+    // Lengthen every O-H bond so hydroxyl hydrogens are easier to see.
+    const OH_DISTANCE = 1.12;
+    data.bonds.forEach(bond => {
+        const [idx1, idx2] = bond;
+        const atom1 = data.atoms[idx1];
+        const atom2 = data.atoms[idx2];
+
+        if (atom1.element === 'O' && atom2.element === 'H') {
+            const dx = atom2.x - atom1.x;
+            const dy = atom2.y - atom1.y;
+            const dz = atom2.z - atom1.z;
+            const length = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
+
+            atom2.x = atom1.x + (dx / length) * OH_DISTANCE;
+            atom2.y = atom1.y + (dy / length) * OH_DISTANCE;
+            atom2.z = atom1.z + (dz / length) * OH_DISTANCE;
+        } else if (atom2.element === 'O' && atom1.element === 'H') {
+            const dx = atom1.x - atom2.x;
+            const dy = atom1.y - atom2.y;
+            const dz = atom1.z - atom2.z;
+            const length = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
+
+            atom1.x = atom2.x + (dx / length) * OH_DISTANCE;
+            atom1.y = atom2.y + (dy / length) * OH_DISTANCE;
+            atom1.z = atom2.z + (dz / length) * OH_DISTANCE;
+        }
     });
     
     return data;
