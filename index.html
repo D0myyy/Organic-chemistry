@@ -4,181 +4,256 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vizualizator 3D Chimie Organică</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="dark-mode">
-    <!-- Theme Toggle Button -->
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-        <span class="sun-icon">☀️</span>
-        <span class="moon-icon">🌙</span>
-    </button>
-    
-    <!-- Author Info -->
-    <div class="author-info">
-        <p><strong>Realizat de:</strong></p>
-        <p>Student: Tilipeț Dumitru</p>
-        <p>Profesoară: Talmaci Natalia</p>
-    </div>
-    
-    <div class="container">
-        <header>
-            <h1>🧪 Vizualizator 3D Chimie Organică</h1>
-            <p class="subtitle">Explorează structuri moleculare în 3D</p>
-        </header>
 
+    <!-- Ambient background -->
+    <div class="bg-ambience" aria-hidden="true">
+        <div class="glow glow-a"></div>
+        <div class="glow glow-b"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Top bar -->
+    <header class="topbar">
+        <div class="brand">
+            <svg class="brand-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <path d="M24 6l14 8v16l-14 8-14-8V14l14-8z" stroke="url(#bmGrad)" stroke-width="2.5" fill="none"/>
+                <path d="M24 6v12M38 14l-10 6M38 30l-10-6M10 14l10 6M10 30l10-6M24 38V26" stroke="url(#bmGrad)" stroke-width="1.6" stroke-opacity="0.55" fill="none"/>
+                <circle cx="24" cy="24" r="4.5" fill="url(#bmGrad)"/>
+                <defs>
+                    <linearGradient id="bmGrad" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#2dd4bf"/>
+                        <stop offset="1" stop-color="#60a5fa"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div class="brand-text">
+                <h1>Chimi<span class="accent-text">3D</span></h1>
+                <span class="subtitle">Vizualizator de chimie organică</span>
+            </div>
+        </div>
+
+        <div class="author-info">
+            <span class="author-line">Student: <strong>Tilipeț Dumitru</strong></span>
+            <span class="author-dot"></span>
+            <span class="author-line">Profesoară: <strong>Talmaci Natalia</strong></span>
+        </div>
+
+        <!-- Theme Toggle Button -->
+        <button id="themeToggle" class="theme-toggle" aria-label="Comută tema" title="Comută tema">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </header>
+
+    <div class="container">
         <div class="main-content">
-            <div class="sidebar">
-                <h2>Selectează un Compus</h2>
-                
+            <aside class="sidebar">
                 <div class="search-section">
-                    <h3>Caută după Nume IUPAC</h3>
-                    <input type="text" id="iupacSearch" placeholder="ex: but-1-enă, 2,3-dimetil-hexan, propenă">
-                    <button id="searchBtn" class="search-btn">Generează Structura</button>
+                    <span class="eyebrow">Caută după nume IUPAC</span>
+                    <div class="search-row">
+                        <input type="text" id="iupacSearch" placeholder="ex: but-1-enă, 2,3-dimetil-hexan…" autocomplete="off" spellcheck="false">
+                        <button id="searchBtn" class="search-btn" title="Generează structura">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M4 17l4-10 4 10M6 13h4M15 7h5l-5 10h5"/>
+                            </svg>
+                            <span>Generează</span>
+                        </button>
+                    </div>
                     <p id="searchError" class="error-message"></p>
                 </div>
-                
-                <div class="category">
-                    <h3>Alcani (Legături Simple)</h3>
-                    <button class="molecule-btn" data-molecule="methane">Metan (CH₄)</button>
-                    <button class="molecule-btn" data-molecule="ethane">Etan (C₂H₆)</button>
-                    <button class="molecule-btn" data-molecule="propane">Propan (C₃H₈)</button>
-                    <button class="molecule-btn" data-molecule="butane">Butan (C₄H₁₀)</button>
-                    <button class="molecule-btn" data-molecule="pentane">Pentan (C₅H₁₂)</button>
-                    <button class="molecule-btn" data-molecule="hexane">Hexan (C₆H₁₄)</button>
-                    <button class="molecule-btn" data-molecule="heptane">Heptan (C₇H₁₆)</button>
-                    <button class="molecule-btn" data-molecule="octane">Octan (C₈H₁₈)</button>
+
+                <div class="list-filter">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    <input type="text" id="listFilter" placeholder="Filtrează lista de compuși…" autocomplete="off" spellcheck="false">
                 </div>
 
-                <div class="category">
-                    <h3>Alchene (Legături Duble)</h3>
-                    <button class="molecule-btn" data-molecule="ethene">Etenă (C₂H₄)</button>
-                    <button class="molecule-btn" data-molecule="propene">Propenă (C₃H₆)</button>
-                    <button class="molecule-btn" data-molecule="butene">But-1-enă (C₄H₈)</button>
-                </div>
+                <nav class="molecule-nav">
+                    <section class="category">
+                        <h3><i class="dot dot-a"></i>Alcani · legături simple</h3>
+                        <div class="btn-stack">
+                            <button class="molecule-btn" data-molecule="methane">Metan <span class="formula-sm">CH₄</span></button>
+                            <button class="molecule-btn" data-molecule="ethane">Etan <span class="formula-sm">C₂H₆</span></button>
+                            <button class="molecule-btn" data-molecule="propane">Propan <span class="formula-sm">C₃H₈</span></button>
+                            <button class="molecule-btn" data-molecule="butane">Butan <span class="formula-sm">C₄H₁₀</span></button>
+                            <button class="molecule-btn" data-molecule="pentane">Pentan <span class="formula-sm">C₅H₁₂</span></button>
+                            <button class="molecule-btn" data-molecule="hexane">Hexan <span class="formula-sm">C₆H₁₄</span></button>
+                            <button class="molecule-btn" data-molecule="heptane">Heptan <span class="formula-sm">C₇H₁₆</span></button>
+                            <button class="molecule-btn" data-molecule="octane">Octan <span class="formula-sm">C₈H₁₈</span></button>
+                        </div>
+                    </section>
 
-                <div class="category">
-                    <h3>Alchine (Legături Triple)</h3>
-                    <button class="molecule-btn" data-molecule="ethyne">Etină (C₂H₂)</button>
-                    <button class="molecule-btn" data-molecule="propyne">Propină (C₃H₄)</button>
-                </div>
+                    <section class="category">
+                        <h3><i class="dot dot-b"></i>Alchene · legături duble</h3>
+                        <div class="btn-stack">
+                            <button class="molecule-btn" data-molecule="ethene">Etenă <span class="formula-sm">C₂H₄</span></button>
+                            <button class="molecule-btn" data-molecule="propene">Propenă <span class="formula-sm">C₃H₆</span></button>
+                            <button class="molecule-btn" data-molecule="butene">But-1-enă <span class="formula-sm">C₄H₈</span></button>
+                        </div>
+                    </section>
 
-                <div class="category">
-                    <h3>Compuși Ciclici</h3>
-                    <button class="molecule-btn" data-molecule="cyclopropane">Ciclopropan (C₃H₆)</button>
-                    <button class="molecule-btn" data-molecule="cyclohexane">Ciclohexan (C₆H₁₂)</button>
-                    <button class="molecule-btn" data-molecule="benzene">Benzen (C₆H₆)</button>
-                </div>
+                    <section class="category">
+                        <h3><i class="dot dot-c"></i>Alchine · legături triple</h3>
+                        <div class="btn-stack">
+                            <button class="molecule-btn" data-molecule="ethyne">Etină <span class="formula-sm">C₂H₂</span></button>
+                            <button class="molecule-btn" data-molecule="propyne">Propină <span class="formula-sm">C₃H₄</span></button>
+                        </div>
+                    </section>
 
-                <div class="category">
-                    <h3>Alcooli C₂ (Etanol)</h3>
-                    <button class="molecule-btn" data-molecule="ethanol">Etanol (C₂H₅OH)</button>
-                </div>
+                    <section class="category">
+                        <h3><i class="dot dot-d"></i>Compuși ciclici</h3>
+                        <div class="btn-stack">
+                            <button class="molecule-btn" data-molecule="cyclopropane">Ciclopropan <span class="formula-sm">C₃H₆</span></button>
+                            <button class="molecule-btn" data-molecule="cyclohexane">Ciclohexan <span class="formula-sm">C₆H₁₂</span></button>
+                            <button class="molecule-btn" data-molecule="benzene">Benzen <span class="formula-sm">C₆H₆</span></button>
+                        </div>
+                    </section>
 
-                <div class="category">
-                    <h3>Alcooli C₃ (Propanol - 2 izomeri)</h3>
-                    <button class="molecule-btn" data-molecule="propanol">Propan-1-ol</button>
-                    <button class="molecule-btn" data-molecule="propan-2-ol">Propan-2-ol</button>
-                </div>
+                    <section class="category">
+                        <h3><i class="dot dot-e"></i>Alcooli C₂–C₆</h3>
+                        <div class="m-group">
+                            <span class="subhead">C₂</span>
+                            <div class="btn-stack">
+                                <button class="molecule-btn" data-molecule="ethanol">Etanol <span class="formula-sm">C₂H₅OH</span></button>
+                            </div>
+                        </div>
+                        <div class="m-group">
+                            <span class="subhead">C₃ · izomeri de poziție</span>
+                            <div class="btn-stack">
+                                <button class="molecule-btn" data-molecule="propanol">Propan-1-ol</button>
+                                <button class="molecule-btn" data-molecule="propan-2-ol">Propan-2-ol</button>
+                            </div>
+                        </div>
+                        <div class="m-group">
+                            <span class="subhead">C₄ · 4 izomeri</span>
+                            <div class="btn-stack">
+                                <button class="molecule-btn" data-molecule="butanol">Butan-1-ol</button>
+                                <button class="molecule-btn" data-molecule="butan-2-ol">Butan-2-ol</button>
+                                <button class="molecule-btn" data-molecule="2-metilpropan-1-ol">2-Metilpropan-1-ol</button>
+                                <button class="molecule-btn" data-molecule="2-metilpropan-2-ol">2-Metilpropan-2-ol</button>
+                            </div>
+                        </div>
+                        <div class="m-group">
+                            <span class="subhead">C₅ · izomeri selectați</span>
+                            <div class="btn-stack">
+                                <button class="molecule-btn" data-molecule="pentanol">Pentan-1-ol</button>
+                                <button class="molecule-btn" data-molecule="pentan-2-ol">Pentan-2-ol</button>
+                                <button class="molecule-btn" data-molecule="pentan-3-ol">Pentan-3-ol</button>
+                                <button class="molecule-btn" data-molecule="2-metilbutan-1-ol">2-Metilbutan-1-ol</button>
+                                <button class="molecule-btn" data-molecule="3-metilbutan-2-ol">3-Metilbutan-2-ol</button>
+                            </div>
+                        </div>
+                        <div class="m-group">
+                            <span class="subhead">C₆ · izomeri selectați</span>
+                            <div class="btn-stack">
+                                <button class="molecule-btn" data-molecule="hexanol">Hexan-1-ol</button>
+                                <button class="molecule-btn" data-molecule="hexan-2-ol">Hexan-2-ol</button>
+                                <button class="molecule-btn" data-molecule="hexan-3-ol">Hexan-3-ol</button>
+                                <button class="molecule-btn" data-molecule="2-metilpentan-1-ol">2-Metilpentan-1-ol</button>
+                            </div>
+                        </div>
+                    </section>
 
-                <div class="category">
-                    <h3>Alcooli C₄ (Butanol - 4 izomeri)</h3>
-                    <button class="molecule-btn" data-molecule="butanol">Butan-1-ol</button>
-                    <button class="molecule-btn" data-molecule="butan-2-ol">Butan-2-ol</button>
-                    <button class="molecule-btn" data-molecule="2-metilpropan-1-ol">2-Metilpropan-1-ol</button>
-                    <button class="molecule-btn" data-molecule="2-metilpropan-2-ol">2-Metilpropan-2-ol</button>
-                </div>
+                    <section class="category">
+                        <h3><i class="dot dot-f"></i>Aldehide · C=O terminală</h3>
+                        <div class="btn-stack">
+                            <button class="molecule-btn" data-molecule="metanal">Metanal <span class="formula-sm">CH₂O</span></button>
+                            <button class="molecule-btn" data-molecule="etanal">Etanal <span class="formula-sm">C₂H₄O</span></button>
+                            <button class="molecule-btn" data-molecule="propanal">Propanal <span class="formula-sm">C₃H₆O</span></button>
+                            <button class="molecule-btn" data-molecule="butanal">Butanal <span class="formula-sm">C₄H₈O</span></button>
+                            <button class="molecule-btn" data-molecule="pentanal">Pentanal <span class="formula-sm">C₅H₁₀O</span></button>
+                        </div>
+                    </section>
 
-                <div class="category">
-                    <h3>Alcooli C₅ (Pentanol - izomeri selectați)</h3>
-                    <button class="molecule-btn" data-molecule="pentanol">Pentan-1-ol</button>
-                    <button class="molecule-btn" data-molecule="pentan-2-ol">Pentan-2-ol</button>
-                    <button class="molecule-btn" data-molecule="pentan-3-ol">Pentan-3-ol</button>
-                    <button class="molecule-btn" data-molecule="2-metilbutan-1-ol">2-Metilbutan-1-ol</button>
-                </div>
+                    <section class="category">
+                        <h3><i class="dot dot-g"></i>Cetone · C=O în lanț</h3>
+                        <div class="btn-stack">
+                            <button class="molecule-btn" data-molecule="propan-2-ona">Propan-2-ona <span class="formula-sm">C₃H₆O</span></button>
+                            <button class="molecule-btn" data-molecule="butan-2-ona">Butan-2-ona <span class="formula-sm">C₄H₈O</span></button>
+                            <button class="molecule-btn" data-molecule="pentan-2-ona">Pentan-2-ona <span class="formula-sm">C₅H₁₀O</span></button>
+                            <button class="molecule-btn" data-molecule="pentan-3-ona">Pentan-3-ona <span class="formula-sm">C₅H₁₀O</span></button>
+                            <button class="molecule-btn" data-molecule="hexan-2-ona">Hexan-2-ona <span class="formula-sm">C₆H₁₂O</span></button>
+                            <button class="molecule-btn" data-molecule="hexan-3-ona">Hexan-3-ona <span class="formula-sm">C₆H₁₂O</span></button>
+                        </div>
+                    </section>
 
-                <div class="category">
-                    <h3>Alcooli C₆ (Hexanol - izomeri selectați)</h3>
-                    <button class="molecule-btn" data-molecule="hexanol">Hexan-1-ol</button>
-                    <button class="molecule-btn" data-molecule="hexan-2-ol">Hexan-2-ol</button>
-                    <button class="molecule-btn" data-molecule="hexan-3-ol">Hexan-3-ol</button>
-                    <button class="molecule-btn" data-molecule="2-metilpentan-1-ol">2-Metilpentan-1-ol</button>
-                </div>
-
-                <div class="category">
-                    <h3>Aldehide (Legătură C=O terminală)</h3>
-                    <button class="molecule-btn" data-molecule="metanal">Metanal (Formaldehidă) (CH₂O)</button>
-                    <button class="molecule-btn" data-molecule="etanal">Etanal (Acetaldehidă) (C₂H₄O)</button>
-                    <button class="molecule-btn" data-molecule="propanal">Propanal (C₃H₆O)</button>
-                    <button class="molecule-btn" data-molecule="butanal">Butanal (C₄H₈O)</button>
-                    <button class="molecule-btn" data-molecule="pentanal">Pentanal (C₅H₁₀O)</button>
-                </div>
-
-                <div class="category">
-                    <h3>Cetone (Legătură C=O în lanț)</h3>
-                    <button class="molecule-btn" data-molecule="propan-2-ona">Propan-2-ona (Acetonă) (C₃H₆O)</button>
-                    <button class="molecule-btn" data-molecule="butan-2-ona">Butan-2-ona (C₄H₈O)</button>
-                    <button class="molecule-btn" data-molecule="pentan-2-ona">Pentan-2-ona (C₅H₁₀O)</button>
-                    <button class="molecule-btn" data-molecule="pentan-3-ona">Pentan-3-ona (C₅H₁₀O)</button>
-                    <button class="molecule-btn" data-molecule="hexan-2-ona">Hexan-2-ona (C₆H₁₂O)</button>
-                    <button class="molecule-btn" data-molecule="hexan-3-ona">Hexan-3-ona (C₆H₁₂O)</button>
-                </div>
-
-                <div class="category">
-                    <h3>Grupe Funcționale</h3>
-                    <button class="molecule-btn" data-molecule="ethanol">Etanol (C₂H₅OH)</button>
-                    <button class="molecule-btn" data-molecule="acetone">Acetonă (C₃H₆O)</button>
-                    <button class="molecule-btn" data-molecule="aceticacid">Acid Acetic (CH₃COOH)</button>
-                    <button class="molecule-btn" data-molecule="methylamine">Metilamină (CH₃NH₂)</button>
-                </div>
+                    <section class="category">
+                        <h3><i class="dot dot-h"></i>Grupe funcționale</h3>
+                        <div class="btn-stack">
+                            <button class="molecule-btn" data-molecule="acetone">Acetonă <span class="formula-sm">C₃H₆O</span></button>
+                            <button class="molecule-btn" data-molecule="aceticacid">Acid acetic <span class="formula-sm">CH₃COOH</span></button>
+                            <button class="molecule-btn" data-molecule="methylamine">Metilamină <span class="formula-sm">CH₃NH₂</span></button>
+                        </div>
+                    </section>
+                </nav>
 
                 <div class="controls">
-                    <h3>Opțiuni de Afișare</h3>
-                    <label>
+                    <span class="eyebrow">Opțiuni de afișare</span>
+
+                    <div class="switch-row">
                         <input type="checkbox" id="showLabels" checked>
-                        Arată Etichetele Atomilor
-                    </label>
-                    <label>
+                        <label for="showLabels">Etichete atomi</label>
+                    </div>
+                    <div class="switch-row">
                         <input type="checkbox" id="rotate" checked>
-                        Rotație Automată    
-                    </label>
-                    <label>
+                        <label for="rotate">Rotație automată</label>
+                    </div>
+                    <div class="switch-row">
                         <input type="checkbox" id="soundToggle" checked>
-                        🔊 Efecte Sonore
-                    </label>
-                    
-                    <div class="style-buttons">
-                        <button id="ballStick" class="style-btn active">Bile și Bețe</button>
-                        <button id="spaceFill" class="style-btn">Umplere Spațială</button>
+                        <label for="soundToggle">Efecte sonore</label>
+                    </div>
+
+                    <span class="eyebrow" style="margin-top:22px">Stil de afișare</span>
+                    <div class="style-buttons" role="group" aria-label="Stil de afișare">
+                        <button id="ballStick" class="style-btn active">Bile & bețe</button>
+                        <button id="spaceFill" class="style-btn">Umplere spațială</button>
                     </div>
                 </div>
-            </div>
+            </aside>
 
-            <div class="viewer-container">
-                <div id="moleculeViewer"></div>
+            <main class="viewer-container">
+                <div class="viewport-frame">
+                    <div id="moleculeViewer"></div>
+                    <span class="hud hud-tl">VIZUALIZARE · 3D</span>
+                    <div class="hud-hint">
+                        <kbd>Drag</kbd> rotește &nbsp;·&nbsp; <kbd>Scroll</kbd> zoom
+                    </div>
+                </div>
+
                 <div class="info-panel">
-                    <h3 id="moleculeName">Selectează o moleculă pentru a începe</h3>
-                    <p id="moleculeFormula"></p>
+                    <div class="info-head">
+                        <h3 id="moleculeName">Selectează o moleculă pentru a începe</h3>
+                        <span id="moleculeFormula" class="formula-chip"></span>
+                    </div>
                     <p id="moleculeDescription"></p>
                     <div class="isomer-buttons">
                         <button id="backToParentBtn" class="back-btn" style="display: none;">
                             ← Înapoi la compusul original
                         </button>
                         <button id="showIsomersBtn" class="isomers-btn" style="display: none;">
-                            🔬 Vizualizează Izomerii
+                            ❖ Vizualizează izomerii
                         </button>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
-        
-        <!-- Isomers Modal -->
-        <div id="isomersModal" class="modal">
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <h2>Izomeri pentru <span id="isomerCompoundName"></span></h2>
-                <p class="isomer-info">Formula moleculară: <span id="isomerFormula"></span></p>
-                <div id="isomersList" class="isomers-list"></div>
-            </div>
+    </div>
+
+    <!-- Isomers Modal -->
+    <div id="isomersModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" aria-label="Închide">&times;</button>
+            <h2>Izomeri pentru <span id="isomerCompoundName"></span></h2>
+            <p class="isomer-info">Formula moleculară: <span id="isomerFormula"></span></p>
+            <div id="isomersList" class="isomers-list"></div>
         </div>
     </div>
 

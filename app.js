@@ -3,6 +3,8 @@ let scene, camera, renderer, molecule, controls;
 let isRotating = true;
 let animationPaused = false;
 let currentStyle = 'ballStick';
+let fitDistance = 8; // camera distance that fits the whole molecule in view
+let currentMoleculeData = null;
 
 // Sound effects using Web Audio API
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -3423,7 +3425,11 @@ const elementColors = {
     'C': 0x909090,  // Gray for carbon
     'H': 0xFFFFFF,  // White for hydrogen
     'O': 0xFF0D0D,  // Red for oxygen
-    'N': 0x3050F8   // Blue for nitrogen
+    'N': 0x3050F8,  // Blue for nitrogen
+    'Cl': 0x1FF01F, // Green for chlorine
+    'Br': 0xA62929, // Dark red for bromine
+    'F': 0x90E050,  // Yellow-green for fluorine
+    'I': 0x940094   // Dark violet for iodine
 };
 
 // Element sizes
@@ -3431,7 +3437,11 @@ const elementSizes = {
     'C': 0.35,
     'H': 0.20,
     'O': 0.32,
-    'N': 0.33
+    'N': 0.33,
+    'Cl': 0.32,
+    'Br': 0.34,
+    'F': 0.29,
+    'I': 0.35
 };
 
 // IUPAC nomenclature parser (Romanian nomenclature)
@@ -3470,6 +3480,15 @@ class IUPACParser {
         };
     }
     
+    lookupChain(prefix) {
+        if (this.chainPrefixes[prefix]) return this.chainPrefixes[prefix];
+        // "buta-1,3-diena", "propadiena" - IUPAC joins the terminal 'a' before multi-bond suffixes
+        if (prefix.endsWith('a') && this.chainPrefixes[prefix.slice(0, -1)]) {
+            return this.chainPrefixes[prefix.slice(0, -1)];
+        }
+        return 0;
+    }
+    
     parse(name) {
         // Clean and normalize the input
         name = name.toLowerCase().trim().replace(/\s+/g, '');
@@ -3479,8 +3498,12 @@ class IUPACParser {
             substituents: [],
             doubleBonds: [],
             tripleBonds: [],
-            alcohol: null,  // Position of -OH group
-            isomer: null  // 'cis' or 'trans'
+            alcohol: null,      // position of -OH group
+            carbonyl: null,     // { type: 'aldehida' | 'cetona' | 'acid', position }
+            amine: null,        // position of -NH2 group
+            ring: false,        // ciclo- compound
+            aromatic: false,    // benzenic ring
+            isomer: null        // 'cis' or 'trans'
         };
         
         // Check for geometric isomers (cis/trans)
@@ -3492,126 +3515,288 @@ class IUPACParser {
             name = name.substring(6);
         }
         
-        // Check for alcohol (-ol)
-        let alcoholMatch = null;
-        if (name.includes('-ol')) {
-            // Pattern: butan-1-ol, propan-2-ol, 2-metilpropan-1-ol
-            alcoholMatch = name.match(/-(\d+)-ol$/);
-            if (alcoholMatch) {
-                result.alcohol = parseInt(alcoholMatch[1]);
+        // Carboxylic acids: "acid etanoic", "acid propanoic", "acid acetic" (trivial)
+        if (name.startsWith('acid')) {
+            name = name.replace(/^acid-?/, '');
+            if (name === 'acetic' || name === 'acetic') { name = 'etanoic'; } // acid acetic = acid etanoic (C2)
+            if (name === 'formic' || name === 'formic') { name = 'metanoic'; } // acid formic = acid metanoic (C1)
+            result.carbonyl = { type: 'acid', position: 1 };
+        }
+        
+        // Amines: propan-2-amină, propan-2-amina, propan-1-amin, etamină, metilamină, dimetilamină
+        let amineMatch = name.match(/-(\d+)-?amin[ăa]?$|-(\d+)-amin$/);
+        if (amineMatch) {
+            result.amine = parseInt(amineMatch[1] || amineMatch[2]);
+        } else if (/amin[ăa]$/.test(name)) {
+            result.amine = 1;
+        }
+        if (result.amine !== null) {
+            name = name.replace(/(?:-\d+)?-?amin[ăa]?$|(?:-\d+)-amin$/, '');
+            name = name.replace(/-+$/, '');
+        }
+        
+        // Alcohols: butan-1-ol, propan-2-ol, 2-propanol, etanol, metanol
+        let alcoholMatch = name.match(/-(\d+)-ol$/);
+        if (alcoholMatch) {
+            result.alcohol = parseInt(alcoholMatch[1]);
+            name = name.replace(/-\d+-ol$/, '');
+        } else if (/ol$/.test(name)) {
+            const positional = name.match(/^(\d+)-([a-z]+)ol$/);
+            if (positional) {
+                result.alcohol = parseInt(positional[1]);
+                name = positional[2];
             } else {
-                // Simple pattern: propanol (assume -1-ol)
                 result.alcohol = 1;
+                name = name.replace(/ol$/, '');
             }
         }
         
-        // Parse substituents (e.g., "2,3-dimetil", "2-etil")
+        // Ketones: pentan-2-ona, butan-2-ona; bare form for ring ketones: ciclopentanonă (position 1)
+        let ketoneMatch = name.match(/-(\d+)-on[ăa]$/);
+        if (ketoneMatch) {
+            result.carbonyl = { type: 'cetona', position: parseInt(ketoneMatch[1]) };
+            name = name.replace(/-(\d+)-on[ăa]$/, '');
+        } else if (/on[ăa]$/.test(name)) {
+            // Bare ketone suffix - "pentanona", "ciclopentanonă"
+            result.carbonyl = { type: 'cetona', position: name.startsWith('ciclo') ? 1 : 2 };
+            name = name.replace(/on[ăa]$/, '');
+        }
+        
+        // Halogens: 2-cloro(3b)utan, 1,2-dicloroetan, 2-bromobut-2-en, 3-fluoropentan
+        const halogenRegex = /(\d+(?:,\d+)*)-((?:di|tri|tetra)?)(clor|brom|fluor|iod)o?/g;
+        const halogenTokens = [];
+        let haloMatch;
+        let haloGuard = 0;
+        while ((haloMatch = halogenRegex.exec(name)) !== null && haloGuard++ < 50) {
+            haloMatch[1].split(',').map(Number).forEach(pos => {
+                result.substituents.push({ position: pos, type: haloMatch[3], chainLength: 0, halogen: true });
+            });
+            halogenTokens.push(haloMatch[0]);
+        }
+        halogenTokens.forEach(tok => { name = name.replace(tok, ''); });
+        
+        // Substituents (metil/etil/propil/butil, optionally with multipliers).
+        // Handles both separated ("2-metil-hexan") and joined ("2-metilpropan",
+        // "3-metilpent-2-enă", "2,3-dimetilbutan") forms.
         const substituentRegex = /(\d+(?:,\d+)*)-([a-z]+)/g;
         let match;
-        let nameWithoutSubstituents = name;
-        
-        while ((match = substituentRegex.exec(name)) !== null) {
+        const tokenReplacements = [];
+        let subGuard = 0;
+        while ((match = substituentRegex.exec(name)) !== null && subGuard++ < 50) {
             const positions = match[1].split(',').map(Number);
-            const substituentName = match[2];
+            let tokenName = match[2];
             
-            // Skip if this is the main chain (ends with -an, -ena, -ina, -diena, -ol)
-            if (substituentName.endsWith('an') || 
-                substituentName.endsWith('ena') || 
-                substituentName.endsWith('ina') ||
-                substituentName.endsWith('diena') ||
-                substituentName.endsWith('ol')) {
-                continue;
-            }
-            
-            // Parse multiplier (di, tri, etc.)
-            let substituentType = substituentName;
-            
-            for (const [mult, num] of Object.entries(this.multipliers)) {
-                if (substituentName.startsWith(mult)) {
-                    substituentType = substituentName.substring(mult.length);
+            // Peel a leading multiplier (di/tri/tetra/penta/...) if one is present
+            for (const mult of Object.keys(this.multipliers)) {
+                if (tokenName.startsWith(mult)) {
+                    tokenName = tokenName.substring(mult.length);
                     break;
                 }
             }
             
-            // Add substituent for each position
+            // Match the longest known substituent root at the start of the token
+            let knownRoot = null;
+            let rootLen = 0;
+            for (const root of Object.keys(this.substituentPrefixes)) {
+                if (tokenName.startsWith(root) && root.length > rootLen) {
+                    knownRoot = root;
+                    rootLen = root.length;
+                }
+            }
+            
+            if (!knownRoot) continue; // unknown token (e.g. part of the main chain suffix)
+            
+            const remainder = tokenName.substring(rootLen);
             positions.forEach(pos => {
-                result.substituents.push({ 
-                    position: pos, 
-                    type: substituentType,
-                    chainLength: this.substituentPrefixes[substituentType] || 1
+                result.substituents.push({
+                    position: pos,
+                    type: knownRoot,
+                    chainLength: this.substituentPrefixes[knownRoot]
                 });
             });
             
-            // Remove this substituent from the name
-            nameWithoutSubstituents = nameWithoutSubstituents.replace(match[0] + '-', '');
+            // Remove the substituent part, keep the chain remainder ("2-metilpropan" -> "propan")
+            tokenReplacements.push([match[0], remainder]);
+        }
+        tokenReplacements.forEach(([tok, rem]) => {
+            name = name.replace(tok, rem);
+        });
+        
+        // Aldehyde suffix: etanal, metanal, propanal, 2-metilbutanal
+        if (!result.carbonyl && /[a-z]*anal$/.test(name)) {
+            result.carbonyl = { type: 'aldehida', position: 1 };
         }
         
-        // Parse main chain and functional groups
-        // Examples: "hexan", "but-1-ena", "but-1,3-diena", "but-1-ina", "butan-1-ol"
-        
-        // Remove -ol suffix for chain parsing
-        if (nameWithoutSubstituents.includes('-ol')) {
-            nameWithoutSubstituents = nameWithoutSubstituents.replace(/-\d+-ol$/, 'an').replace(/-ol$/, 'an');
+        // Cyclic ring (ciclopropan, ciclohexanol, 1-metilclopentanan...)
+        if (name.startsWith('ciclo')) {
+            result.ring = true;
+            name = name.substring(5);
         }
         
-        // Check for alkyne (-ina)
-        if (nameWithoutSubstituents.includes('-ina')) {
-            const match = nameWithoutSubstituents.match(/(\d+(?:,\d+)*)?-?(\w+)-(\d+)-ina/);
-            if (match) {
-                const chainPrefix = match[2];
-                const bondPosition = parseInt(match[3]);
-                result.chainLength = this.chainPrefixes[chainPrefix] || 0;
-                result.tripleBonds.push(bondPosition);
+        // Aromatic ring: "benzen", "benzenă", "benzene", "toluen", "metilbenzen", "clorobenzen"...
+        if (name === 'toluen') {
+            result.substituents.push({ position: 1, type: 'metil', chainLength: 1 });
+            name = 'benzen';
+        }
+        const arylSub = name.match(/^(metil|etil|propil|butil)-?benzen[ăe]?$/);
+        if (arylSub) {
+            result.substituents.push({ position: 1, type: arylSub[1], chainLength: this.substituentPrefixes[arylSub[1]] });
+            name = 'benzen';
+        }
+        const arylHalogen = name.match(/^(clor|brom|fluor|iod)o?-?benzen[ăe]?$/);
+        if (arylHalogen) {
+            result.substituents.push({ position: 1, type: arylHalogen[1], chainLength: 0, halogen: true });
+            name = 'benzen';
+        }
+        if (/^benzen[ăe]?$/.test(name)) {
+            result.aromatic = true;
+        }
+        
+        if (result.aromatic) {
+            result.ring = true;
+            result.chainLength = 6;
+        } else {
+            // Dienes: but-1,3-dienă / buta-1,3-diena / pent-1,3-dien / butadiena (implicit 1,3)
+            const dieneMatch = name.match(/^([a-z]*?)(?:-(\d+(?:,\d+)*)-)?dien[ăa]?$/);
+            if (dieneMatch && dieneMatch[1].length > 0) {
+                result.chainLength = this.lookupChain(dieneMatch[1]);
+                if (dieneMatch[2]) {
+                    result.doubleBonds = dieneMatch[2].split(',').map(Number);
+                } else {
+                    // "butadiena" - add standard locants once the chain is known
+                    result.chainLength = this.lookupChain(dieneMatch[1]);
+                    result.bareDiene = true;
+                }
             } else {
-                // Simple format: but-1-ina
-                const match2 = nameWithoutSubstituents.match(/(\w+)-(\d+)-ina/);
-                if (match2) {
-                    const chainPrefix = match2[1];
-                    const bondPosition = parseInt(match2[2]);
-                    result.chainLength = this.chainPrefixes[chainPrefix] || 0;
-                    result.tripleBonds.push(bondPosition);
+                // Alkynes: prop-1-ină / propin / etina (implicit 1)
+                const alkyneMatch = name.match(/^([a-z]*?)(?:-(\d+)-?)?in[ăa]?$/);
+                if ((alkyneMatch && alkyneMatch[1].length > 0)) {
+                    result.chainLength = this.lookupChain(alkyneMatch[1]);
+                    result.tripleBonds.push(alkyneMatch[2] ? parseInt(alkyneMatch[2]) : 1);
+                } else {
+                    // Alkenes: but-1-enă / pent-2-ena / propena / etena (implicit 1)
+                    const alkeneMatch = name.match(/^([a-z]*?)(?:-(\d+)-?)?en[ăa]?$/);
+                    if (alkeneMatch && alkeneMatch[1].length > 0) {
+                        result.chainLength = this.lookupChain(alkeneMatch[1]);
+                        result.doubleBonds.push(alkeneMatch[2] ? parseInt(alkeneMatch[2]) : 1);
+                    } else {
+                        // Amine/special carbons like "metil", "dimetil", "etil" (metilamină, dimetilamină...)
+                        const specialMatch = name.match(/^(di|tri|tetra)?(metil|etil|propil|butil)$/);
+                        if (specialMatch) {
+                            result.chainLength = this.substituentPrefixes[specialMatch[2]];
+                            if (specialMatch[1]) {
+                                const extraCount = this.multipliers[specialMatch[1]] - 1;
+                                for (let k = 0; k < extraCount; k++) {
+                                    result.substituents.push({ position: 1, type: specialMatch[2], chainLength: this.substituentPrefixes[specialMatch[2]] });
+                                }
+                            }
+                        } else if (this.chainPrefixes[name]) {
+                            // Bare chain prefix residue ("etamina" -> "et", "metanol"-style suffixes)
+                            result.chainLength = this.chainPrefixes[name];
+                        } else {
+                            // Alkanes: hexan, 2-metilpropan (remnant)
+                            for (const [prefix, length] of Object.entries(this.chainPrefixes)) {
+                                if (name.includes(prefix + 'an')) {
+                                    result.chainLength = length;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
-        // Check for diene (-diena)
-        else if (nameWithoutSubstituents.includes('-diena')) {
-            const match = nameWithoutSubstituents.match(/(\w+)-(\d+(?:,\d+)+)-diena/);
-            if (match) {
-                const chainPrefix = match[1];
-                const bondPositions = match[2].split(',').map(Number);
-                result.chainLength = this.chainPrefixes[chainPrefix] || 0;
-                result.doubleBonds = bondPositions;
-            }
-        }
-        // Check for alkene (-ena)
-        else if (nameWithoutSubstituents.includes('-ena')) {
-            const match = nameWithoutSubstituents.match(/(\w+)-(\d+)-ena/);
-            if (match) {
-                const chainPrefix = match[1];
-                const bondPosition = parseInt(match[2]);
-                result.chainLength = this.chainPrefixes[chainPrefix] || 0;
-                result.doubleBonds.push(bondPosition);
-            }
-        }
-        // Check for alkane (-an)
-        else {
-            // Try to find chain prefix ending with 'an'
-            for (const [prefix, length] of Object.entries(this.chainPrefixes)) {
-                if (nameWithoutSubstituents.includes(prefix + 'an')) {
-                    result.chainLength = length;
-                    break;
-                }
-            }
+        
+        name = name.replace(/^-+|-+$/g, '');
+        
+        // Fill default diene locants (butadiena -> buta-1,3-diena / propadiena -> propa-1,2-diena)
+        if (result.bareDiene) {
+            result.doubleBonds = result.chainLength >= 4 ? [1, 3] : (result.chainLength === 3 ? [1, 2] : []);
+            delete result.bareDiene;
         }
         
         if (result.chainLength === 0) {
-            throw new Error('Nu s-a putut determina lungimea lanțului. Exemple valide: "hexan", "but-1-ena", "2,3-dimetil-hexan", "propan-2-ol"');
+            throw new Error('Nu s-a putut determina lanțul. Exemple valide: "hexan", "but-1-enă", "propan-2-ol", "pentan-2-ona", "etanal", "acid propanoic", "propan-2-amină", "ciclohexan", "benzen"');
         }
+        
+        const chainLen = result.chainLength;
+        
+        // Bond positions must stay within the chain (a locant can bond C-k with C-k+1)
+        const allBonds = [...result.doubleBonds, ...result.tripleBonds];
+        const badBond = allBonds.find(p => p < 1 || p > chainLen - 1);
+        if (badBond !== undefined) {
+            throw new Error(`Poziția legăturii (${badBond}) este în afara lanțului de ${chainLen} atomi de carbon`);
+        }
+        
+        if (result.alcohol !== null && (result.alcohol < 1 || result.alcohol > chainLen)) {
+            throw new Error(`Grupa -OH la poziția ${result.alcohol} este în afara lanțului de ${chainLen} atomi de carbon`);
+        }
+        
+        if (result.amine !== null && (result.amine < 1 || result.amine > chainLen)) {
+            throw new Error(`Grupa -NH₂ la poziția ${result.amine} este în afara lanțului de ${chainLen} atomi de carbon`);
+        }
+        
+        for (const sub of result.substituents) {
+            if (sub.position < 1 || sub.position > chainLen) {
+                throw new Error(`Substituentul "${sub.type}" la C-${sub.position} este în afara lanțului de ${chainLen} atomi de carbon`);
+            }
+        }
+        
+        if (result.carbonyl) {
+            if (result.ring && (result.carbonyl.type === 'aldehida' || result.carbonyl.type === 'acid')) {
+                throw new Error('Inelul nu poate conține grupă -CHO / -COOH. Pentru cetonă inelară folosiți sufixul -onă (ex: ciclohexanonă)');
+            }
+            if (result.aromatic && result.carbonyl) {
+                throw new Error('Inelul benzenic nu poate conține și grupă carbonil');
+            }
+            if (result.carbonyl.type === 'cetona') {
+                const pos = result.carbonyl.position;
+                // In a ring the carbonyl carbon can be C-1; in a chain it must sit between two carbons
+                const minPos = result.ring ? 1 : 2;
+                if (pos < minPos || pos > chainLen - 1) {
+                    throw new Error(`Poziția C=O (${pos}) invalidă pentru ketonă — trebuie între C-${minPos} și C-${chainLen - 1}`);
+                }
+                if (result.alcohol === pos) {
+                    throw new Error(`Poziția ${pos} nu poate avea și -OH și C=O (carbonul ar avea 5 legături)`);
+                }
+                const onCarbonyl = result.substituents.find(s => s.position === pos);
+                if (onCarbonyl) {
+                    throw new Error(`Carbonul C-${pos} are deja grupa C=O și nu poate primi substituent — mutați gruparea pe un alt carbon`);
+                }
+            }
+        }
+        
+        if (result.ring && chainLen < 3) {
+            throw new Error('Un inel trebuie să aibă cel puțin 3 atomi de carbon');
+        }
+        
+        if (result.aromatic && (result.alcohol !== null || result.amine !== null)) {
+            throw new Error('Grupările -OH / -NH₂ direct pe inelul benzenic nu sunt suportate — folosiți substituenți metil/etil sau atomi de halogen (ex: clorobenzen)');
+        }
+        
+        if (result.aromatic) {
+            const perPos = {};
+            result.substituents.forEach(s => {
+                perPos[s.position] = (perPos[s.position] || 0) + 1;
+            });
+            const dupPos = Object.keys(perPos).find(p => perPos[p] > 1);
+            if (dupPos) {
+                throw new Error(`Inelul benzenic nu poate primi doi substituenți pe același carbon (C-${dupPos}) — corectați numerotarea`);
+            }
+        }
+        
+        // Deduplicate and sort bond positions
+        result.doubleBonds = [...new Set(result.doubleBonds)].sort((a, b) => a - b);
+        result.tripleBonds = [...new Set(result.tripleBonds)].sort((a, b) => a - b);
         
         return result;
     }
     
     buildMolecule(parsed) {
+        if (parsed.ring) {
+            return this.buildRingMolecule(parsed);
+        }
+        
         const atoms = [];
         const bonds = [];
         const spacing = 1.54; // Carbon-carbon bond length (in Angstroms)
@@ -3621,6 +3806,9 @@ class IUPACParser {
         const doubleBonds = parsed.doubleBonds;
         const tripleBonds = parsed.tripleBonds;
         const alcoholPosition = parsed.alcohol;
+        const carbonyl = parsed.carbonyl || null;
+        const aminePosition = parsed.amine || null;
+        const halogenElements = { 'clor': 'Cl', 'brom': 'Br', 'fluor': 'F', 'iod': 'I' };
         
         // Build carbon chain with zig-zag geometry
         for (let i = 0; i < chainLength; i++) {
@@ -3654,6 +3842,59 @@ class IUPACParser {
         for (let i = 0; i < chainLength; i++) {
             if (i > 0) occupiedPositions[i].push('left');
             if (i < chainLength - 1) occupiedPositions[i].push('right');
+        }
+        
+        // Add carbonyl groups (aldehidă / cetonă / acid carboxilic)
+        if (carbonyl !== null) {
+            const carbonylIdx = carbonyl.position - 1;
+            if (carbonylIdx >= 0 && carbonylIdx < chainLength) {
+                const carbonylAvailable = this.getAvailableTetrahedralPositions(
+                    atoms[carbonylIdx],
+                    occupiedPositions[carbonylIdx],
+                    carbonylIdx,
+                    chainLength
+                );
+                
+                const topPos = carbonylAvailable.find(p => p.name === 'top') || carbonylAvailable[0] || null;
+                if (topPos) {
+                    const oxygenAtom = {
+                        element: 'O',
+                        x: atoms[carbonylIdx].x + topPos.x * spacing * 0.75,
+                        y: atoms[carbonylIdx].y + topPos.y * spacing * 0.75,
+                        z: atoms[carbonylIdx].z + topPos.z * spacing * 0.75
+                    };
+                    atoms.push(oxygenAtom);
+                    bonds.push([carbonylIdx, atoms.length - 1, 'double']);
+                    occupiedPositions[carbonylIdx].push(topPos.name);
+                }
+                
+                if (carbonyl.type === 'acid') {
+                    const bottomPos = carbonylAvailable.find(p => p.name === 'bottom') || carbonylAvailable[0] || null;
+                    if (bottomPos) {
+                        // Hydroxyl of the -COOH group
+                        const hydroxylAtom = {
+                            element: 'O',
+                            x: atoms[carbonylIdx].x + bottomPos.x * spacing * 0.75,
+                            y: atoms[carbonylIdx].y + bottomPos.y * spacing * 0.75,
+                            z: atoms[carbonylIdx].z + bottomPos.z * spacing * 0.75
+                        };
+                        const hydroxylIndex = atoms.length;
+                        atoms.push(hydroxylAtom);
+                        bonds.push([carbonylIdx, hydroxylIndex]);
+                        
+                        // O-H hydrogen, continuing in the same direction
+                        atoms.push({
+                            element: 'H',
+                            x: hydroxylAtom.x + bottomPos.x * 1.12,
+                            y: hydroxylAtom.y + bottomPos.y * 1.12,
+                            z: hydroxylAtom.z + bottomPos.z * 1.12
+                        });
+                        bonds.push([hydroxylIndex, atoms.length - 1]);
+                        
+                        occupiedPositions[carbonylIdx].push(bottomPos.name);
+                    }
+                }
+            }
         }
         
         // Add alcohol group (-OH) if present
@@ -3718,45 +3959,81 @@ class IUPACParser {
                 
                 // Add each substituent at this position using different available positions
                 subs.forEach((sub, subIndex) => {
-                    if (subIndex < availablePositions.length) {
-                        const position = availablePositions[subIndex];
-                        
-                        // Add the first carbon of the substituent
-                        const substituentCarbon = {
-                            element: 'C',
-                            x: atoms[carbonIndex].x + position.x * spacing * 0.85,
-                            y: atoms[carbonIndex].y + position.y * spacing * 0.85,
-                            z: atoms[carbonIndex].z + position.z * spacing * 0.85
+                    if (subIndex >= availablePositions.length) return;
+                    const position = availablePositions[subIndex];
+                    
+                    // Halogen atom (clor/brom/fluor/iod)
+                    if (sub.halogen) {
+                        const halAtom = {
+                            element: halogenElements[sub.type] || 'Cl',
+                            x: atoms[carbonIndex].x + position.x * spacing * 0.95,
+                            y: atoms[carbonIndex].y + position.y * spacing * 0.95,
+                            z: atoms[carbonIndex].z + position.z * spacing * 0.95
                         };
-                        const substituentCarbonIndex = atoms.length;
-                        atoms.push(substituentCarbon);
-                        bonds.push([carbonIndex, substituentCarbonIndex]);
-                        
-                        // If it's an ethyl (etil) group, add another carbon
-                        if (sub.type === 'etil') {
-                            const secondCarbon = {
-                                element: 'C',
-                                x: substituentCarbon.x + position.x * spacing * 0.7,
-                                y: substituentCarbon.y + position.y * spacing * 0.7,
-                                z: substituentCarbon.z + position.z * spacing * 0.7
-                            };
-                            const secondCarbonIndex = atoms.length;
-                            atoms.push(secondCarbon);
-                            bonds.push([substituentCarbonIndex, secondCarbonIndex]);
-                            
-                            // Add hydrogens to both carbons of ethyl group
-                            this.addHydrogensTetrahedrally(atoms, bonds, substituentCarbonIndex, 2, carbonIndex);
-                            this.addHydrogensTetrahedrally(atoms, bonds, secondCarbonIndex, 3, substituentCarbonIndex);
-                        } else if (sub.type === 'metil') {
-                            // Methyl group - add 3 hydrogens
-                            this.addHydrogensTetrahedrally(atoms, bonds, substituentCarbonIndex, 3, carbonIndex);
-                        }
-                        
+                        atoms.push(halAtom);
+                        bonds.push([carbonIndex, atoms.length - 1]);
                         occupiedPositions[carbonIndex].push(position.name);
+                        return;
                     }
+                    
+                    // Alkyl radical - build its carbon skeleton (metil/etil/propil/butil...)
+                    const subLen = sub.chainLength || 1;
+                    let prevIdx = carbonIndex;
+                    for (let c = 0; c < subLen; c++) {
+                        const base = atoms[prevIdx];
+                        const dist = (c === 0) ? spacing * 0.85 : spacing * 0.7;
+                        const subCarbon = {
+                            element: 'C',
+                            x: base.x + position.x * dist,
+                            y: base.y + position.y * dist,
+                            z: base.z + position.z * dist
+                        };
+                        const subCarbonIndex = atoms.length;
+                        atoms.push(subCarbon);
+                        bonds.push([prevIdx, subCarbonIndex]);
+                        
+                        // Hydrogens: middle carbons of a long chain get 2, terminal get 3,
+                        // the first carbon holds back one valence for the main chain
+                        const hCount = (c === 0) ? (subLen === 1 ? 3 : 2) : (c === subLen - 1 ? 3 : 2);
+                        this.addHydrogensTetrahedrally(atoms, bonds, subCarbonIndex, hCount, prevIdx);
+                        
+                        prevIdx = subCarbonIndex;
+                    }
+                    
+                    occupiedPositions[carbonIndex].push(position.name);
                 });
             }
         });
+        
+        // Add amine group (-NH2) if present
+        if (aminePosition !== null) {
+            const amineIdx = aminePosition - 1;
+            if (amineIdx >= 0 && amineIdx < chainLength) {
+                const amineAvailable = this.getAvailableTetrahedralPositions(
+                    atoms[amineIdx],
+                    occupiedPositions[amineIdx],
+                    amineIdx,
+                    chainLength
+                );
+                
+                if (amineAvailable.length > 0) {
+                    const position = amineAvailable[0];
+                    const nitrogenAtom = {
+                        element: 'N',
+                        x: atoms[amineIdx].x + position.x * spacing * 0.75,
+                        y: atoms[amineIdx].y + position.y * spacing * 0.75,
+                        z: atoms[amineIdx].z + position.z * spacing * 0.75
+                    };
+                    const nitrogenIndex = atoms.length;
+                    atoms.push(nitrogenAtom);
+                    bonds.push([amineIdx, nitrogenIndex]);
+                    occupiedPositions[amineIdx].push(position.name);
+                    
+                    // Two hydrogens on the nitrogen
+                    this.addHydrogensTetrahedrally(atoms, bonds, nitrogenIndex, 2, amineIdx);
+                }
+            }
+        }
         
         // Add remaining hydrogens to main chain carbons
         for (let i = 0; i < chainLength; i++) {
@@ -3783,6 +4060,188 @@ class IUPACParser {
         }
         
         return { atoms, bonds };
+    }
+    
+    // Ring molecules: ciclopropan, ciclohexan, benzene, 1-metilciclopentan,
+    // ciclohexanona, 1,2-dicloro-4-metilbenzene...
+    buildRingMolecule(parsed) {
+        const atoms = [];
+        const bonds = [];
+        const n = parsed.chainLength;
+        const spacing = 1.54;
+        const radius = spacing / (2 * Math.sin(Math.PI / n));
+        const halogenElements = { 'clor': 'Cl', 'brom': 'Br', 'fluor': 'F', 'iod': 'I' };
+        
+        // Ring carbons, numbered clockwise starting from the top
+        for (let i = 0; i < n; i++) {
+            const angle = Math.PI / 2 - (i * 2 * Math.PI / n);
+            atoms.push({
+                element: 'C',
+                x: Math.cos(angle) * radius,
+                y: Math.sin(angle) * radius,
+                z: (n >= 6 ? (i % 2 ? 0.22 : -0.22) : 0)
+            });
+        }
+        
+        // Ring bonds (bond k connects C-k and C-k+1; closing bond has position n)
+        for (let i = 0; i < n; i++) {
+            const j = (i + 1) % n;
+            const bondNumber = i + 1;
+            let type = 'single';
+            if (parsed.aromatic) {
+                type = (i % 2 === 0) ? 'double' : 'single';
+            } else if ((parsed.doubleBonds || []).includes(bondNumber)) {
+                type = 'double';
+            } else if ((parsed.tripleBonds || []).includes(bondNumber)) {
+                type = 'triple';
+            }
+            bonds.push([i, j, type]);
+        }
+        
+        // Two attachment slots per ring carbon (radial outward, tilted up/down)
+        const slots = [];
+        for (let i = 0; i < n; i++) {
+            const vx = atoms[i].x, vy = atoms[i].y;
+            const len = Math.sqrt(vx * vx + vy * vy) || 1;
+            const ox = vx / len, oy = vy / len;
+            slots.push([
+                { x: ox, y: oy, z: 0.8 },
+                { x: ox, y: oy, z: -0.8 }
+            ]);
+        }
+        
+        // Groups per position: substituents/halogens, then -OH, then -NH2
+        const groupsAt = {};
+        (parsed.substituents || []).forEach(sub => {
+            (groupsAt[sub.position] = groupsAt[sub.position] || []).push({
+                kind: sub.halogen ? 'halogen' : 'chain',
+                type: sub.type,
+                chainLength: sub.chainLength || 1
+            });
+        });
+        if (parsed.alcohol !== null && parsed.alcohol !== undefined) {
+            (groupsAt[parsed.alcohol] = groupsAt[parsed.alcohol] || []).push({ kind: 'hydroxyl' });
+        }
+        if (parsed.amine !== null && parsed.amine !== undefined) {
+            (groupsAt[parsed.amine] = groupsAt[parsed.amine] || []).push({ kind: 'amine' });
+        }
+        
+        const usedSlots = new Array(n).fill(0);
+        
+        // Ring ketone (ciclopentanonă / ciclohexanonă): C=O on the numbered carbon
+        if (parsed.carbonyl && parsed.carbonyl.type === 'cetona') {
+            const kIdx = parsed.carbonyl.position - 1;
+            if (kIdx >= 0 && kIdx < n) {
+                const kSlot = slots[kIdx][0];
+                const kLen = Math.sqrt(kSlot.x * kSlot.x + kSlot.y * kSlot.y + kSlot.z * kSlot.z);
+                atoms.push({
+                    element: 'O',
+                    x: atoms[kIdx].x + (kSlot.x / kLen) * 1.15,
+                    y: atoms[kIdx].y + (kSlot.y / kLen) * 1.15,
+                    z: atoms[kIdx].z + (kSlot.z / kLen) * 1.15
+                });
+                bonds.push([kIdx, atoms.length - 1, 'double']);
+                usedSlots[kIdx] = 1;
+            }
+        }
+        
+        Object.keys(groupsAt).sort((a, b) => parseInt(a) - parseInt(b)).forEach(posStr => {
+            const idx = parseInt(posStr) - 1;
+            if (idx < 0 || idx >= n) return;
+            groupsAt[posStr].forEach(g => {
+                if (usedSlots[idx] >= 2) return;
+                this.attachRingGroup(atoms, bonds, idx, slots[idx][usedSlots[idx]], g, halogenElements);
+                usedSlots[idx]++;
+            });
+        });
+        
+        // Fill the remaining hydrogens
+        for (let i = 0; i < n; i++) {
+            let valence = 0;
+            bonds.forEach(b => {
+                if (b[0] === i || b[1] === i) {
+                    valence += b[2] === 'triple' ? 3 : (b[2] === 'double' ? 2 : 1);
+                }
+            });
+            let hNeeded = 4 - valence;
+            while (hNeeded > 0) {
+                const slot = slots[i][Math.min(usedSlots[i], 1)];
+                const len = Math.sqrt(slot.x * slot.x + slot.y * slot.y + slot.z * slot.z);
+                atoms.push({
+                    element: 'H',
+                    x: atoms[i].x + (slot.x / len) * 1.09,
+                    y: atoms[i].y + (slot.y / len) * 1.09,
+                    z: atoms[i].z + (slot.z / len) * 1.09
+                });
+                bonds.push([i, atoms.length - 1]);
+                usedSlots[i]++;
+                hNeeded--;
+            }
+        }
+        
+        return { atoms, bonds };
+    }
+    
+    attachRingGroup(atoms, bonds, ringIdx, slot, group, halogenElements) {
+        const sx = Math.sqrt(slot.x * slot.x + slot.y * slot.y + slot.z * slot.z);
+        const dir = { x: slot.x / sx, y: slot.y / sx, z: slot.z / sx };
+        const ringAtom = atoms[ringIdx];
+        
+        if (group.kind === 'halogen') {
+            atoms.push({
+                element: halogenElements[group.type] || 'Cl',
+                x: ringAtom.x + dir.x * 1.5,
+                y: ringAtom.y + dir.y * 1.5,
+                z: ringAtom.z + dir.z * 1.5
+            });
+            bonds.push([ringIdx, atoms.length - 1]);
+        } else if (group.kind === 'hydroxyl') {
+            const oIdx = atoms.length;
+            atoms.push({
+                element: 'O',
+                x: ringAtom.x + dir.x * 1.15,
+                y: ringAtom.y + dir.y * 1.15,
+                z: ringAtom.z + dir.z * 1.15
+            });
+            bonds.push([ringIdx, oIdx]);
+            
+            atoms.push({
+                element: 'H',
+                x: ringAtom.x + dir.x * 2.27,
+                y: ringAtom.y + dir.y * 2.27,
+                z: ringAtom.z + dir.z * 2.27
+            });
+            bonds.push([oIdx, atoms.length - 1]);
+        } else if (group.kind === 'amine') {
+            const nIdx = atoms.length;
+            atoms.push({
+                element: 'N',
+                x: ringAtom.x + dir.x * 1.15,
+                y: ringAtom.y + dir.y * 1.15,
+                z: ringAtom.z + dir.z * 1.15
+            });
+            bonds.push([ringIdx, nIdx]);
+            this.addHydrogensTetrahedrally(atoms, bonds, nIdx, 2, ringIdx);
+        } else {
+            // Alkyl chain (metil, etil, propil, ...)
+            let prevIdx = ringIdx;
+            for (let c = 0; c < group.chainLength; c++) {
+                const base = atoms[prevIdx];
+                const dist = (c === 0) ? 1.45 : 1.35;
+                const subLen = group.chainLength;
+                atoms.push({
+                    element: 'C',
+                    x: base.x + dir.x * dist,
+                    y: base.y + dir.y * dist,
+                    z: base.z + dir.z * dist
+                });
+                const newIdx = atoms.length - 1;
+                bonds.push([prevIdx, newIdx]);
+                const hCount = (c === 0) ? (subLen === 1 ? 3 : 2) : (c === subLen - 1 ? 3 : 2);
+                this.addHydrogensTetrahedrally(atoms, bonds, newIdx, hCount, prevIdx);
+                prevIdx = newIdx;
+            }
+        }
     }
     
     getAvailableTetrahedralPositions(carbon, occupied, carbonIndex, chainLength) {
@@ -3867,6 +4326,36 @@ class IUPACParser {
 }
 
 const iupacParser = new IUPACParser();
+
+// Build the molecular formula string from an atom list, e.g. "C5H10O", in Hill order
+function computeFormula(atoms) {
+    const counts = {};
+    atoms.forEach(a => {
+        counts[a.element] = (counts[a.element] || 0) + 1;
+    });
+    const subMap = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉' };
+    const sub = s => String(s).replace(/\d/g, d => subMap[d]);
+    const order = ['C', 'H', 'N', 'O', 'F', 'Cl', 'Br', 'I'];
+    let formula = '';
+    const rest = [];
+    order.forEach(el => {
+        if (!counts[el]) return;
+        const nStr = counts[el] > 1 ? sub(counts[el]) : '';
+        if (el === 'C' || el === 'H') {
+            formula += el + nStr;
+        } else {
+            rest.push(el + nStr);
+        }
+        delete counts[el];
+    });
+    rest
+        .sort()
+        .forEach(txt => { formula += txt; });
+    Object.keys(counts).sort().forEach(el => {
+        formula += el + (counts[el] > 1 ? sub(counts[el]) : '');
+    });
+    return formula || '—';
+}
 
 // Alkane Isomer Generator - generates all possible structural isomers
 class AlkaneIsomerGenerator {
@@ -4625,7 +5114,7 @@ function init() {
     
     // Scene
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1a2332);
+    scene.background = new THREE.Color(0x070b11);
     
     // Camera
     camera = new THREE.PerspectiveCamera(
@@ -4690,11 +5179,11 @@ function init() {
         }
     });
     
-    // Wheel zoom
+    // Wheel zoom (relative to the fitted distance, generous bounds for large molecules)
     container.addEventListener('wheel', (e) => {
         e.preventDefault();
         camera.position.z += e.deltaY * 0.01;
-        camera.position.z = Math.max(3, Math.min(15, camera.position.z));
+        camera.position.z = Math.max(2, Math.min(45, camera.position.z));
     });
     
     animate();
@@ -5079,6 +5568,44 @@ function createMolecule(moleculeData) {
     });
     
     scene.add(molecule);
+    currentMoleculeData = moleculeData;
+    computeFit(moleculeData);
+}
+
+// Position the camera so the whole molecule is always fully visible,
+// centered at the origin regardless of molecule or viewer size.
+function computeFit(moleculeData) {
+    const container = document.getElementById('moleculeViewer');
+    if (!moleculeData || !moleculeData.atoms || moleculeData.atoms.length === 0) return;
+    
+    const n = moleculeData.atoms.length;
+    let cx = 0, cy = 0, cz = 0;
+    moleculeData.atoms.forEach(a => { cx += a.x; cy += a.y; cz += a.z; });
+    cx /= n; cy /= n; cz /= n;
+    
+    // Keep the geometry centered on the rotation pivot
+    molecule.position.set(-cx, -cy, -cz);
+    
+    const radiusScale = currentStyle === 'spaceFill' ? 2 : 1;
+    let maxR = 0;
+    moleculeData.atoms.forEach(a => {
+        const dx = a.x - cx, dy = a.y - cy, dz = a.z - cz;
+        const r = Math.sqrt(dx*dx + dy*dy + dz*dz) + (elementSizes[a.element] || 0.4) * radiusScale;
+        if (r > maxR) maxR = r;
+    });
+    maxR = Math.max(maxR, 1.2);
+    
+    // Enclosing-sphere distance for both the vertical and horizontal FOV
+    const vHalf = camera.fov * Math.PI / 360;
+    const aspect = Math.max(0.25, (container.clientWidth || 1) / Math.max(1, container.clientHeight || 1));
+    const hHalf = Math.atan(Math.tan(vHalf) * aspect);
+    const halfFov = Math.min(vHalf, hHalf);
+    
+    let dist = (maxR / Math.sin(halfFov)) * 1.05;
+    dist = Math.min(Math.max(dist, 3.2), 60);
+    fitDistance = dist;
+    camera.position.set(0, 0, dist);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
 }
 
 function createBond(start, end, length, horizontalOffset = 0, verticalOffset = 0, color = 0xCCCCCC) {
@@ -5154,13 +5681,10 @@ function loadMolecule(moleculeName) {
         isomersBtn.style.display = 'none';
     }
     
-    // Update active button only if called from button click
-    if (window.event && window.event.target) {
-        document.querySelectorAll('.molecule-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        window.event.target.classList.add('active');
-    }
+    // Mark the button matching the loaded molecule as active
+    document.querySelectorAll('.molecule-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-molecule') === moleculeName);
+    });
 }
 
 function showIsomersModal(moleculeName) {
@@ -5324,6 +5848,11 @@ function onWindowResize() {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
+    
+    // Refit the molecule whenever the viewer's size or aspect changes
+    if (currentMoleculeData) {
+        computeFit(currentMoleculeData);
+    }
 }
 
 function animate() {
@@ -5410,6 +5939,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 description += `\nSubstituenți: ${subList}`;
             }
             
+            if (parsed.ring) {
+                description += `\n${parsed.aromatic ? 'Inel benzenic (aromatic)' : 'Inel ciclic'} cu ${parsed.chainLength} atomi de carbon`;
+            }
+            
+            if (parsed.carbonyl) {
+                const carbonylLabel = parsed.carbonyl.type === 'aldehida'
+                    ? 'Grupă aldehidă (-CHO) la poziția'
+                    : parsed.carbonyl.type === 'cetona'
+                        ? 'Grupă cetonă (C=O) la poziția'
+                        : 'Grupă acid carboxilic (-COOH) la poziția';
+                description += `\n${carbonylLabel} ${parsed.carbonyl.position}`;
+            }
+            
+            if (parsed.amine !== null) {
+                description += `\nGrupă amino (-NH₂) la poziția: ${parsed.amine}`;
+            }
+            
             if (parsed.isomer) {
                 description += `\nIzomer geometric: ${parsed.isomer}`;
             }
@@ -5417,7 +5963,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update info panel
             const compoundName = input.charAt(0).toUpperCase() + input.slice(1);
             document.getElementById('moleculeName').textContent = compoundName;
-            document.getElementById('moleculeFormula').textContent = 'Compus organic generat din nume IUPAC';
+            document.getElementById('moleculeFormula').textContent = computeFormula(normalizedMolecule);
             document.getElementById('moleculeDescription').textContent = description;
             
             // Hide back button for new IUPAC search
@@ -5452,6 +5998,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') {
             document.getElementById('searchBtn').click();
         }
+    });
+    
+    // Live filter for the predefined compound lists
+    const listFilter = document.getElementById('listFilter');
+    listFilter.addEventListener('input', () => {
+        const q = normalizeDiacritics(listFilter.value).trim().toLowerCase();
+        document.querySelectorAll('.molecule-btn').forEach(btn => {
+            const txt = normalizeDiacritics(btn.textContent.toLowerCase());
+            btn.style.display = (!q || txt.includes(q)) ? '' : 'none';
+        });
+        // Hide sub-groups and categories that have no visible molecules
+        document.querySelectorAll('.m-group').forEach(g => {
+            const anyVisible = Array.prototype.some.call(
+                g.querySelectorAll('.molecule-btn'),
+                b => b.style.display !== 'none'
+            );
+            g.style.display = anyVisible ? '' : 'none';
+        });
+        document.querySelectorAll('.molecule-nav .category').forEach(cat => {
+            const anyVisible = Array.prototype.some.call(
+                cat.querySelectorAll('.molecule-btn'),
+                b => b.style.display !== 'none'
+            );
+            cat.style.display = anyVisible ? '' : 'none';
+        });
     });
     
     // Molecule selection
